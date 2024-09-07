@@ -1,4 +1,5 @@
 import sqlite3
+import os
 
 dic_titre = {
     0: "Circonvolution génétique",
@@ -24,62 +25,67 @@ dic_titre = {
     100000: "Matteo Ricci"
 }
 
+db_directory = '/Users/gabriel/Documents/VSCode/Python/Studium/chinois/database_handling'
+db_filename = 'quizz_progress.db'
+db_path = os.path.join(db_directory, db_filename)
+
 # Connect to SQLite database (or create it if it doesn't exist)
-conn = sqlite3.connect('quizz_progress.db')
+conn = sqlite3.connect(db_path)
 
 # Create a cursor object to interact with the database
 cursor = conn.cursor()
 
-# Create a table to track quiz scores
-cursor.execute('''
-    CREATE TABLE IF NOT EXISTS QuizzScores (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        Score INTEGER NOT NULL,
-        Time INTEGER NOT NULL,
-        Type VARCHAR(255) NOT NULL
-    )
-''')
-
-# Create a table to track overall progress
-cursor.execute('''
-    CREATE TABLE IF NOT EXISTS OverallProgress (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        Experience INTEGER NOT NULL,
-        Titre VARCHAR(255) NOT NULL, 
-        Prestige INTEGER NOT NULL
-    )
-''')
-
-# Create a tble to track right and wrong answer
-cursor.execute('''CREATE TABLE IF NOT EXISTS SuccessRate (
-                    question TEXT PRIMARY KEY,
-                    right_count INTEGER DEFAULT 0,
-                    wrong_count INTEGER DEFAULT 0,
-                    ratio REAL DEFAULT 0.0
-                    )''')
-
-# Step 1: Check if the OverallProgress table is empty
-cursor.execute('SELECT COUNT(*) FROM OverallProgress')
-count = cursor.fetchone()[0]
-
-# Step 2: Insert a new record only if the table is empty
-if count == 0:
-    # Define the initial values you want to insert
-    experience = 0
-    prestige = 0
-    titre = "Mangeur de feutres"
-    
+def intiate_database():
+    # Create a table to track quiz scores
     cursor.execute('''
-        INSERT INTO OverallProgress (Experience, Titre, Prestige)
-        VALUES (?, ?, ?)
-    ''', (experience, titre, prestige))
+        CREATE TABLE IF NOT EXISTS QuizzScores (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            Score INTEGER NOT NULL,
+            Time INTEGER NOT NULL,
+            Type VARCHAR(255) NOT NULL
+        )
+    ''')
 
-# Commit the changes
-conn.commit()
+    # Create a table to track overall progress
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS OverallProgress (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            Experience INTEGER NOT NULL,
+            Titre VARCHAR(255) NOT NULL, 
+            Prestige INTEGER NOT NULL
+        )
+    ''')
+
+    # Create a table to track right and wrong answer
+    cursor.execute('''CREATE TABLE IF NOT EXISTS SuccessRate (
+                        word TEXT PRIMARY KEY,
+                        right_count INTEGER DEFAULT 0,
+                        wrong_count INTEGER DEFAULT 0,
+                        ratio REAL DEFAULT 0.0
+                        )''')
+
+    # Step 1: Check if the OverallProgress table is empty
+    cursor.execute('SELECT COUNT(*) FROM OverallProgress')
+    count = cursor.fetchone()[0]
+
+    # Step 2: Insert a new record only if the table is empty
+    if count == 0:
+        # Define the initial values you want to insert
+        experience = 0
+        prestige = 0
+        titre = "Mangeur de feutres"
+        
+        cursor.execute('''
+            INSERT INTO OverallProgress (Experience, Titre, Prestige)
+            VALUES (?, ?, ?)
+        ''', (experience, titre, prestige))
+
+    # Commit the changes
+    conn.commit()
 
 # Connect to SQLite database (or create it if it doesn't exist)
 def update_score_progress(score, time, mode):
-    conn = sqlite3.connect('quizz_progress.db')
+    conn = sqlite3.connect(db_path)
 
     # Create a cursor object to interact with the database
     cursor = conn.cursor()
@@ -137,7 +143,7 @@ def update_score_progress(score, time, mode):
 
 
 def update_word_stats(word, is_correct):
-    conn = sqlite3.connect('quizz_progress.db')
+    conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
 
     # Check if the word exists in the table
@@ -174,10 +180,10 @@ def update_word_stats(word, is_correct):
     conn.close()
 
 def get_word_stats(word, pinyin):
-    conn = sqlite3.connect('quizz_progress.db')
+    conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
 
-    cursor.execute('SELECT right_count, wrong_count, ratio FROM SuccessRate WHERE word = ?', (word,))
+    cursor.execute('SELECT right_count, wrong_count, ratio FROM SuccessRate WHERE question = ?', (word,))
     result = cursor.fetchone()
 
     conn.close()
@@ -189,7 +195,7 @@ def get_word_stats(word, pinyin):
 
 def get_worst_word_ratios(limit=10):
     # Connect to the SQLite database
-    conn = sqlite3.connect('quizz_progress.db')
+    conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
 
     # Retrieve the words with the worst ratios
@@ -210,19 +216,22 @@ def get_worst_word_ratios(limit=10):
     
     return worst_words
 
+if __name__ == "__main__":
+    intiate_database()
+
+
 # Example usage:
 #worst_words = get_worst_word_ratios()
 #print(worst_words[0]["word"])
 
-cursor.execute('SELECT * FROM OverallProgress')
-overall_progress = cursor.fetchall()
+#cursor.execute('SELECT * FROM OverallProgress')
+#overall_progress = cursor.fetchall()
 
-cursor.execute('SELECT * FROM SuccessRate')
-success_rate = cursor.fetchall()
+#cursor.execute('SELECT * FROM SuccessRate')
+#success_rate = cursor.fetchall()
 
 # Display the results
 #print("Overall Progress:", overall_progress)
 #print("Success Rate:", success_rate)
 
 # Close the connection
-conn.close()

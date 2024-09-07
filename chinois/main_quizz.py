@@ -1,6 +1,6 @@
 from questions_vocabulaire import dq_vocabulary
-from database import update_score_progress
-from quizz_functions import ec_quizz, ecpinyin_quizz, last_x_quizz, worst_x_quizz, random_x_quizz, ce_quizz
+from database_handling.database import update_score_progress
+from quizz_functions import ec_quizz, ecpinyin_quizz, last_x_quizz, worst_x_quizz, random_x_quizz, ce_quizz, add_vocabulary
 
 from datetime import datetime
 from termcolor import cprint
@@ -48,7 +48,11 @@ elif inp == "worst x":
 elif inp == "random x":
     random_x_quizz(inp, count, limitation)
 
-
+elif inp == "add def":
+    pinyin = input("Input pinyin: ")
+    simplified = input("Simplified: ")
+    add_vocabulary()
+    
 
 
 

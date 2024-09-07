@@ -1,25 +1,30 @@
 import sqlite3
+import os
 import time
 
-from parser import create_dict
+from database_handling.parser import create_dict
 
-conn = sqlite3.connect("cedict.db")
+db_directory = '/Users/gabriel/Documents/VSCode/Python/Studium/chinois/database_handling'
+db_filename = 'cedict.db'
+db_path = os.path.join(db_directory, db_filename)
+
+conn = sqlite3.connect(db_path)
 
 cursor = conn.cursor()
-
-cursor.execute('''
-    CREATE TABLE IF NOT EXISTS CeDict (
-        Pinyin VARCHAR(255) NOT NULL,
-        English VARCHAR(255) NOT NULL,
-        Simplified VARCHAR(255) NOT NULL,
-        Traditional VARCHAR(255)
-    )
-''')
+def initiate_cedict():
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS CeDict (
+            Pinyin VARCHAR(255) NOT NULL,
+            English VARCHAR(255) NOT NULL,
+            Simplified VARCHAR(255) NOT NULL,
+            Traditional VARCHAR(255)
+        )
+    ''')
 
 # Create the dictionnary database
 def create_cedb(ce_d):
 
-    conn = sqlite3.connect("cedict.db")
+    conn = sqlite3.connect(db_path)
 
     cursor = conn.cursor()
 
@@ -45,7 +50,7 @@ def sort_cedict():
 
 # Remove all the entries that are duplicates by english def (pretty sure it's a bad idea but)
 def remove_duplicate():
-    conn = sqlite3.connect("cedict.db")
+    conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
 
     cursor.execute('''
@@ -63,7 +68,7 @@ def remove_duplicate():
 
 # Get a definition by asking the user Pinyin input (may result in more than 1 answer)
 def get_def():
-    conn = sqlite3.connect("cedict.db")
+    conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
 
     word = input("Input Pinyin: ")
@@ -80,7 +85,7 @@ def get_def():
 
 # Get a definiton by asking the user Pinyin and Simplified Chinese character input
 def get_def_pinyin_simplified():
-    conn = sqlite3.connect("cedict.db")
+    conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
 
     pinyin = input("Input Pinyin: ")
@@ -91,6 +96,7 @@ def get_def_pinyin_simplified():
     result = cursor.fetchall()
     end = time.time()
 
+    #return a dictionary with key1 being english def and key2 being pinyin
     if result:
         dict_result = {"english": result[0][0], "pinyin": result[0][1]}
         print(dict_result)
@@ -113,4 +119,5 @@ def main():
     get_def_pinyin_simplified()
 
 if __name__ == "__main__":
+    initiate_cedict()
     main()

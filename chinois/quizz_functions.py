@@ -1,6 +1,6 @@
 from questions_vocabulaire import dq_vocabulary
-from database import update_score_progress, update_word_stats, get_word_stats, get_worst_word_ratios
-from cedict_database import get_def, get_def_pinyin_simplified
+from database_handling.database import update_score_progress, update_word_stats, get_word_stats, get_worst_word_ratios
+from database_handling.cedict_database import get_def, get_def_pinyin_simplified
 
 from datetime import datetime
 from termcolor import cprint
@@ -223,12 +223,17 @@ def ce_quizz(count, limitation):
 def use_cedict(user_input):
     # Parse U8 file and return a list of dict with this form {traditional:, simplified:, pinyin:, english:}
     ce_dict = create_dict()
-    
+
+        
+
 def add_vocabulary(pinyin, simplified, english, hsk_level = 1):
-    count = 0
-    with open("questions_vocabulaire.py", "a") as f:
-        print(f'dq_vocabulary["{simplified}"] = Vocabulary("{pinyin}", "{simplified}", "{english}", {hsk_level})', file=f)
-        print("done")
+    word_def = get_def_pinyin_simplified()
+
+    if word_def != False: 
+        count = 0
+        with open("questions_vocabulaire.py", "a") as f:
+            print(f'dq_vocabulary["{simplified}"] = Vocabulary("{pinyin}", "{simplified}", "{english}", {hsk_level})', file=f)
+            print("done")
 
 if __name__ == "__main__":
     add_vocabulary("ran2 hou4", "然后", "and then")
