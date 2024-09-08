@@ -1,5 +1,5 @@
-from questions_vocabulaire import dq_vocabulary
-from database_handling.database import update_score_progress
+from dict_tools.questions_vocabulaire import dq_vocabulary
+from database_tools.database import update_score_progress
 from quizz_functions import ec_quizz, ecpinyin_quizz, last_x_quizz, worst_x_quizz, random_x_quizz, ce_quizz, add_vocabulary
 
 from datetime import datetime

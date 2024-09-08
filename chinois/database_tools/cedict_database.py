@@ -2,9 +2,9 @@ import sqlite3
 import os
 import time
 
-from parser import create_dict
+from database_tools.parser import create_dict
 
-db_directory = '/Users/gabriel/Documents/VSCode/Python/Studium/chinois/database_handling'
+db_directory = '/Users/gabriel/Documents/VSCode/Python/Studium/chinois/database_tools'
 db_filename = 'cedict.db'
 db_path = os.path.join(db_directory, db_filename)
 

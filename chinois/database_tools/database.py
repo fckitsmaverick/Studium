@@ -25,7 +25,7 @@ dic_titre = {
     100000: "Matteo Ricci"
 }
 
-db_directory = '/Users/gabriel/Documents/VSCode/Python/Studium/chinois/database_handling'
+db_directory = '/Users/gabriel/Documents/VSCode/Python/Studium/chinois/database_tools'
 db_filename = 'quizz_progress.db'
 db_path = os.path.join(db_directory, db_filename)
 

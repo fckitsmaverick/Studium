@@ -24,7 +24,7 @@ chinois_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 with add_to_sys_path(chinois_dir):
     from questions_vocabulaire import dq_vocabulary
 
-db_directory = ('/Users/gabriel/Documents/VSCode/Python/Studium/chinois/database_handling')
+db_directory = ('/Users/gabriel/Documents/VSCode/Python/Studium/chinois/database_tools')
 db_filename = ('personal_vocabulary.db')
 
 db_path = os.path.join(db_directory, db_filename)

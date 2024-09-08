@@ -1,6 +1,6 @@
-from questions_vocabulaire import dq_vocabulary
-from database_handling.database import update_score_progress, update_word_stats, get_word_stats, get_worst_word_ratios
-from database_handling.cedict_database import get_def, get_def_pinyin_simplified
+from dict_tools.questions_vocabulaire import dq_vocabulary
+from database_tools.database import update_score_progress, update_word_stats, get_word_stats, get_worst_word_ratios
+from database_tools.cedict_database import get_def, get_def_pinyin_simplified
 
 from datetime import datetime
 from termcolor import cprint

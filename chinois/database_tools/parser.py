@@ -14,7 +14,7 @@ import time
 
 start = time.time()
 
-with open('cedict_ts.u8') as file:
+with open('database_tools/cedict_ts.u8') as file:
     text = file.read()
     lines = text.split('\n')
     dict_lines = list(lines)
