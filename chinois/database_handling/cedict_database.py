@@ -2,7 +2,7 @@ import sqlite3
 import os
 import time
 
-from database_handling.parser import create_dict
+from parser import create_dict
 
 db_directory = '/Users/gabriel/Documents/VSCode/Python/Studium/chinois/database_handling'
 db_filename = 'cedict.db'
@@ -18,7 +18,7 @@ def initiate_cedict():
             Pinyin VARCHAR(255) NOT NULL,
             English VARCHAR(255) NOT NULL,
             Simplified VARCHAR(255) NOT NULL,
-            Traditional VARCHAR(255)
+            Traditional VARCHAR(255),
             UNIQUE (Pinyin, Simplified, Traditional)
         )
     ''')
@@ -86,25 +86,24 @@ def get_def():
 
 
 # Get a definiton by asking the user Pinyin and Simplified Chinese character input
-def get_def_pinyin_simplified():
+def get_def_pinyin_simplified(pinyin_input, simplified_input, user_input=False):
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
 
-    pinyin = input("Input Pinyin: ")
-    simplified = input("Input Simplified: ")
-    start = time.time()
+    if user_input == True:
+        pinyin_input = input("Input Pinyin: ")
+        simplified_input = input("Input Simplified: ")
 
-    cursor.execute('SELECT DISTINCT English, Pinyin FROM CeDict WHERE Pinyin = ? AND Simplified = ?', (pinyin, simplified))
+    start = time.time()
+    cursor.execute('SELECT DISTINCT English, Pinyin, Simplified FROM CeDict WHERE Pinyin = ? AND Simplified = ?', (pinyin_input, simplified_input))
     result = cursor.fetchall()
     end = time.time()
+    print(result)
 
     #return a dictionary with key1 being english def and key2 being pinyin
     if result:
-        dict_result = {"english": result[0][0], "pinyin": result[0][1]}
-        print(dict_result)
-        #dict_result = {key:value for(key, value) in result.items()}
-        #print(dict_result)
-        return result
+        dict_result = {"english": result[0][0], "pinyin": result[0][1], "simplified": result[0][2]}
+        return dict_result
     else:
         print("No matching result")
         return False
