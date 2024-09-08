@@ -58,7 +58,7 @@ def get_hsk_level(pinyin_input, simplified_input, user_input=False):
     cursor = conn.cursor()
 
     #If the user ask explicitely for it, otherwise the function is just meant to be called as part of the code
-    if user_input = True:
+    if user_input == True:
         pinyin_input = input("Pinyin: ")
         simplified_input = input("Simplified: ")
 
@@ -68,12 +68,12 @@ def get_hsk_level(pinyin_input, simplified_input, user_input=False):
 
     if result:
         #result[0][0] is hsk_level, [0][1] is simplified, [0][2] is pinyin and [0][3] is english
-        print(result[0][1], result[0][2])
-        #Since we just want the hsk_level we return it
-        return result[0][0]
+        dict_result = {"hsk_level": result[0][0]}
+        return dict_result
     else:
-        print("No result found for this word")
-        return False
+        print("No result found for this word, hsk default value assigned: 1")
+        dict_result = {"hsk_level": 1}
+        return dict_result 
 
     conn.close()
 
