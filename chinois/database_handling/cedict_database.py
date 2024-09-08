@@ -11,6 +11,7 @@ db_path = os.path.join(db_directory, db_filename)
 conn = sqlite3.connect(db_path)
 
 cursor = conn.cursor()
+
 def initiate_cedict():
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS CeDict (
@@ -18,6 +19,7 @@ def initiate_cedict():
             English VARCHAR(255) NOT NULL,
             Simplified VARCHAR(255) NOT NULL,
             Traditional VARCHAR(255)
+            UNIQUE (Pinyin, Simplified, Traditional)
         )
     ''')
 
@@ -31,7 +33,7 @@ def create_cedb(ce_d):
     for curr in ce_d:
         
         cursor.execute('''
-            INSERT INTO CeDict (Pinyin, English, Simplified, Traditional)
+            INSERT OR IGNORE INTO CeDict (Pinyin, English, Simplified, Traditional)
             Values (?, ?, ?, ?)
         ''', (curr["pinyin"], curr["english"], curr["simplified"], curr["traditional"]))
 
