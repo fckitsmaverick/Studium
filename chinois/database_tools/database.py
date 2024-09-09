@@ -239,6 +239,36 @@ def get_experience():
     # Close the connection
     conn.close()
 
+def update_experience(score):
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+
+    # Execute the SELECT statement to retrieve current Experience from OverallProgress
+    cursor.execute('''
+        SELECT Experience FROM OverallProgress WHERE id = 1
+    ''')
+
+    # Fetch the result
+    result = cursor.fetchone()
+
+    if result:
+        curr_experience = result[0]
+        new_experience = curr_experience + score
+
+        # Update the Experience in the database
+        cursor.execute('''
+            UPDATE OverallProgress
+            SET Experience = ?
+            WHERE id = 1
+        ''', (new_experience,))
+
+        conn.commit()
+        #print(f"Experience updated: Previous Experience: {curr_experience}, New Experience: {new_experience}")
+    else:
+        print("No record found with ID 1.")
+
+    conn.close()
+
 
 
 if __name__ == "__main__":

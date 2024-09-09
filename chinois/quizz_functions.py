@@ -1,5 +1,5 @@
 from dict_tools.questions_vocabulaire import dq_vocabulary
-from database_tools.database import update_score_progress, update_word_stats, get_word_stats, get_worst_word_ratios
+from database_tools.database import update_score_progress, update_word_stats, get_word_stats, get_worst_word_ratios, update_experience
 from database_tools.cedict_database import get_def, get_def_pinyin_simplified
 from database_tools.hsk_database import get_hsk_by_level
 
@@ -69,7 +69,6 @@ def ec_quizz(inp, count, limitation):
 
         print(score_player_1)
         #Update Database
-        update_score_progress(score_player_1, time.time() - start, inp)
 
 
 
@@ -117,6 +116,7 @@ def ecpinyin_quizz(inp):
 
             question_pick.done = 1
             count += 1
+            update_experience(question_pick.difficulty)
             console.rule("[bold red]")
 
     # Display a summary of bad answers
@@ -135,7 +135,6 @@ def ecpinyin_quizz(inp):
     score_player_1 = round(score_player_1 * 0.75)
     console.print(Panel(f"[bold magenta]Quiz Complete![/bold magenta]\nYour final score: [bold yellow]{score_player_1}[/bold yellow]", expand=False))
 
-    update_score_progress(score_player_1, time.time() - start, inp)
 
 
 def last_x_quizz(inp, count=0, limitation=10001):
@@ -176,7 +175,9 @@ def last_x_quizz(inp, count=0, limitation=10001):
 
                 table.add_row(f"{question_pick.chinese_character}", f"{question_pick.chinese_pinyin}", f"{question_pick.english}")
                 console.print(table)
-
+            
+            update_experience(question_pick.difficulty)
+            console.rule("[bold] red")
             # Update the ratio if the user opted to
             if update_ratio.lower() == "yes": 
                 update_word_stats(key, result)
@@ -191,7 +192,6 @@ def last_x_quizz(inp, count=0, limitation=10001):
     # Display final score in a panel
     console.print(Panel(f"[bold magenta]Quiz Complete![/bold magenta]\nYour final score: [bold yellow]{score_player_1}[/bold yellow]", expand=False))
 
-    update_score_progress(score_player_1, time.time() - start, inp)
 
 
 
@@ -232,7 +232,8 @@ def worst_x_quizz(inp, count=0, limitation=10001):
                     console.print(table)
 
                     update_word_stats(key, False)
-
+                
+                update_experience(value.difficulty)
                 # Print separator after each question
                 console.rule("[bold red]")
 
@@ -240,109 +241,147 @@ def worst_x_quizz(inp, count=0, limitation=10001):
     score_player_1 = round(score_player_1 * 0.75)
     console.print(Panel(f"[bold magenta]Quiz Complete![/bold magenta]\nYour final score: [bold yellow]{score_player_1}[/bold yellow]", expand=False))
 
-    update_score_progress(score_player_1, time.time() - start, inp)
 
 
-#Like ec pinyin but user choose the number of question (x)
 def random_x_quizz(inp, count=0, limitation=10001):
-    user_limit = input("Random x numbers of words (type x): ")
-    if user_limit == "": user_limit = 10
+    # Start rich console
+    console = Console()
+    console.show_cursor()
+
+    # Take user input for number of random questions
+    user_limit = Prompt.ask("[bold yellow]Random x number of words (type x)[/bold yellow]", default="10")
     user_limit = int(user_limit)
     score_player_1 = 0
     counter = 0
+    bad_ans = {}
 
     for key, value in dq_vocabulary.items():
         question_pick = random.choice(list(dq_vocabulary.values()))
 
+        # Skip already answered questions
         while question_pick.done == 1:
             question_pick = random.choice(list(dq_vocabulary.values()))
 
         if question_pick.done == 0:
-            cprint(question_pick.english, "blue", attrs=["bold"]) 
-            ans = input()
+            # Ask the question (displaying the English meaning)
+            console.print(Panel(f"[bold blue]{question_pick.english}[/bold blue]", title="Question", expand=False))
+            ans = Prompt.ask("[bold yellow]Enter your answer (pinyin or character): [/bold yellow]")
 
             if ans == question_pick.chinese_pinyin or ans == question_pick.chinese_character:
-                cprint("Good Answer", "green", attrs=["underline"])
-                update_word_stats(key, True)
+                console.print("[bold green]Good Answer![/bold green]")
                 score_player_1 += question_pick.difficulty
-
+                update_word_stats(key, True)
             else:
-                cprint("Wrong Anser", "red", attrs=["underline"])
-                cprint(f"{question_pick.chinese_pinyin}, {question_pick.chinese_character}", attrs=["bold"])
+                console.print("[bold red]Wrong Answer![/bold red]")
+
+                # Display the correct answer in a table
+                table = Table(title=f"[bold]Correct Answer[/bold] - {question_pick.chinese_character}")
+                table.add_column("Simplified", justify="center", style="bright_blue", no_wrap=True)
+                table.add_column("Pinyin", justify="center", style="bright_blue")
+                table.add_column("English", justify="center", style="bright_blue")
+
+                table.add_row(f"{question_pick.chinese_character}", f"{question_pick.chinese_pinyin}", f"{question_pick.english}")
+                console.print(table)
+
+                bad_ans[key] = question_pick
                 update_word_stats(key, False)
 
             question_pick.done = 1
-        counter += 1 
-        if counter >= user_limit: break
+            counter += 1
+            update_experience(question_pick.difficulty)
+            console.rule("[bold red]")
 
-    score_player_1 = round(score_player_1*0.75)
-    update_score_progress(score_player_1, time.time() - start, inp)
+            if counter >= user_limit:
+                break
+
+    # Display a summary of bad answers
+    if bad_ans:
+        table = Table(title="[bold red]Summary of Bad Answers[/bold red]")
+        table.add_column("Simplified", justify="center", style="bright_blue", no_wrap=True)
+        table.add_column("Pinyin", justify="center", style="bright_blue")
+        table.add_column("English", justify="center", style="bright_blue")
+
+        for key in bad_ans:
+            table.add_row(f"{bad_ans[key].chinese_character}", f"{bad_ans[key].chinese_pinyin}", f"{bad_ans[key].english}")
+        
+        console.print(table)
+
+    # Calculate final score and display it
+    score_player_1 = round(score_player_1 * 0.75)
+    console.print(Panel(f"[bold magenta]Quiz Complete![/bold magenta]\nYour final score: [bold yellow]{score_player_1}[/bold yellow]", expand=False))
+
 
 
 
 def hsk_quizz(inp):
+    # Start rich console
     console = Console()
     console.show_cursor()
 
-    hsk_level = input("Which hsk level do you want ?(1 to 6): ")
-    limitation = input("Do you wish to set a limit to the number of questions ?(yes or no, blank is no): ")
+    # Take user input for HSK level and question limit
+    hsk_level = Prompt.ask("[bold yellow]Which HSK level do you want? (1 to 6)[/bold yellow]")
+    limitation = Prompt.ask("[bold yellow]Do you wish to set a limit to the number of questions? (yes or no, blank is no)[/bold yellow]", choices=["yes", "no"], default="no")
 
+    # Get HSK vocabulary by level
     hsk_dict = get_hsk_by_level(hsk_level)
-    for i in hsk_dict:
-        print(hsk_dict[i].english, hsk_dict[i].chinese_pinyin)
     bad_ans = {}
     score_player_1 = 0
+    count = 0
 
     for key, value in hsk_dict.items():
         word = random.choice(list(hsk_dict.values()))
 
+        # Skip already answered questions
         while word.done == 1:
             word = random.choice(list(hsk_dict.values()))
 
         if word.done == 0:
-            console.print(f"[bold royal_blue1]{word.english}")
-            ans = input()
+            # Ask the question (displaying the English meaning)
+            console.print(Panel(f"[bold royal_blue1]{word.english}[/bold royal_blue1]", title="Question", expand=False))
+            ans = Prompt.ask("[bold yellow]Enter your answer (pinyin): [/bold yellow]")
+
             if ans == word.chinese_pinyin:
-                console.print("[bold green]Good Answer")
+                console.print("[bold green]Good Answer![/bold green]")
                 score_player_1 += word.difficulty
                 update_word_stats(key, True)
-
             else:
-                console.print("[bold red]Wrong Answer")
+                console.print("[bold red]Wrong Answer![/bold red]")
                 bad_ans[key] = word
                 update_word_stats(key, False)
 
-                table = Table(title=(f"{word.chinese_character}"))
-
+                # Display the correct answer in a table
+                table = Table(title=f"[bold]Correct Answer[/bold] - {word.chinese_character}")
                 table.add_column("Simplified", justify="center", style="bright_blue", no_wrap=True)
                 table.add_column("Pinyin", justify="center", style="bright_blue")
                 table.add_column("English", justify="center", style="bright_blue")
 
                 table.add_row(f"{word.chinese_character}", f"{word.chinese_pinyin}", f"{word.english}")
-
                 console.print(table)
 
             console.rule("[bold red]")
             word.done = 1
+            count += 1
+            
+            # Break if limit is reached
+            if limitation.lower() == "yes" and count >= int(user_limit):
+                break
+
+    # Display a summary of bad answers
+    if bad_ans:
+        table = Table(title="[bold red]Summary of Bad Answers[/bold red]")
+        table.add_column("Simplified", justify="center", style="bright_blue", no_wrap=True)
+        table.add_column("Pinyin", justify="center", style="bright_blue")
+        table.add_column("English", justify="center", style="bright_blue")
+
+        for i in bad_ans:
+            table.add_row(f"{bad_ans[i].chinese_character}", f"{bad_ans[i].chinese_pinyin}", f"{bad_ans[i].english}")
         
-    update_score_progress(score_player_1, time.time() - start, inp)
+        console.print(table)
 
-    table = Table(title=("[bold red]Bad Answers"))            
-    table.add_column("Simplified", justify="center", style="bright_blue", no_wrap=True)
-    table.add_column("Pinyin", justify="center", style="bright_blue")
-    table.add_column("English", justify="center", style="bright_blue") 
-    for i in bad_ans:
-        table.add_row(f"{bad_ans[i].chinese_character}", f"{bad_ans[i].chinese_pinyin}, f{bad_ans[i].english}")
-    console.print(table)
-
+    # Calculate final score and display it
     score_player_1 = round(score_player_1)
+    console.print(Panel(f"[bold magenta]Quiz Complete![/bold magenta]\nYour final score: [bold yellow]{score_player_1}[/bold yellow]", expand=False))
     update_score_progress(score_player_1, time.time() - start, "hsk")
-
-
-
-
-
-
 
 
 

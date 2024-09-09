@@ -64,3 +64,9 @@ def new_vocab_auto():
             
         else:
             if duplicate == False: print("No entries found for your input")
+
+def study_personal():
+    table = Table(title="[bold blue]Study Table")
+    for i in dq_vocabulary:
+
+    
