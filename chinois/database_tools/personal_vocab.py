@@ -98,8 +98,8 @@ def populate_personal_vocab():
     
     conn.commit()
     conn.close()
-    
 
+    
 
 def main():
     initiate_personal_db()

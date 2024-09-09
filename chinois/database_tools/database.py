@@ -183,7 +183,7 @@ def get_word_stats(word, pinyin):
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
 
-    cursor.execute('SELECT right_count, wrong_count, ratio FROM SuccessRate WHERE question = ?', (word,))
+    cursor.execute('SELECT right_count, wrong_count, ratio FROM SuccessRate WHERE word = ?', (word,))
     result = cursor.fetchone()
 
     conn.close()
@@ -215,6 +215,31 @@ def get_worst_word_ratios(limit=10):
                    for word, right_count, wrong_count, ratio in results]
     
     return worst_words
+
+def get_experience():
+    # Connect to SQLite database
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+
+    # Execute the SELECT statement to retrieve Experience from OverallProgress
+    cursor.execute('''
+        SELECT Experience FROM OverallProgress WHERE id = 1
+    ''')
+
+    # Fetch the result
+    result = cursor.fetchone()
+
+    # Check if the result is found
+    if result:
+        experience = result[0]
+        print(f"Your current experience is: {experience}")
+    else:
+        print("No record found with ID 1.")
+
+    # Close the connection
+    conn.close()
+
+
 
 if __name__ == "__main__":
     intiate_database()

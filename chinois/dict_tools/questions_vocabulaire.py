@@ -129,3 +129,4 @@ dq_vocabulary["如果"] = Vocabulary("ru2 guo3", "如果", "if, in this case", 1
 dq_vocabulary["尽量"] = Vocabulary("jin3 liang4", "尽量", "as much as possible, to the greatest extent", 1)
 
 #dq_vocabulary[""] = Vocabulary("", "", "", 1)
+dq_vocabulary["百"] = Vocabulary("bai3", "百", "hundred", 2)

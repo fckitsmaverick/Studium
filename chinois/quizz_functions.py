@@ -1,9 +1,16 @@
 from dict_tools.questions_vocabulaire import dq_vocabulary
 from database_tools.database import update_score_progress, update_word_stats, get_word_stats, get_worst_word_ratios
 from database_tools.cedict_database import get_def, get_def_pinyin_simplified
+from database_tools.hsk_database import get_hsk_by_level
 
 from datetime import datetime
 from termcolor import cprint
+from rich.progress import Progress
+from rich.console import Console
+from rich.table import Table
+from rich.prompt import Prompt
+from rich.panel import Panel
+from rich.progress import track
 
 import random
 import time
@@ -13,9 +20,6 @@ import pandas as pd
 score_player_1 = 0
 limitation = 10001
 
-bad_ans = {
-
-}
 
 progress = {
 
@@ -54,11 +58,12 @@ def ec_quizz(inp, count, limitation):
                     else:
                         cprint("Bad Answer", "red")
                         print(question_pick.chinese_character, " ", question_pick.chinese_pinyin)
-                        bad_ans[i] = question_pick
                         update_word_stats(question_pick.chinese_character, False)
 
                     question_pick.done = 1
                     count+=1
+                    progress.update(task_ecpinyin, advance=1)
+
                 if count >= int(limitation):
                     break
 
@@ -66,105 +71,180 @@ def ec_quizz(inp, count, limitation):
         #Update Database
         update_score_progress(score_player_1, time.time() - start, inp)
 
+
+
+#This quizz is the basis for the others
 #English to Chinese quizz only one input required to validate the answer (pinyin)
-def ecpinyin_quizz(inp, count, limitation):
+def ecpinyin_quizz(inp):
+    # Start rich console
+    console = Console()
+    console.show_cursor()
+
     score_player_1 = 0
+    count = 0
+    bad_ans = {}
+
     for i in dq_vocabulary:
         question_pick = random.choice(list(dq_vocabulary.values()))
-        
+
+        # Skip already answered questions
         while question_pick.done == 1:
             question_pick = random.choice(list(dq_vocabulary.values()))
 
         if question_pick.done == 0:
-            cprint(f"{question_pick.english}", "light_magenta")
-            ans = input() 
+            # Ask the question (displaying the English meaning)
+            console.print(Panel(f"[bold bright_blue]{question_pick.english}[/bold bright_blue]", title="Question", expand=False))
+            ans = Prompt.ask("[bold yellow]Enter your answer (pinyin): [/bold yellow]")
 
-            if (ans == question_pick.chinese_pinyin):
-                cprint("Good Answer", "green")
+            if ans == question_pick.chinese_pinyin:
+                console.print("[bold bright_green]Good Answer![/bold bright_green]")
                 score_player_1 += question_pick.difficulty
                 update_word_stats(question_pick.chinese_character, True)
-
             else:
-                cprint("Bad Answer")
-                print(f"{question_pick.chinese_pinyin}, {question_pick.chinese_character}", "red")
+                console.print("[bold bright_red]Bad Answer![/bold bright_red]")
+
+                # Display the correct answer in a table
+                table = Table(title=f"[bold]Correct Answer[/bold] - {question_pick.chinese_character}")
+                table.add_column("Simplified", justify="center", style="bright_blue", no_wrap=True)
+                table.add_column("Pinyin", justify="center", style="bright_blue")
+                table.add_column("English", justify="center", style="bright_blue")
+
+                table.add_row(f"{question_pick.chinese_character}", f"{question_pick.chinese_pinyin}", f"{question_pick.english}")
+                console.print(table)
+
                 bad_ans[i] = question_pick
                 update_word_stats(question_pick.chinese_character, False)
 
             question_pick.done = 1
             count += 1
+            console.rule("[bold red]")
 
-        if count >= int(limitation):
-            break
-            
-    score_player_1 = round(score_player_1*0.75)
+    # Display a summary of bad answers
+    if bad_ans:
+        table = Table(title="[bold red]Summary of Bad Answers[/bold red]")
+        table.add_column("Simplified", justify="center", style="bright_blue", no_wrap=True)
+        table.add_column("Pinyin", justify="center", style="bright_blue")
+        table.add_column("English", justify="center", style="bright_blue")
+
+        for i in bad_ans:
+            table.add_row(f"{bad_ans[i].chinese_character}", f"{bad_ans[i].chinese_pinyin}", f"{bad_ans[i].english}")
+        
+        console.print(table)
+
+    # Display final score
+    score_player_1 = round(score_player_1 * 0.75)
+    console.print(Panel(f"[bold magenta]Quiz Complete![/bold magenta]\nYour final score: [bold yellow]{score_player_1}[/bold yellow]", expand=False))
+
     update_score_progress(score_player_1, time.time() - start, inp)
 
-#Quizz about the last x entries in the dictionnary, user can choose x
-def last_x_quizz(inp, count, limitation):
-    x = input("Last x numbers(type x): ")
-    update_ratio = input("Do you want to update ratio ?: ")
+
+def last_x_quizz(inp, count=0, limitation=10001):
+    # Start rich console
+    console = Console()
+    console.show_cursor()
+
+    # Take user input for number of entries and whether to update ratio
+    x = Prompt.ask("[bold yellow]Enter how many last entries you want to quiz on (type x)[/bold yellow]", default="5")
+    update_ratio = Prompt.ask("[bold yellow]Do you want to update the success ratio?[/bold yellow]", choices=["yes", "no"], default="no")
     x = int(x)
-    count = 0
     score_player_1 = 0
+    total_questions = len(dq_vocabulary) - (len(dq_vocabulary) - x)
 
+    # Loop over the last x entries and ask questions
     for key, value in dq_vocabulary.items():
-
-        if len(dq_vocabulary) - count <= (x-1):
+        # Iterate until the entry we want
+        if len(dq_vocabulary) - count <= (x - 1):
             question_pick = value
-            cprint(f"{question_pick.english}", "light_blue", attrs=["bold"])
-            ans = input() 
+            
+            # Ask the question (displaying the English meaning)
+            console.print(Panel(f"[bold cyan]{question_pick.english}[/bold cyan]", title="Question", expand=False))
+            ans = Prompt.ask("[bold yellow]Enter your answer (pinyin): [/bold yellow]") 
             result = False
 
-            if (ans == question_pick.chinese_pinyin):
-                cprint("Good Answer", "green", attrs=["underline"])
+            if ans == question_pick.chinese_pinyin:
+                console.print("[bold green]Correct![/bold green]", style="bold green")
                 score_player_1 += question_pick.difficulty
                 result = True
-
             else:
-                cprint("Bad Answer")
-                cprint(f"{question_pick.chinese_pinyin}, {question_pick.chinese_character}", "red", attrs =["underline"])
-                result = False
+                console.print("[bold bright_red]Incorrect![/bold bright_red]", style="bold red")
+                
+                # Display correct answer in a table
+                table = Table(title=f"[bold]Correct Answer[/bold] - {question_pick.chinese_character}")
+                table.add_column("Simplified", justify="center", style="bright_blue", no_wrap=True)
+                table.add_column("Pinyin", justify="center", style="bright_blue")
+                table.add_column("English", justify="center", style="bright_blue")
 
-            if update_ratio.lower() == "yes": update_word_stats(key, result)
-            get_word_stats(key, question_pick.chinese_pinyin)
+                table.add_row(f"{question_pick.chinese_character}", f"{question_pick.chinese_pinyin}", f"{question_pick.english}")
+                console.print(table)
+
+            # Update the ratio if the user opted to
+            if update_ratio.lower() == "yes": 
+                update_word_stats(key, result)
+
             count += 1
         else:
             count += 1
 
-    score_player_1 = round(score_player_1*0.75)
+    # Calculate final score
+    score_player_1 = round(score_player_1 * 0.75)
+
+    # Display final score in a panel
+    console.print(Panel(f"[bold magenta]Quiz Complete![/bold magenta]\nYour final score: [bold yellow]{score_player_1}[/bold yellow]", expand=False))
+
     update_score_progress(score_player_1, time.time() - start, inp)
 
-#Quizz about the words with the worst ratio of right/wrong answers, user can choose x
-def worst_x_quizz(inp, count, limitation):
-    user_limit = input("Worst x words (type x): ")
-    if user_limit == "": user_limit = 10
 
+
+
+def worst_x_quizz(inp, count=0, limitation=10001):
+    # Start rich console
+    console = Console()
+    console.show_cursor()
+
+    # Take user input for number of worst words to quiz on
+    user_limit = Prompt.ask("[bold yellow]Worst x words (type x)[/bold yellow]", default="10")
     user_limit = int(user_limit)
     score_player_1 = 0
     worst10 = get_worst_word_ratios(user_limit)
 
+    # Loop through vocabulary to ask questions about the worst words
     for key, value in dq_vocabulary.items():
         for word in worst10:
-
             if word["word"] == value.chinese_character:
-                cprint(f"{value.english}", "magenta", attrs=["underline"])
-                ans = input()
+                # Ask the question (displaying the English meaning)
+                console.print(Panel(f"[bold magenta]{value.english}[/bold magenta]", title="Question", expand=False))
+                ans = console.input("[bold yellow]Enter your answer (pinyin): [/bold yellow]")
 
                 if ans == value.chinese_pinyin:
-                    cprint("Good Answer", "green", attrs=["bold"])
+                    console.print("[bold green]Correct![/bold green]")
                     score_player_1 += value.difficulty
                     update_word_stats(key, True)
-
                 else:
-                    cprint(f"Wrong Answer, {value.chinese_pinyin}, {value.chinese_character}", "red", attrs=["bold"])
+                    console.print("[bold bright_red]Incorrect![/bold bright_red]", style="bold red")
+                    
+                    # Display correct answer in a table
+                    table = Table(title=f"[bold]Correct Answer[/bold] - {value.chinese_character}")
+                    table.add_column("Simplified", justify="center", style="bright_blue", no_wrap=True)
+                    table.add_column("Pinyin", justify="center", style="bright_blue")
+                    table.add_column("English", justify="center", style="bright_blue")
+
+                    table.add_row(f"{value.chinese_character}", f"{value.chinese_pinyin}", f"{value.english}")
+                    console.print(table)
+
                     update_word_stats(key, False)
 
-    score_player_1 = round(score_player_1*0.75)
+                # Print separator after each question
+                console.rule("[bold red]")
+
+    # Calculate final score and display it
+    score_player_1 = round(score_player_1 * 0.75)
+    console.print(Panel(f"[bold magenta]Quiz Complete![/bold magenta]\nYour final score: [bold yellow]{score_player_1}[/bold yellow]", expand=False))
+
     update_score_progress(score_player_1, time.time() - start, inp)
 
 
 #Like ec pinyin but user choose the number of question (x)
-def random_x_quizz(inp, count, limitation):
+def random_x_quizz(inp, count=0, limitation=10001):
     user_limit = input("Random x numbers of words (type x): ")
     if user_limit == "": user_limit = 10
     user_limit = int(user_limit)
@@ -200,6 +280,72 @@ def random_x_quizz(inp, count, limitation):
 
 
 
+def hsk_quizz(inp):
+    console = Console()
+    console.show_cursor()
+
+    hsk_level = input("Which hsk level do you want ?(1 to 6): ")
+    limitation = input("Do you wish to set a limit to the number of questions ?(yes or no, blank is no): ")
+
+    hsk_dict = get_hsk_by_level(hsk_level)
+    for i in hsk_dict:
+        print(hsk_dict[i].english, hsk_dict[i].chinese_pinyin)
+    bad_ans = {}
+    score_player_1 = 0
+
+    for key, value in hsk_dict.items():
+        word = random.choice(list(hsk_dict.values()))
+
+        while word.done == 1:
+            word = random.choice(list(hsk_dict.values()))
+
+        if word.done == 0:
+            console.print(f"[bold royal_blue1]{word.english}")
+            ans = input()
+            if ans == word.chinese_pinyin:
+                console.print("[bold green]Good Answer")
+                score_player_1 += word.difficulty
+                update_word_stats(key, True)
+
+            else:
+                console.print("[bold red]Wrong Answer")
+                bad_ans[key] = word
+                update_word_stats(key, False)
+
+                table = Table(title=(f"{word.chinese_character}"))
+
+                table.add_column("Simplified", justify="center", style="bright_blue", no_wrap=True)
+                table.add_column("Pinyin", justify="center", style="bright_blue")
+                table.add_column("English", justify="center", style="bright_blue")
+
+                table.add_row(f"{word.chinese_character}", f"{word.chinese_pinyin}", f"{word.english}")
+
+                console.print(table)
+
+            console.rule("[bold red]")
+            word.done = 1
+        
+    update_score_progress(score_player_1, time.time() - start, inp)
+
+    table = Table(title=("[bold red]Bad Answers"))            
+    table.add_column("Simplified", justify="center", style="bright_blue", no_wrap=True)
+    table.add_column("Pinyin", justify="center", style="bright_blue")
+    table.add_column("English", justify="center", style="bright_blue") 
+    for i in bad_ans:
+        table.add_row(f"{bad_ans[i].chinese_character}", f"{bad_ans[i].chinese_pinyin}, f{bad_ans[i].english}")
+    console.print(table)
+
+    score_player_1 = round(score_player_1)
+    update_score_progress(score_player_1, time.time() - start, "hsk")
+
+
+
+
+
+
+
+
+
 #Chinese to english quizz, doesn't update the stats because checking right answer is too tedious
 def ce_quizz(count, limitation):
         for i in dq_vocabulary:
@@ -219,10 +365,6 @@ def ce_quizz(count, limitation):
                     break
         return
 
-
-def use_cedict(user_input):
-    # Parse U8 file and return a list of dict with this form {traditional:, simplified:, pinyin:, english:}
-    ce_dict = create_dict()
 
         
 

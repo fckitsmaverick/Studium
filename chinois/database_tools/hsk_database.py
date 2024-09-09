@@ -1,8 +1,27 @@
 import sqlite3
-import os
 import pandas as pd
 
-db_directory = ('/Users/gabriel/Documents/VSCode/Python/Studium/chinois/database_handling')
+import sys
+import os
+from contextlib import contextmanager
+
+@contextmanager
+def temporarily_add_path(path):
+    sys.path.insert(0, path)
+    try:
+        yield  # This allows the code inside the "with" block to execute
+    finally:
+        sys.path.pop(0)  # Ensure that the path is removed after use
+
+# Usage:
+parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+
+with temporarily_add_path(parent_dir):
+    from classes_chinois import Vocabulary  # The path is temporarily modified here
+
+# After the with block, sys.path is restored to its original state
+
+db_directory = ('/Users/gabriel/Documents/VSCode/Python/Studium/chinois/database_tools')
 db_filename = ('hsk_vocabulary.db')
 db_path = os.path.join(db_directory, db_filename)
 
@@ -33,7 +52,7 @@ def create_hsk_db():
     cursor = conn.cursor()
 
     #Turn CSV into pandas dataframe
-    df_directory = ('/Users/gabriel/Documents/VSCode/Python/Studium/chinois/database_handling')
+    df_directory = ('/Users/gabriel/Documents/VSCode/Python/Studium/chinois/database_tools')
     df_filename = ('hsk-level-all.csv')
     df_path = os.path.join(df_directory, df_filename)
 
@@ -73,9 +92,32 @@ def get_hsk_level(pinyin_input, simplified_input, user_input=False):
     else:
         print("No result found for this word, hsk default value assigned: 1")
         dict_result = {"hsk_level": 1}
-        return dict_result 
+        return False
 
     conn.close()
+
+def get_hsk_by_level(level):
+    hsk_dict = {}
+
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+
+    cursor.execute('''SELECT simplified, pinyin, english, hsk_level
+                      FROM hsk_vocab
+                      WHERE hsk_level = ?''', (level,))
+
+    result = cursor.fetchall()
+
+    for row in result:
+        simplified = row[0]
+        pinyin = row[1]
+        english = row[2]
+        hsk_level = row[3]
+        hsk_dict[simplified] = Vocabulary(pinyin, simplified, english, hsk_level)
+
+    conn.close()
+
+    return hsk_dict
 
 
 
