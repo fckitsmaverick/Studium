@@ -5,6 +5,8 @@ import sys
 import os
 from contextlib import contextmanager
 
+from rich.console import Console
+
 @contextmanager
 def temporarily_add_path(path):
     sys.path.insert(0, path)
@@ -43,6 +45,16 @@ def initiate_hsk_db():
         )
     ''')
 
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS hsk_grammar (
+            hsk_level INTEGER DEFAULT 1,
+            simplified TEXT NOT NULL,
+            pinyin TEXT NOT NULL,
+            english TEXT NOT NULL,
+            UNIQUE (simplified, pinyin, english)
+        )
+    ''')
+
     conn.close()
 
 
@@ -71,10 +83,35 @@ def create_hsk_db():
     conn.commit()
     conn.close()
 
+def create_hsk_grammar_db():
+    
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+
+    #Turn CSV into pandas dataframe
+    df_directory = ('/Users/gabriel/Documents/VSCode/Python/Studium/chinois/database_tools')
+    df_filename = ('hsk-1-grammar.csv')
+    df_path = os.path.join(df_directory, df_filename)
+
+    df = pd.read_csv(df_path, names=(["hsk_level", "simplified", "pinyin", "english"]), usecols=["hsk_level", "simplified", "pinyin", "english"])
+    hsk_sentences_dict = df.to_dict("index")
+    print(hsk_sentences_dict)
+
+    for i in hsk_sentences_dict:
+        cursor.execute('''
+            INSERT OR IGNORE INTO hsk_grammar (hsk_level, simplified, pinyin, english)
+            VALUES (?, ?, ?, ?)
+        ''', (1, hsk_sentences_dict[i]["simplified"], hsk_sentences_dict[i]["pinyin"], hsk_sentences_dict[i]["english"]))
+    
+    
+
     
 def get_hsk_level(pinyin_input, simplified_input, user_input=False):
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
+
+    console = Console()
+    console.show_cursor()
 
     #If the user ask explicitely for it, otherwise the function is just meant to be called as part of the code
     if user_input == True:
@@ -90,7 +127,7 @@ def get_hsk_level(pinyin_input, simplified_input, user_input=False):
         dict_result = {"hsk_level": result[0][0]}
         return dict_result
     else:
-        print("No result found for this word, hsk default value assigned: 1")
+        console.print("[bold red]No result found for this word, hsk default value assigned: 1[/bold red]")
         dict_result = {"hsk_level": 1}
         return False
 
@@ -113,18 +150,42 @@ def get_hsk_by_level(level):
         pinyin = row[1]
         english = row[2]
         hsk_level = row[3]
-        hsk_dict[simplified] = Vocabulary(pinyin, simplified, english, hsk_level)
+        hsk_dict[simplified] = Vocabulary(pinyin, simplified, english, hsk_level, category="Vocabulary")
 
     conn.close()
 
     return hsk_dict
 
+def get_hsk_dict_def(pinyin_input, simplified_input, user_input=False):
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+
+    console = Console()
+    console.show_cursor()
+
+    #If the user ask explicitely for it, otherwise the function is just meant to be called as part of the code
+    if user_input == True:
+        pinyin_input = input("Pinyin: ")
+        simplified_input = input("Simplified: ")
+
+    cursor.execute('SELECT hsk_level, simplified, pinyin, english FROM hsk_vocab WHERE pinyin = ? AND simplified = ?', (pinyin_input, simplified_input))
+
+    result = cursor.fetchall()
+
+    if result:
+        #result[0][0] is hsk_level, [0][1] is simplified, [0][2] is pinyin and [0][3] is english
+        dict_result = {"simplified": result[0][1], "pinyin": result[0][2], "english": result[0][3]}
+        return dict_result
+    else:
+        console.print("[bold red]No result found for this word in HSK dictionnary[/bold red]")
+        return False
+
+    conn.close() 
 
 
 def main():
     initiate_hsk_db()
     create_hsk_db()
-    get_hsk_level()
 
 if __name__ == "__main__":
     main()

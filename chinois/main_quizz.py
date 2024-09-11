@@ -1,8 +1,8 @@
 from dict_tools.questions_vocabulaire import dq_vocabulary
 from database_tools.database import update_score_progress, get_experience
 from database_tools.pokemon_database import get_pokedex, check_pokemon_rank
-from quizz_functions import ec_quizz, ecpinyin_quizz, last_x_quizz, worst_x_quizz, random_x_quizz, ce_quizz, hsk_quizz
-from diverse_functions import print_pokedex, new_vocab_auto
+from quizz_functions import ec_quizz, ecpinyin_quizz, last_x_quizz, worst_x_quizz, random_x_quizz, hsk_quizz, ce_random_quizz, sentence_quizz
+from diverse_functions import print_pokedex, new_vocab_auto, study_personal
 
 
 from datetime import datetime
@@ -46,9 +46,10 @@ def display_menu():
 
     table.add_row("1", "Enter Quizz Mode")
     table.add_row("2", "Enter Pokemon Mode")
-    table.add_row("3", "Add New Vocabulary")
-    table.add_row("4", "View Pokedex")
-    table.add_row("5", "Exit")
+    table.add_row("3", "Enter Study Mode")
+    table.add_row("4", "Add New Vocabulary")
+    table.add_row("5", "View Pokedex")
+    table.add_row("6", "Exit")
 
     console.print(table)
 
@@ -66,7 +67,9 @@ def display_quizz_submenu():
     table.add_row("3", "Last X Words Quizz (taken from your personal dictionnary)")
     table.add_row("4", "Worst X Words Quizz (your words with the worst ratio!)")
     table.add_row("5", "HSK Quizz (you can choose your level!)")
-    table.add_row("6", "Back to Main Menu")
+    table.add_row("6", "Chinese character to Pinyin Quizz")
+    table.add_row("7", "Chinese Sentences Quizz")
+    table.add_row("8", "Back to Main Menu")
 
     console.print(table)
 
@@ -89,7 +92,7 @@ def display_pokemon_submenu():
 
 def get_user_choice():
     """Prompt the user for input."""
-    return Prompt.ask("[bold yellow]Please select an option[/bold yellow]", choices=["1", "2", "3", "4", "5"])
+    return Prompt.ask("[bold yellow]Please select an option[/bold yellow]", choices=["1", "2", "3", "4", "5", "6"])
 
 def get_submenu_choice(choices):
     """Prompt the user for input in the submenu."""
@@ -99,24 +102,37 @@ def quizz_mode():
     """Handle Quizz Mode submenu actions."""
     while True:
         display_quizz_submenu()
-        quizz_choice = get_submenu_choice(["1", "2", "3", "4", "5", "6"])
+        quizz_choice = get_submenu_choice(["1", "2", "3", "4", "5", "6", "7", "8"])
 
         if quizz_choice == "1":
             console.print("[bold green]Starting a new English to Chinese Pinyin Quizz ![/bold green]")
             ecpinyin_quizz("1")
+            return
         elif quizz_choice == "2":
             console.print("[bold green]Starting a new Random Test ![/bold green]")
             random_x_quizz("2")
+            return
         elif quizz_choice == "3":
             console.print("[bold green]Starting a new Last X Test ![/bold green]")
             last_x_quizz("3")
+            return
         elif quizz_choice == "4":
             console.print("[bold green]Starting a new Worst X Test ![/bold green]")
             worst_x_quizz("4")
+            return
         elif quizz_choice == "5":
             console.print("[bold green]Starting a new HSK Test ![/bold green]")
             hsk_quizz("5")
+            return
         elif quizz_choice == "6":
+            console.print("[bold green]Starting a new Chinese Character to Pinyin Quizz ![/bold green]")
+            ce_random_quizz("6")
+            return
+        elif quizz_choice == "7":
+            console.print("[bold green]Starting a new Chinese Sentences Quizz ![/bold green]")
+            sentence_quizz("7")
+            return
+        elif quizz_choice == "8":
             return  # Return to the main menu
 
 def pokemon_mode():
@@ -129,13 +145,15 @@ def pokemon_mode():
             console.print("[bold green]Catching a Pokémon![/bold green]")
             my_pokedex = get_pokedex()
             print_pokedex(my_pokedex)
+            return
         elif pokemon_choice == "2":
             console.print("[bold green]Checking Pokémon rank![/bold green]")
             check_pokemon_rank()
-            # Call the function to check Pokémon rank
+            return
         elif pokemon_choice == "3":
             console.print("[bold green]Check your XP!")
             get_experience()
+            return
         elif pokemon_choice == "4":
             return  # Return to the main menu
 
@@ -152,13 +170,16 @@ def main():
         elif choice == "2":
             pokemon_mode()  # Call the Pokemon Mode submenu
         elif choice == "3":
+            console.print("Study Mode selected!")
+            study_personal()
+        elif choice == "4":
             console.print("[bold green]Add New Vocabulary selected![/bold green]")
             new_vocab_auto()
-        elif choice == "4":
+        elif choice == "5":
             console.print("[bold green]View Pokedex selected![/bold green]")
             my_pokedex = get_pokedex()
             print_pokedex(my_pokedex)
-        elif choice == "5":
+        elif choice == "6":
             console.print("[bold red]Exiting...[/bold red]")
             sys.exit(0)
         else:

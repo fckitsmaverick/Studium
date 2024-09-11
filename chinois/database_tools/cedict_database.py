@@ -98,25 +98,20 @@ def get_def_pinyin_simplified(pinyin_input, simplified_input, user_input=False):
     cursor.execute('SELECT DISTINCT English, Pinyin, Simplified FROM CeDict WHERE Pinyin = ? AND Simplified = ?', (pinyin_input, simplified_input))
     result = cursor.fetchall()
     end = time.time()
-    print(result)
 
     #return a dictionary with key1 being english def and key2 being pinyin
     if result:
         dict_result = {"english": result[0][0], "pinyin": result[0][1], "simplified": result[0][2]}
         return dict_result
     else:
-        print("No matching result")
         return False
 
     print(f"Timer: {round(end-start, 3)}")
     
 
 def main():
-
     sorted_list = sort_cedict()
     create_cedb(sorted_list)
-    remove_duplicate()
-    #get_def()
     get_def_pinyin_simplified()
 
 if __name__ == "__main__":

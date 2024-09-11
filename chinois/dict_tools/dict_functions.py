@@ -1,5 +1,5 @@
-from cedict_database import get_def_pinyin_simplified()
-from questions_vocabulaire import dq_vocabulary()
+from cedict_database import get_def_pinyin_simplified
+from questions_vocabulaire import dq_vocabulary
 
 
 

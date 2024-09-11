@@ -83,6 +83,23 @@ def ecpinyin_quizz(inp):
     count = 0
     bad_ans = {}
 
+    sentence_included = Prompt.ask("[bold yellow]Do you want to include sentences?[/bold yellow]", choices=["yes", "no"], default="no")
+
+    difficulty_set = Prompt.ask("[bold yellow]Do you want to set a difficulty limit? (yes or no, blank is no)[/bold yellow]", choices=["yes", "no"], default="no")
+    if difficulty_set.lower() == "yes":
+         difficulty_limit = Prompt.ask("[bold yellow]Enter the difficulty limit (1 to 6): [/bold yellow]", choices=["1", "2", "3", "4", "5"], default="1")
+
+    # Modify dq_vocabulary without reassigning
+    if sentence_included == "no":
+        dq_vocabulary_copy = {key: value for key, value in dq_vocabulary.items() if value.category == "Vocabulary"}
+        dq_vocabulary.clear()
+        dq_vocabulary.update(dq_vocabulary_copy)
+
+    if difficulty_set.lower() == "yes":
+        dq_vocabulary_copy = {key: value for key, value in dq_vocabulary.items() if value.difficulty == int(difficulty_limit)}
+        dq_vocabulary.clear()
+        dq_vocabulary.update(dq_vocabulary_copy)
+
     for i in dq_vocabulary:
         question_pick = random.choice(list(dq_vocabulary.values()))
 
@@ -118,6 +135,7 @@ def ecpinyin_quizz(inp):
             count += 1
             update_experience(question_pick.difficulty)
             console.rule("[bold red]")
+            console.print(f"[bold yellow]Questions Completed: {count}/{len(dq_vocabulary)}, {round((count/len(dq_vocabulary))*100)}%[/bold yellow]")
 
     # Display a summary of bad answers
     if bad_ans:
@@ -145,9 +163,18 @@ def last_x_quizz(inp, count=0, limitation=10001):
     # Take user input for number of entries and whether to update ratio
     x = Prompt.ask("[bold yellow]Enter how many last entries you want to quiz on (type x)[/bold yellow]", default="5")
     update_ratio = Prompt.ask("[bold yellow]Do you want to update the success ratio?[/bold yellow]", choices=["yes", "no"], default="no")
+    sentence_included = Prompt.ask("[bold yellow]Do you want to include sentences?[/bold yellow]", choices=["yes", "no"], default="no")
+
+    if sentence_included == "no":
+        dq_vocabulary_copy = {key: value for key, value in dq_vocabulary.items() if value.category == "Vocabulary"}
+        dq_vocabulary.clear()
+        dq_vocabulary.update(dq_vocabulary_copy)
+
     x = int(x)
+    counter = 0
     score_player_1 = 0
     total_questions = len(dq_vocabulary) - (len(dq_vocabulary) - x)
+    bad_ans = {}
 
     # Loop over the last x entries and ask questions
     for key, value in dq_vocabulary.items():
@@ -175,19 +202,31 @@ def last_x_quizz(inp, count=0, limitation=10001):
 
                 table.add_row(f"{question_pick.chinese_character}", f"{question_pick.chinese_pinyin}", f"{question_pick.english}")
                 console.print(table)
+
+                bad_ans[key] = question_pick
             
             update_experience(question_pick.difficulty)
-            console.rule("[bold] red")
+            console.rule("[bold]")
             # Update the ratio if the user opted to
             if update_ratio.lower() == "yes": 
                 update_word_stats(key, result)
 
-            count += 1
+            counter += 1
+            if counter >= x:
+                break
         else:
             count += 1
+        # Display a summary of bad answers
+    if bad_ans:
+        table = Table(title="[bold red]Summary of Bad Answers[/bold red]")
+        table.add_column("Simplified", justify="center", style="bright_blue", no_wrap=True)
+        table.add_column("Pinyin", justify="center", style="bright_blue")
+        table.add_column("English", justify="center", style="bright_blue")
 
-    # Calculate final score
-    score_player_1 = round(score_player_1 * 0.75)
+        for i in bad_ans:
+            table.add_row(f"{bad_ans[i].chinese_character}", f"{bad_ans[i].chinese_pinyin}", f"{bad_ans[i].english}")
+        
+        console.print(table)
 
     # Display final score in a panel
     console.print(Panel(f"[bold magenta]Quiz Complete![/bold magenta]\nYour final score: [bold yellow]{score_player_1}[/bold yellow]", expand=False))
@@ -250,10 +289,30 @@ def random_x_quizz(inp, count=0, limitation=10001):
 
     # Take user input for number of random questions
     user_limit = Prompt.ask("[bold yellow]Random x number of words (type x)[/bold yellow]", default="10")
+    sentence_included = Prompt.ask("[bold yellow]Do you want to include sentences?[/bold yellow]", choices=["yes", "no"], default="no")
+
+    difficulty_set = Prompt.ask("[bold yellow]Do you want to set a difficulty limit? (yes or no, blank is no)[/bold yellow]", choices=["yes", "no"], default="no")
+    if difficulty_set.lower() == "yes":
+         difficulty_limit = Prompt.ask("[bold yellow]Enter the difficulty limit (1 to 6): [/bold yellow]", choices=["1", "2", "3", "4", "5"], default="1")
+
     user_limit = int(user_limit)
     score_player_1 = 0
     counter = 0
     bad_ans = {}
+
+    # Modify dq_vocabulary without reassigning
+    if sentence_included == "no":
+        dq_vocabulary_copy = {key: value for key, value in dq_vocabulary.items() if value.category == "Vocabulary"}
+        dq_vocabulary.clear()
+        dq_vocabulary.update(dq_vocabulary_copy)
+
+    if difficulty_set.lower() == "yes":
+        dq_vocabulary_copy = {key: value for key, value in dq_vocabulary.items() if value.difficulty == int(difficulty_limit)}
+        dq_vocabulary.clear()
+        dq_vocabulary.update(dq_vocabulary_copy)
+    
+    # Start timer
+    start_time = time.time()
 
     for key, value in dq_vocabulary.items():
         question_pick = random.choice(list(dq_vocabulary.values()))
@@ -291,8 +350,16 @@ def random_x_quizz(inp, count=0, limitation=10001):
             update_experience(question_pick.difficulty)
             console.rule("[bold red]")
 
+            # Display progress counter
+            console.print(f"[bold yellow]Questions Completed: {counter}/{user_limit}[/bold yellow]")
+
+            # Check if the user has reached the limit
             if counter >= user_limit:
                 break
+
+    # Calculate elapsed time
+    elapsed_time = time.time() - start_time
+    minutes, seconds = divmod(int(elapsed_time), 60)
 
     # Display a summary of bad answers
     if bad_ans:
@@ -306,9 +373,11 @@ def random_x_quizz(inp, count=0, limitation=10001):
         
         console.print(table)
 
-    # Calculate final score and display it
-    score_player_1 = round(score_player_1 * 0.75)
     console.print(Panel(f"[bold magenta]Quiz Complete![/bold magenta]\nYour final score: [bold yellow]{score_player_1}[/bold yellow]", expand=False))
+    
+    # Display elapsed time
+    console.print(f"[bold green]Time Elapsed: {minutes}m {seconds}s[/bold green]")
+
 
 
 
@@ -321,6 +390,10 @@ def hsk_quizz(inp):
     # Take user input for HSK level and question limit
     hsk_level = Prompt.ask("[bold yellow]Which HSK level do you want? (1 to 6)[/bold yellow]")
     limitation = Prompt.ask("[bold yellow]Do you wish to set a limit to the number of questions? (yes or no, blank is no)[/bold yellow]", choices=["yes", "no"], default="no")
+    user_limit = 500
+    if limitation.lower() == "yes":
+        user_limit = Prompt.ask("[bold yellow]Enter the number of questions you want to answer[/bold yellow]", default="500")
+    order = Prompt.ask("[bold yellow]Do you want it to appear ordered ?[/bold yellow]", choices=["yes", "no"], default="no")
 
     # Get HSK vocabulary by level
     hsk_dict = get_hsk_by_level(hsk_level)
@@ -329,12 +402,16 @@ def hsk_quizz(inp):
     count = 0
 
     for key, value in hsk_dict.items():
-        word = random.choice(list(hsk_dict.values()))
-
-        # Skip already answered questions
-        while word.done == 1:
+        if order == "no":
             word = random.choice(list(hsk_dict.values()))
 
+            # Skip already answered questions
+            while word.done == 1:
+                word = random.choice(list(hsk_dict.values()))
+        else:
+            word = value
+        
+        
         if word.done == 0:
             # Ask the question (displaying the English meaning)
             console.print(Panel(f"[bold royal_blue1]{word.english}[/bold royal_blue1]", title="Question", expand=False))
@@ -359,8 +436,9 @@ def hsk_quizz(inp):
                 console.print(table)
 
             console.rule("[bold red]")
-            word.done = 1
             count += 1
+            console.print(f"[bold yellow]Questions Completed: {count}/{len(hsk_dict)}, {round((count/len(hsk_dict))*100)}%[/bold yellow]")
+            word.done = 1
             
             # Break if limit is reached
             if limitation.lower() == "yes" and count >= int(user_limit):
@@ -379,42 +457,161 @@ def hsk_quizz(inp):
         console.print(table)
 
     # Calculate final score and display it
-    score_player_1 = round(score_player_1)
     console.print(Panel(f"[bold magenta]Quiz Complete![/bold magenta]\nYour final score: [bold yellow]{score_player_1}[/bold yellow]", expand=False))
     update_score_progress(score_player_1, time.time() - start, "hsk")
 
 
+def ce_random_quizz(inp, count=0, limitation=10001):
+    # Start rich console
+    console = Console()
+    console.show_cursor()
 
-#Chinese to english quizz, doesn't update the stats because checking right answer is too tedious
-def ce_quizz(count, limitation):
-        for i in dq_vocabulary:
+    # Take user input for number of random questions
+    user_limit = Prompt.ask("[bold yellow]Random x number of words (type x)[/bold yellow]", default="10")
+    user_limit = int(user_limit)
+    score_player_1 = 0
+    counter = 0
+    bad_ans = {}
 
+    # Start timer
+    start_time = time.time()
+
+    for key, value in dq_vocabulary.items():
+        question_pick = random.choice(list(dq_vocabulary.values()))
+
+        # Skip already answered questions
+        while question_pick.done == 1:
             question_pick = random.choice(list(dq_vocabulary.values()))
 
-            while question_pick.done == 1:
-                question_pick = random.choice(list(dq_vocabulary.values()))
+        if question_pick.done == 0:
+            # Ask the question (displaying the English meaning)
+            console.print(Panel(f"[bold blue]{question_pick.chinese_character}[/bold blue]", title="Question", expand=False))
+            ans = Prompt.ask("[bold yellow]Enter your answer (pinyin or character): [/bold yellow]")
 
-            if question_pick.done == 0:
-                cprint(f"{question_pick.chinese_character}, {question_pick.chinese_pinyin}", "blue", attrs=["bold"])
-                ans = input() 
-                cprint(f"{question_pick.english}", "light_green", attrs=["bold"])
-                question_pick.done = 1 
-                count +=1 
-                if count == limitation:
-                    break
-        return
+            if ans == question_pick.chinese_pinyin:
+                console.print("[bold green]Good Answer![/bold green]")
+                score_player_1 += question_pick.difficulty
+                update_word_stats(key, True)
+            else:
+                console.print("[bold red]Wrong Answer![/bold red]")
 
+                # Display the correct answer in a table
+                table = Table(title=f"[bold]Correct Answer[/bold] - {question_pick.chinese_character}")
+                table.add_column("Simplified", justify="center", style="bright_blue", no_wrap=True)
+                table.add_column("Pinyin", justify="center", style="bright_blue")
+                table.add_column("English", justify="center", style="bright_blue")
 
+                table.add_row(f"{question_pick.chinese_character}", f"{question_pick.chinese_pinyin}", f"{question_pick.english}")
+                console.print(table)
+
+                bad_ans[key] = question_pick
+                update_word_stats(key, False)
+
+            question_pick.done = 1
+            counter += 1
+            update_experience(question_pick.difficulty)
+            console.rule("[bold red]")
+
+            # Display progress counter
+            console.print(f"[bold yellow]Questions Completed: {counter}/{user_limit}[/bold yellow]")
+
+            # Check if the user has reached the limit
+            if counter >= user_limit:
+                break
+
+    # Calculate elapsed time
+    elapsed_time = time.time() - start_time
+    minutes, seconds = divmod(int(elapsed_time), 60)
+
+    # Display a summary of bad answers
+    if bad_ans:
+        table = Table(title="[bold red]Summary of Bad Answers[/bold red]")
+        table.add_column("Simplified", justify="center", style="bright_blue", no_wrap=True)
+        table.add_column("Pinyin", justify="center", style="bright_blue")
+        table.add_column("English", justify="center", style="bright_blue")
+
+        for key in bad_ans:
+            table.add_row(f"{bad_ans[key].chinese_character}", f"{bad_ans[key].chinese_pinyin}", f"{bad_ans[key].english}")
         
+        console.print(table)
 
-def add_vocabulary(pinyin, simplified, english, hsk_level = 1):
-    word_def = get_def_pinyin_simplified()
+    console.print(Panel(f"[bold magenta]Quiz Complete![/bold magenta]\nYour final score: [bold yellow]{score_player_1}[/bold yellow]", expand=False))
+    
+    # Display elapsed time
+    console.print(f"[bold green]Time Elapsed: {minutes}m {seconds}s[/bold green]")
 
-    if word_def != False: 
-        count = 0
-        with open("questions_vocabulaire.py", "a") as f:
-            print(f'dq_vocabulary["{simplified}"] = Vocabulary("{pinyin}", "{simplified}", "{english}", {hsk_level})', file=f)
-            print("done")
+
+
+def sentence_quizz(inp):
+    # Start rich console
+    console = Console()
+    console.show_cursor()
+
+    score_player_1 = 0
+    count = 0
+    bad_ans = {}
+
+    sentence_dict = {}
+
+    for key, value in dq_vocabulary.items():
+        print(value.category, value.chinese_pinyin)
+        if value.category == "Sentence":
+            sentence_dict[key] = value
+
+    for i in sentence_dict:
+        question_pick = random.choice(list(sentence_dict.values()))
+
+        # Skip already answered questions
+        while question_pick.done == 1:
+            question_pick = random.choice(list(sentence_dict.values()))
+
+        if question_pick.done == 0:
+            # Ask the question (displaying the English meaning)
+            console.print(Panel(f"[bold bright_blue]{question_pick.english}[/bold bright_blue]", title="Question", expand=False))
+            ans = Prompt.ask("[bold yellow]Enter your answer (pinyin): [/bold yellow]")
+
+            if ans == question_pick.chinese_pinyin:
+                console.print("[bold bright_green]Good Answer![/bold bright_green]")
+                score_player_1 += question_pick.difficulty
+                update_word_stats(question_pick.chinese_character, True)
+            else:
+                console.print("[bold bright_red]Bad Answer![/bold bright_red]")
+
+                # Display the correct answer in a table
+                table = Table(title=f"[bold]Correct Answer[/bold] - {question_pick.chinese_character}")
+                table.add_column("Simplified", justify="center", style="bright_blue", no_wrap=True)
+                table.add_column("Pinyin", justify="center", style="bright_blue")
+                table.add_column("English", justify="center", style="bright_blue")
+
+                table.add_row(f"{question_pick.chinese_character}", f"{question_pick.chinese_pinyin}", f"{question_pick.english}")
+                console.print(table)
+
+                bad_ans[i] = question_pick
+                update_word_stats(question_pick.chinese_character, False)
+
+            question_pick.done = 1
+            count += 1
+            update_experience(question_pick.difficulty)
+            console.rule("[bold red]")
+            console.print(f"[bold yellow]Questions Completed: {count}/{len(dq_vocabulary)}, {round((count/len(dq_vocabulary))*100)}%[/bold yellow]")
+
+    # Display a summary of bad answers
+    if bad_ans:
+        table = Table(title="[bold red]Summary of Bad Answers[/bold red]")
+        table.add_column("Simplified", justify="center", style="bright_blue", no_wrap=True)
+        table.add_column("Pinyin", justify="center", style="bright_blue")
+        table.add_column("English", justify="center", style="bright_blue")
+
+        for i in bad_ans:
+            table.add_row(f"{bad_ans[i].chinese_character}", f"{bad_ans[i].chinese_pinyin}", f"{bad_ans[i].english}")
+        
+        console.print(table)
+
+    # Display final score
+    console.print(Panel(f"[bold magenta]Quiz Complete![/bold magenta]\nYour final score: [bold yellow]{score_player_1}[/bold yellow]", expand=False))
+
+
+
 
 if __name__ == "__main__":
     add_vocabulary("ran2 hou4", "然后", "and then")

@@ -1,6 +1,8 @@
 import sqlite3
 import os
 
+from rich.console import Console
+
 dic_titre = {
     0: "Circonvolution génétique",
     500: "Mangeur de feutres",
@@ -221,6 +223,9 @@ def get_experience():
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
 
+    console = Console()
+    console.show_cursor()
+
     # Execute the SELECT statement to retrieve Experience from OverallProgress
     cursor.execute('''
         SELECT Experience FROM OverallProgress WHERE id = 1
@@ -232,7 +237,7 @@ def get_experience():
     # Check if the result is found
     if result:
         experience = result[0]
-        print(f"Your current experience is: {experience}")
+        console.print(f"[bold blue]Your current experience is: {experience}[/bold blue]")
     else:
         print("No record found with ID 1.")
 
