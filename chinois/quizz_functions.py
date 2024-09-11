@@ -74,6 +74,7 @@ def ec_quizz(inp, count, limitation):
 
 #This quizz is the basis for the others
 #English to Chinese quizz only one input required to validate the answer (pinyin)
+#Yes my functions are too long
 def ecpinyin_quizz(inp):
     # Start rich console
     console = Console()
@@ -84,10 +85,14 @@ def ecpinyin_quizz(inp):
     bad_ans = {}
 
     sentence_included = Prompt.ask("[bold yellow]Do you want to include sentences?[/bold yellow]", choices=["yes", "no"], default="no")
+    kind_of_word = Prompt.ask("[bold yellow]Do you want to study a specific kind of word?[/bold yellow]", choices=["yes", "no"], default="no")
+    if kind_of_word == "yes":
+        kind = Prompt.ask("[bold yellow]Enter the kind of word you want to study: [/bold yellow]", choices=["general", "verb", "grammar"], default="general")
 
     difficulty_set = Prompt.ask("[bold yellow]Do you want to set a difficulty limit? (yes or no, blank is no)[/bold yellow]", choices=["yes", "no"], default="no")
     if difficulty_set.lower() == "yes":
          difficulty_limit = Prompt.ask("[bold yellow]Enter the difficulty limit (1 to 6): [/bold yellow]", choices=["1", "2", "3", "4", "5"], default="1")
+    
 
     # Modify dq_vocabulary without reassigning
     if sentence_included == "no":
@@ -97,6 +102,11 @@ def ecpinyin_quizz(inp):
 
     if difficulty_set.lower() == "yes":
         dq_vocabulary_copy = {key: value for key, value in dq_vocabulary.items() if value.difficulty == int(difficulty_limit)}
+        dq_vocabulary.clear()
+        dq_vocabulary.update(dq_vocabulary_copy)
+    
+    if kind_of_word.lower() == "yes":
+        dq_vocabulary_copy = {key: value for key, value in dq_vocabulary.items() if value.kind == kind}
         dq_vocabulary.clear()
         dq_vocabulary.update(dq_vocabulary_copy)
 
@@ -111,6 +121,8 @@ def ecpinyin_quizz(inp):
             # Ask the question (displaying the English meaning)
             console.print(Panel(f"[bold bright_blue]{question_pick.english}[/bold bright_blue]", title="Question", expand=False))
             ans = Prompt.ask("[bold yellow]Enter your answer (pinyin): [/bold yellow]")
+
+            if ans.lower() == "exit": return
 
             if ans == question_pick.chinese_pinyin:
                 console.print("[bold bright_green]Good Answer![/bold bright_green]")
@@ -134,7 +146,7 @@ def ecpinyin_quizz(inp):
             question_pick.done = 1
             count += 1
             update_experience(question_pick.difficulty)
-            console.rule("[bold red]")
+            console.rule("[bold red]\n")
             console.print(f"[bold yellow]Questions Completed: {count}/{len(dq_vocabulary)}, {round((count/len(dq_vocabulary))*100)}%[/bold yellow]")
 
     # Display a summary of bad answers
@@ -187,6 +199,8 @@ def last_x_quizz(inp, count=0, limitation=10001):
             ans = Prompt.ask("[bold yellow]Enter your answer (pinyin): [/bold yellow]") 
             result = False
 
+            if ans.lower() == "exit": return
+
             if ans == question_pick.chinese_pinyin:
                 console.print("[bold green]Correct![/bold green]", style="bold green")
                 score_player_1 += question_pick.difficulty
@@ -206,7 +220,7 @@ def last_x_quizz(inp, count=0, limitation=10001):
                 bad_ans[key] = question_pick
             
             update_experience(question_pick.difficulty)
-            console.rule("[bold]")
+            console.rule("[bold]\n")
             # Update the ratio if the user opted to
             if update_ratio.lower() == "yes": 
                 update_word_stats(key, result)
@@ -254,6 +268,8 @@ def worst_x_quizz(inp, count=0, limitation=10001):
                 console.print(Panel(f"[bold magenta]{value.english}[/bold magenta]", title="Question", expand=False))
                 ans = console.input("[bold yellow]Enter your answer (pinyin): [/bold yellow]")
 
+                if ans.lower() == "exit": return
+
                 if ans == value.chinese_pinyin:
                     console.print("[bold green]Correct![/bold green]")
                     score_player_1 += value.difficulty
@@ -274,7 +290,7 @@ def worst_x_quizz(inp, count=0, limitation=10001):
                 
                 update_experience(value.difficulty)
                 # Print separator after each question
-                console.rule("[bold red]")
+                console.rule("[bold red]\n")
 
     # Calculate final score and display it
     score_player_1 = round(score_player_1 * 0.75)
@@ -290,6 +306,9 @@ def random_x_quizz(inp, count=0, limitation=10001):
     # Take user input for number of random questions
     user_limit = Prompt.ask("[bold yellow]Random x number of words (type x)[/bold yellow]", default="10")
     sentence_included = Prompt.ask("[bold yellow]Do you want to include sentences?[/bold yellow]", choices=["yes", "no"], default="no")
+
+    if kind_of_word == "yes":
+        kind = Prompt.ask("[bold yellow]Enter the kind of word you want to study: [/bold yellow]", choices=["general", "verb", "grammar"], default="general")
 
     difficulty_set = Prompt.ask("[bold yellow]Do you want to set a difficulty limit? (yes or no, blank is no)[/bold yellow]", choices=["yes", "no"], default="no")
     if difficulty_set.lower() == "yes":
@@ -311,6 +330,11 @@ def random_x_quizz(inp, count=0, limitation=10001):
         dq_vocabulary.clear()
         dq_vocabulary.update(dq_vocabulary_copy)
     
+    if kind_of_word.lower() == "yes":
+        dq_vocabulary_copy = {key: value for key, value in dq_vocabulary.items() if value.kind == kind}
+        dq_vocabulary.clear()
+        dq_vocabulary.update(dq_vocabulary_copy)
+    
     # Start timer
     start_time = time.time()
 
@@ -325,6 +349,8 @@ def random_x_quizz(inp, count=0, limitation=10001):
             # Ask the question (displaying the English meaning)
             console.print(Panel(f"[bold blue]{question_pick.english}[/bold blue]", title="Question", expand=False))
             ans = Prompt.ask("[bold yellow]Enter your answer (pinyin or character): [/bold yellow]")
+
+            if ans.lower() == "exit": return
 
             if ans == question_pick.chinese_pinyin or ans == question_pick.chinese_character:
                 console.print("[bold green]Good Answer![/bold green]")
@@ -348,7 +374,7 @@ def random_x_quizz(inp, count=0, limitation=10001):
             question_pick.done = 1
             counter += 1
             update_experience(question_pick.difficulty)
-            console.rule("[bold red]")
+            console.rule("[bold red]\n")
 
             # Display progress counter
             console.print(f"[bold yellow]Questions Completed: {counter}/{user_limit}[/bold yellow]")
@@ -417,6 +443,8 @@ def hsk_quizz(inp):
             console.print(Panel(f"[bold royal_blue1]{word.english}[/bold royal_blue1]", title="Question", expand=False))
             ans = Prompt.ask("[bold yellow]Enter your answer (pinyin): [/bold yellow]")
 
+            if ans.lower() == "exit": return
+
             if ans == word.chinese_pinyin:
                 console.print("[bold green]Good Answer![/bold green]")
                 score_player_1 += word.difficulty
@@ -435,7 +463,7 @@ def hsk_quizz(inp):
                 table.add_row(f"{word.chinese_character}", f"{word.chinese_pinyin}", f"{word.english}")
                 console.print(table)
 
-            console.rule("[bold red]")
+            console.rule("[bold red]\n")
             count += 1
             console.print(f"[bold yellow]Questions Completed: {count}/{len(hsk_dict)}, {round((count/len(hsk_dict))*100)}%[/bold yellow]")
             word.done = 1
@@ -488,6 +516,8 @@ def ce_random_quizz(inp, count=0, limitation=10001):
             console.print(Panel(f"[bold blue]{question_pick.chinese_character}[/bold blue]", title="Question", expand=False))
             ans = Prompt.ask("[bold yellow]Enter your answer (pinyin or character): [/bold yellow]")
 
+            if ans.lower() == "exit": return
+
             if ans == question_pick.chinese_pinyin:
                 console.print("[bold green]Good Answer![/bold green]")
                 score_player_1 += question_pick.difficulty
@@ -510,7 +540,7 @@ def ce_random_quizz(inp, count=0, limitation=10001):
             question_pick.done = 1
             counter += 1
             update_experience(question_pick.difficulty)
-            console.rule("[bold red]")
+            console.rule("[bold red]\n")
 
             # Display progress counter
             console.print(f"[bold yellow]Questions Completed: {counter}/{user_limit}[/bold yellow]")
@@ -570,12 +600,14 @@ def sentence_quizz(inp):
             console.print(Panel(f"[bold bright_blue]{question_pick.english}[/bold bright_blue]", title="Question", expand=False))
             ans = Prompt.ask("[bold yellow]Enter your answer (pinyin): [/bold yellow]")
 
+            if ans.lower() == "exit": return
+
             if ans == question_pick.chinese_pinyin:
-                console.print("[bold bright_green]Good Answer![/bold bright_green]")
+                console.print("[bold bright_green]Good Answer![/bold bright_green]\n")
                 score_player_1 += question_pick.difficulty
                 update_word_stats(question_pick.chinese_character, True)
             else:
-                console.print("[bold bright_red]Bad Answer![/bold bright_red]")
+                console.print("[bold bright_red]Bad Answer![/bold bright_red]\n")
 
                 # Display the correct answer in a table
                 table = Table(title=f"[bold]Correct Answer[/bold] - {question_pick.chinese_character}")
@@ -613,8 +645,6 @@ def sentence_quizz(inp):
 
 
 
-if __name__ == "__main__":
-    add_vocabulary("ran2 hou4", "然后", "and then")
 
 # Ask the def of a word and it will return the matching result (you can ask english, pinyin, simplified or traditional)
 #def ask_def():

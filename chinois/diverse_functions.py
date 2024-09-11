@@ -41,8 +41,9 @@ def new_vocab_auto():
 
     while True:
         pinyin_input = Prompt.ask("[bold yellow]Pinyin: [/bold yellow]")
-        simplified_input = Prompt.ask("[bold yellow]Simplified: [/bold yellow]")
-        category = Prompt.ask("[bold yellow]Type:[/bold yellow]", default="Vocabulary", choices=["Vocabulary", "Sentence", "Grammar Rule", "Other"])
+        simplified_input = Prompt.ask("[bold yellow]Simplified: [/bold yellow]\n")
+        category = Prompt.ask("[bold yellow]Vocabulary or Sentence ?:[/bold yellow]", default="Vocabulary", choices=["Vocabulary", "Sentence"])
+        kind = Prompt.ask("[bold yellow]Type of word:[/bold yellow]\n", default="general", choices=["general", "verb", "grammar"])
 
         while pinyin_input == "" and simplified_input == "":
             console.print("[bold red]Both fields are empty, please enter a pinyin and a simplified character[/bold red]")
@@ -84,7 +85,7 @@ def new_vocab_auto():
             elif dict_hsk == False: hsk_level = Prompt.ask("[bold yellow]Assign an hsk level (level of difficutly from 1 to 6) to your entry: [/bold yellow]", default=1, choices=["1", "2", "3", "4", "5", "6"])
 
             with open("dict_tools/questions_vocabulaire.py", "a") as f:
-                print(f'\ndq_vocabulary["{simplified}"] = Vocabulary("{pinyin}", "{simplified}", "{english}", {hsk_level}, category="{category}")', file=f)
+                print(f'\ndq_vocabulary["{simplified}"] = Vocabulary("{pinyin}", "{simplified}", "{english}", {hsk_level}, category="{category}, kind={kind}")', file=f)
                 console.print("[bold green]New entry in your dictionnary[/bold green]")
                 f.close()
 
@@ -102,7 +103,7 @@ def new_vocab_auto():
                 english = Prompt.ask("[bold yellow]Enter the English definition: [/bold yellow]")
 
                 with open("dict_tools/questions_vocabulaire.py", "a") as f:
-                    print(f'\ndq_vocabulary["{simplified_input}"] = Vocabulary("{pinyin_input}", "{simplified_input}", "{english}", {hsk_level}, category="{category}")', file=f)
+                    print(f'\ndq_vocabulary["{simplified_input}"] = Vocabulary("{pinyin_input}", "{simplified_input}", "{english}", {hsk_level}, category="{category}, kind={kind}")', file=f)
                     console.print("[bold green]New entry in your dictionnary[/bold green]")
                     f.close()
 

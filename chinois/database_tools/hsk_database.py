@@ -19,7 +19,7 @@ def temporarily_add_path(path):
 parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 
 with temporarily_add_path(parent_dir):
-    from classes_chinois import Vocabulary  # The path is temporarily modified here
+    from classes.classes_chinois import Vocabulary  # The path is temporarily modified here
 
 # After the with block, sys.path is restored to its original state
 
@@ -127,7 +127,7 @@ def get_hsk_level(pinyin_input, simplified_input, user_input=False):
         dict_result = {"hsk_level": result[0][0]}
         return dict_result
     else:
-        console.print("[bold red]No result found for this word, hsk default value assigned: 1[/bold red]")
+        console.print("[bold red]No result found for this word, HSK default value is assigned (1)[/bold red]\n")
         dict_result = {"hsk_level": 1}
         return False
 
