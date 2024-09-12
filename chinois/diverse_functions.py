@@ -41,9 +41,9 @@ def new_vocab_auto():
 
     while True:
         pinyin_input = Prompt.ask("[bold yellow]Pinyin: [/bold yellow]")
-        simplified_input = Prompt.ask("[bold yellow]Simplified: [/bold yellow]\n")
+        simplified_input = Prompt.ask("[bold yellow]Simplified: [/bold yellow]")
         category = Prompt.ask("[bold yellow]Vocabulary or Sentence ?:[/bold yellow]", default="Vocabulary", choices=["Vocabulary", "Sentence"])
-        kind = Prompt.ask("[bold yellow]Type of word:[/bold yellow]\n", default="general", choices=["general", "verb", "grammar"])
+        kind = Prompt.ask("[bold yellow]Type of word:[/bold yellow]", default="general", choices=["general", "verb", "grammar"])
 
         while pinyin_input == "" and simplified_input == "":
             console.print("[bold red]Both fields are empty, please enter a pinyin and a simplified character[/bold red]")

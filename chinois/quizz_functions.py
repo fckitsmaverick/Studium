@@ -451,11 +451,9 @@ def hsk_quizz(inp):
             if ans == word.chinese_pinyin:
                 console.print("[bold green]Good Answer![/bold green]")
                 score_player_1 += word.difficulty
-                update_word_stats(key, True)
             else:
                 console.print("[bold red]Wrong Answer![/bold red]")
                 bad_ans[key] = word
-                update_word_stats(key, False)
 
                 # Display the correct answer in a table
                 table = Table(title=f"[bold]Correct Answer[/bold] - {word.chinese_character}")

@@ -148,3 +148,13 @@ dq_vocabulary["车"] = Vocabulary("che1", "车", "car", 1, category="Vocabulary"
 
 dq_vocabulary["为什么"] = Vocabulary("wei4 shen2 me", "为什么", "why?; for what reason?", 2, category="Vocabulary", kind="grammar")
 dq_vocabulary["慢慢"] = Vocabulary("man4 man4", "慢慢", "slowly; gradually", 3, category="Vocabulary, kind=general")
+
+dq_vocabulary["就"] = Vocabulary("jiu4", "就", "(after a suppositional clause) in that case; then", 2, category="Vocabulary, kind=grammar")
+
+dq_vocabulary["困难"] = Vocabulary("kun4 nan", "困难", "(financial etc) difficulty; problem; issue; CL:個|个[ge4]", 4, category="Vocabulary, kind=general")
+
+dq_vocabulary["如果有困难就给我打电话"] = Vocabulary("ru2 guo3 you3 kun4 nan jiu4 gei3 wo3 da3 dian4 hua4", "如果有困难就给我打电话", "If there is any difficulty then give me a call", 3, category="Sentence, kind=general")
+
+dq_vocabulary["外面"] = Vocabulary("wai4 mian4", "外面", "outside (also pr. [wai4 mian5] for this sense)", 1, category="Vocabulary, kind=general")
+
+dq_vocabulary["里面"] = Vocabulary("li3 mian4", "里面", "inside", 1, category="Vocabulary, kind=general")
