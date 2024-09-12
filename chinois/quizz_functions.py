@@ -259,10 +259,11 @@ def worst_x_quizz(inp, count=0, limitation=10001):
     user_limit = int(user_limit)
     score_player_1 = 0
     worst10 = get_worst_word_ratios(user_limit)
+    print(worst10)
 
     # Loop through vocabulary to ask questions about the worst words
-    for key, value in dq_vocabulary.items():
-        for word in worst10:
+    for word in worst10:
+        for key, value in dq_vocabulary.items():
             if word["word"] == value.chinese_character:
                 # Ask the question (displaying the English meaning)
                 console.print(Panel(f"[bold magenta]{value.english}[/bold magenta]", title="Question", expand=False))
@@ -273,7 +274,8 @@ def worst_x_quizz(inp, count=0, limitation=10001):
                 if ans == value.chinese_pinyin:
                     console.print("[bold green]Correct![/bold green]")
                     score_player_1 += value.difficulty
-                    update_word_stats(key, True)
+                    #You can choose to update the ratio
+                    #update_word_stats(key, True)
                 else:
                     console.print("[bold bright_red]Incorrect![/bold bright_red]", style="bold red")
                     
@@ -286,7 +288,7 @@ def worst_x_quizz(inp, count=0, limitation=10001):
                     table.add_row(f"{value.chinese_character}", f"{value.chinese_pinyin}", f"{value.english}")
                     console.print(table)
 
-                    update_word_stats(key, False)
+                    #update_word_stats(key, False)
                 
                 update_experience(value.difficulty)
                 # Print separator after each question
@@ -306,6 +308,7 @@ def random_x_quizz(inp, count=0, limitation=10001):
     # Take user input for number of random questions
     user_limit = Prompt.ask("[bold yellow]Random x number of words (type x)[/bold yellow]", default="10")
     sentence_included = Prompt.ask("[bold yellow]Do you want to include sentences?[/bold yellow]", choices=["yes", "no"], default="no")
+    kind_of_word = Prompt.ask("[bold yellow]Do you want to study a specific kind of word?[/bold yellow]", choices=["yes", "no"], default="no")
 
     if kind_of_word == "yes":
         kind = Prompt.ask("[bold yellow]Enter the kind of word you want to study: [/bold yellow]", choices=["general", "verb", "grammar"], default="general")
@@ -584,7 +587,6 @@ def sentence_quizz(inp):
     sentence_dict = {}
 
     for key, value in dq_vocabulary.items():
-        print(value.category, value.chinese_pinyin)
         if value.category == "Sentence":
             sentence_dict[key] = value
 
@@ -625,7 +627,7 @@ def sentence_quizz(inp):
             count += 1
             update_experience(question_pick.difficulty)
             console.rule("[bold red]")
-            console.print(f"[bold yellow]Questions Completed: {count}/{len(dq_vocabulary)}, {round((count/len(dq_vocabulary))*100)}%[/bold yellow]")
+            console.print(f"[bold yellow]Questions Completed: {count}/{len(sentence_dict)}, {round((count/len(sentence_dict))*100)}%[/bold yellow]")
 
     # Display a summary of bad answers
     if bad_ans:
