@@ -92,7 +92,7 @@ dq_vocabulary["话"] = Vocabulary("hua4", "话", "language / dialect", 1, catego
 dq_vocabulary["能"] = Vocabulary("neng2", "能", "can, having the ability to do something, being able to", 1, category="Vocabulary", kind="verb")
 dq_vocabulary["听懂"] = Vocabulary("ting1 dong3", "听懂", "to understand (on hearing), to understand what is spoken", 1, category="Vocabulary", kind="verb")
 dq_vocabulary["就是"] = Vocabulary("jiu4 shi4", "就是", "just, add emphasis to a statement, exactly, precisely", 3, category="Vocabulary", kind="grammar")
-dq_vocabulary["然后现在住在香港"] = Vocabulary("ran2 hou4 xian4 zai4 zhu4 zai4 xiang1 gang3", "然后现在住在香港", "Sentence: And(then) now live in Hong Kong", 3, category="Vocabulary", kind="general")
+dq_vocabulary["然后现在住在香港"] = Vocabulary("ran2 hou4 xian4 zai4 zhu4 zai4 xiang1 gang3", "然后现在住在香港", "Sentence: And(then) now live in Hong Kong", 3, category="Sentence", kind="general")
 dq_vocabulary["这些"] = Vocabulary("zhe4 xie1", "这些", "these", 1, category="Vocabulary", kind="grammar")
 dq_vocabulary["要"] = Vocabulary("yao4", "要", "will, want (direct)", 1, category="Vocabulary", kind="verb")
 dq_vocabulary["我要"] = Vocabulary("wo3 yao4", "我要", "i'm going to ... (do something)", 1, category="Vocabulary", kind="general")
@@ -149,12 +149,26 @@ dq_vocabulary["车"] = Vocabulary("che1", "车", "car", 1, category="Vocabulary"
 dq_vocabulary["为什么"] = Vocabulary("wei4 shen2 me", "为什么", "why?; for what reason?", 2, category="Vocabulary", kind="grammar")
 dq_vocabulary["慢慢"] = Vocabulary("man4 man4", "慢慢", "slowly; gradually", 3, category="Vocabulary, kind=general")
 
-dq_vocabulary["就"] = Vocabulary("jiu4", "就", "(after a suppositional clause) in that case; then", 2, category="Vocabulary, kind=grammar")
+dq_vocabulary["就"] = Vocabulary("jiu4", "就", "(after a suppositional clause) in that case; then", 2, category="Vocabulary", kind="grammar")
 
-dq_vocabulary["困难"] = Vocabulary("kun4 nan", "困难", "(financial etc) difficulty; problem; issue; CL:個|个[ge4]", 4, category="Vocabulary, kind=general")
+dq_vocabulary["困难"] = Vocabulary("kun4 nan", "困难", "(financial etc) difficulty; problem; issue; CL:個|个[ge4]", 4, category="Vocabulary", kind="general")
 
-dq_vocabulary["如果有困难就给我打电话"] = Vocabulary("ru2 guo3 you3 kun4 nan jiu4 gei3 wo3 da3 dian4 hua4", "如果有困难就给我打电话", "If there is any difficulty then give me a call", 3, category="Sentence, kind=general")
+dq_vocabulary["如果有困难就给我打电话"] = Vocabulary("ru2 guo3 you3 kun4 nan jiu4 gei3 wo3 da3 dian4 hua4", "如果有困难就给我打电话", "If there is any difficulty then give me a call", 3, category="Sentence", kind="general")
 
-dq_vocabulary["外面"] = Vocabulary("wai4 mian4", "外面", "outside (also pr. [wai4 mian5] for this sense)", 1, category="Vocabulary, kind=general")
+dq_vocabulary["外面"] = Vocabulary("wai4 mian4", "外面", "outside (also pr. [wai4 mian5] for this sense)", 1, category="Vocabulary", kind="general")
 
-dq_vocabulary["里面"] = Vocabulary("li3 mian4", "里面", "inside", 1, category="Vocabulary, kind=general")
+dq_vocabulary["里面"] = Vocabulary("li3 mian4", "里面", "inside", 1, category="Vocabulary", kind="general")
+
+dq_vocabulary["到去"] = Vocabulary("dao4 qu4", "到去", "to go to some place to do something (grammar structure) Subject + ... + place + ... + do something", 2, category="Vocabulary", kind="grammar")
+
+dq_vocabulary["到"] = Vocabulary("dao4", "到", "to reach; to arrive", 2, category="Vocabulary", kind="general")
+
+dq_vocabulary["我们到哪儿去买飞机票"] = Vocabulary("wo3 men dao4 na3 r qu4 mai3 fei1 ji1 piao4", "我们到哪儿去买飞机票", "Where (do) we go buy plane ticket ?", 2, category="Sentence", kind="general")
+
+dq_vocabulary["遛弯儿"] = Vocabulary("liu4 wan1 r", "遛弯儿", "(beijing erhua dialect) to take a walk, to go for a stroll", 3, category="Vocabulary", kind="general")
+
+dq_vocabulary["没事"] = Vocabulary("mei2 shi4", "没事", "it's not important", 1, category="Vocabulary", kind="grammar")
+
+dq_vocabulary["没事儿"] = Vocabulary("mei2 shi4 r", "没事儿", "(dialect, using erhua) nothing to do, no problem", 3, category="Vocabulary", kind="general")
+
+dq_vocabulary["吃完饭遛弯儿去吧也没事儿做"] = Vocabulary("chi1 wan2 fan4 liu4 wan1 r qu4 ba ye3 mei2 shi4 r zuo4", "吃完饭遛弯儿去吧也没事儿做", "(using Beijing erhua), Let's go for a walk after meal is done there is nothing else to do to do anyway", 3, category="Sentence", kind="general")
