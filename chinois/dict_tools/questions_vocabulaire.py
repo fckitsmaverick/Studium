@@ -147,7 +147,7 @@ dq_vocabulary["你怎么还在用那个旧手机"] = Vocabulary("ni3 zen3 me hai
 dq_vocabulary["车"] = Vocabulary("che1", "车", "car", 1, category="Vocabulary", kind="general")
 
 dq_vocabulary["为什么"] = Vocabulary("wei4 shen2 me", "为什么", "why?; for what reason?", 2, category="Vocabulary", kind="grammar")
-dq_vocabulary["慢慢"] = Vocabulary("man4 man4", "慢慢", "slowly; gradually", 3, category="Vocabulary, kind=general")
+dq_vocabulary["慢慢"] = Vocabulary("man4 man4", "慢慢", "slowly; gradually", 3, category="Vocabulary", kind="general")
 
 dq_vocabulary["就"] = Vocabulary("jiu4", "就", "(after a suppositional clause) in that case; then", 2, category="Vocabulary", kind="grammar")
 
@@ -172,3 +172,24 @@ dq_vocabulary["没事"] = Vocabulary("mei2 shi4", "没事", "it's not important"
 dq_vocabulary["没事儿"] = Vocabulary("mei2 shi4 r", "没事儿", "(dialect, using erhua) nothing to do, no problem", 3, category="Vocabulary", kind="general")
 
 dq_vocabulary["吃完饭遛弯儿去吧也没事儿做"] = Vocabulary("chi1 wan2 fan4 liu4 wan1 r qu4 ba ye3 mei2 shi4 r zuo4", "吃完饭遛弯儿去吧也没事儿做", "(using Beijing erhua), Let's go for a walk after meal is done there is nothing else to do to do anyway", 3, category="Sentence", kind="general")
+
+
+dq_vocabulary["打算"] = Vocabulary("da3 suan4", "打算", "to plan, to intend", 3, category="Vocabulary", kind="verb")
+
+dq_vocabulary["中秋切"] = Vocabulary("zhong1 qiu1 jie2", "中秋切", "Mid-autumn festival", 3, category="Vocabulary", kind="general")
+
+dq_vocabulary["过"] = Vocabulary("guo4", "过", "to cross, to celebrate (a holiday), to pass (time).", 2, category="Vocabulary", kind="verb")
+
+dq_vocabulary["明天就是中秋节了打算怎么过"] = Vocabulary("ming2 tian1 jiu4 shi4 zhong1 qiu1 jie2 le da3 suan4 zen3 me guo4", "明天就是中秋节了打算怎么过", "Tomorrow (precisely) is Mid-Autumn Festival, how do you plan to celebrate ?", 4, category="Sentence", kind="general")
+
+dq_vocabulary["一家人"] = Vocabulary("yi1 jia1 ren2", "一家人", "the whole family", 2, category="Vocabulary", kind="general")
+
+dq_vocabulary["一起"] = Vocabulary("yi1 qi3", "一起", "in the same place, together, altogether", 2, category="Vocabulary", kind="grammar")
+
+dq_vocabulary["shang3"] = Vocabulary("赏", "shang3", "to admire the beauty (of nature or art)", 4, category="Vocabulary", kind="verb")
+
+dq_vocabulary["顺便"] = Vocabulary("shun4 bian4", "顺便", "by the way, while we are at it", 4, category="Vocabulary", kind="grammar")
+
+dq_vocabulary["月饼"] = Vocabulary("yue4 bing3", "月饼", "mooncake (esp. for the Mid-Autumn Festival)", 2, category="Vocabulary", kind="general")
+
+dq_vocabulary["我们打算一家人一起吃饭赏月顺便吃月饼"] = Vocabulary("wo3 men da3 suan4 yi1 jia1 ren2 yi4 qi3 chi1 fan4 shang3 yue4 shun4 bian4 chi1 yue4 bing3", "我们打算一家人一起吃饭赏月顺便吃月饼", "We're planning to have a (whole together) family meal admire the moon eat moon cakes", 4, category="Sentence", kind="general")

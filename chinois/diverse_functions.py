@@ -146,5 +146,59 @@ def study_personal():
     
     console.print(table)
 
+def update_vocab_dictionnary(d_voc, sentence_included=False, kind_of_word=False, difficulty_set=False, kind="general", difficulty_limit="1"):
+    d_voc_copy = d_voc
+    if sentence_included == False:
+        d_voc_copy = {key: value for key, value in d_voc_copy.items() if value.category != "Sentence"}
+    if kind_of_word != False:
+        d_voc_copy = {key: value for key, value in d_voc_copy.items() if value.kind == kind}
+    if difficulty_set != False:
+        d_voc_copy = {key: value for key, value in d_voc_copy.items() if value.difficulty == int(difficulty_limit)}
+    return(d_voc_copy)
+
+
+def assign_true_false(curr, bool_value):
+    if bool_value == "yes":
+        curr = True
+    elif bool_value == "no":
+        curr = False
+    return curr
+
+
+def take_user_preferences():
+    difficulty_limit = "1"
+    kind="general"
+
+    user_limit = Prompt.ask("[bold yellow]Number of words you want to study:[/bold yellow]", default="10")
+
+    sentence_included = Prompt.ask("[bold yellow]Do you want to include sentences?[/bold yellow]", choices=["yes", "no"], default="no")
+    sentence_included = assign_true_false(sentence_included, sentence_included)
+
+    kind_of_word = Prompt.ask("[bold yellow]Do you want to study a specific kind of word?[/bold yellow]", choices=["yes", "no"], default="no")
+    kind_of_word = assign_true_false(kind_of_word, kind_of_word)
+    if kind_of_word == True:
+        kind = Prompt.ask("[bold yellow]Enter the kind of word you want to study: [/bold yellow]", choices=["general", "verb", "grammar"], default="general")
+
+    difficulty_set = Prompt.ask("[bold yellow]Do you want to set a difficulty limit?[/bold yellow]", choices=["yes", "no"], default="no")
+    difficulty_set = assign_true_false(difficulty_set, difficulty_set)
+    if difficulty_set == True:
+         difficulty_limit = Prompt.ask("[bold yellow]Enter the difficulty limit (1 to 6): [/bold yellow]", choices=["1", "2", "3", "4", "5"], default="1")
+
+    return int(user_limit), sentence_included, kind_of_word, difficulty_set, kind, difficulty_limit
+
+def display_bad_ans(curr_d):
+        console = Console()
+        console.show_cursor()
+
+        table = Table(title="[bold red]Summary of Bad Answers[/bold red]")
+        table.add_column("Simplified", justify="center", style="bright_blue", no_wrap=True)
+        table.add_column("Pinyin", justify="center", style="bright_blue")
+        table.add_column("English", justify="center", style="bright_blue")
+
+        for key in curr_d:
+            table.add_row(f"{curr_d[key].chinese_character}", f"{curr_d[key].chinese_pinyin}", f"{curr_d[key].english}")
+        
+        console.print(table)
+
 if __name__ == "__main__":
-    study_personal()
+    update_vocab_dictionnary(dq_vocabulary, sentence_included=True, kind_of_word=True, difficulty_set=False, kind="general", difficulty_limit="1")

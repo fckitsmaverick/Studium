@@ -1,6 +1,6 @@
 from dict_tools.questions_vocabulaire import dq_vocabulary
 from database_tools.database import update_score_progress, get_experience
-from database_tools.pokemon_database import get_pokedex, check_pokemon_rank
+from database_tools.pokemon_database import get_pokedex, check_pokemon_rank, add_to_pokedex
 from quizz_functions import ec_quizz, ecpinyin_quizz, last_x_quizz, worst_x_quizz, random_x_quizz, hsk_quizz, ce_random_quizz, sentence_quizz
 from diverse_functions import print_pokedex, new_vocab_auto, study_personal
 
@@ -85,7 +85,8 @@ def display_pokemon_submenu():
     table.add_row("1", "See your Pokedex")
     table.add_row("2", "Check Pokémon Rank")
     table.add_row("3", "See your current XP")
-    table.add_row("4", "Back to Main Menu")
+    table.add_row("4", "Add a pokemon to your pokedex")
+    table.add_row("5", "Back to Main Menu")
 
     console.print(table)
 
@@ -155,6 +156,10 @@ def pokemon_mode():
             get_experience()
             return
         elif pokemon_choice == "4":
+            console.print("[bold green]Adding a Pokémon to your Pokedex![/bold green]")
+            add_to_pokedex()
+            return
+        elif pokemon_choice == "5":
             return  # Return to the main menu
 
 def main():
