@@ -2,7 +2,7 @@ from dict_tools.questions_vocabulaire import dq_vocabulary
 from database_tools.database import update_score_progress, update_word_stats, get_word_stats, get_worst_word_ratios, update_experience
 from database_tools.cedict_database import get_def, get_def_pinyin_simplified
 from database_tools.hsk_database import get_hsk_by_level
-from diverse_functions import update_vocab_dictionnary, assign_true_false, take_user_preferences, display_bad_ans
+from functions_kit import update_vocab_dictionnary, assign_true_false, take_user_preferences, display_bad_ans, compare_ans, redo_bad_ans
 
 from datetime import datetime
 from termcolor import cprint
@@ -115,6 +115,10 @@ def ecpinyin_quizz(inp):
                 table.add_column("Pinyin", justify="center", style="bright_blue")
                 table.add_column("English", justify="center", style="bright_blue")
 
+                if len(ans) > 0:
+                    if ans[0].isascii(): correct_ans = compare_ans(ans, question_pick.chinese_pinyin)
+                    else: correct_ans = compare_ans(ans, question_pick.chinese_character)
+
                 table.add_row(f"{question_pick.chinese_character}", f"{question_pick.chinese_pinyin}", f"{question_pick.english}")
                 console.print(table)
 
@@ -130,6 +134,7 @@ def ecpinyin_quizz(inp):
     # Display a summary of bad answers
     if bad_ans:
         display_bad_ans(bad_ans)
+        redo_bad_ans(bad_ans)
 
     # Display final score
     score_player_1 = round(score_player_1 * 0.75)
@@ -177,6 +182,10 @@ def last_x_quizz(inp, count=0, limitation=10001):
                 table.add_column("Pinyin", justify="center", style="bright_blue")
                 table.add_column("English", justify="center", style="bright_blue")
 
+                if len(ans) > 0:
+                    if ans[0].isascii(): correct_ans = compare_ans(ans, question_pick.chinese_pinyin)
+                    else: correct_ans = compare_ans(ans, question_pick.chinese_character)
+
                 table.add_row(f"{question_pick.chinese_character}", f"{question_pick.chinese_pinyin}", f"{question_pick.english}")
                 console.print(table)
 
@@ -186,7 +195,7 @@ def last_x_quizz(inp, count=0, limitation=10001):
             console.rule("[bold]\n")
             # Update the ratio if the user opted to
             if update_ratio.lower() == "yes": 
-                update_word_stats(key, result)
+                update_word_stats(question_pick.chinese_character, result)
 
             counter += 1
             if counter >= user_limit:
@@ -196,6 +205,7 @@ def last_x_quizz(inp, count=0, limitation=10001):
         # Display a summary of bad answers
     if bad_ans:
         display_bad_ans(bad_ans)
+        redo_bad_ans(bad_ans)
 
     # Display final score in a panel
     console.print(Panel(f"[bold magenta]Quiz Complete![/bold magenta]\nYour final score: [bold yellow]{score_player_1}[/bold yellow]", expand=False))
@@ -214,7 +224,6 @@ def worst_x_quizz(inp, count=0, limitation=10001):
     user_limit = int(user_limit)
     score_player_1 = 0
     worst10 = get_worst_word_ratios(user_limit)
-    print(worst10)
 
     # Loop through vocabulary to ask questions about the worst words
     for word in worst10:
@@ -250,7 +259,7 @@ def worst_x_quizz(inp, count=0, limitation=10001):
                 console.rule("[bold red]\n")
 
     # Calculate final score and display it
-    score_player_1 = round(score_player_1 * 0.75)
+    score_player_1 = round(score_player_1)
     console.print(Panel(f"[bold magenta]Quiz Complete![/bold magenta]\nYour final score: [bold yellow]{score_player_1}[/bold yellow]", expand=False))
 
 
@@ -288,21 +297,26 @@ def random_x_quizz(inp, count=0, limitation=10001):
             if ans == question_pick.chinese_pinyin or ans == question_pick.chinese_character:
                 console.print("[bold green]Good Answer![/bold green]")
                 score_player_1 += question_pick.difficulty
-                update_word_stats(key, True)
+                update_word_stats(question_pick.chinese_character, True)
             else:
                 console.print("[bold red]Wrong Answer![/bold red]")
+                #Check if user typed pinyin or chinese character
+                #Then compare the answer and output the hightlighted error(s)
+                if len(ans) > 0:
+                    if ans[0].isascii(): correct_ans = compare_ans(ans, question_pick.chinese_pinyin)
+                    else: correct_ans = compare_ans(ans, question_pick.chinese_character)
 
                 # Display the correct answer in a table
                 table = Table(title=f"[bold]Correct Answer[/bold] - {question_pick.chinese_character}")
                 table.add_column("Simplified", justify="center", style="bright_blue", no_wrap=True)
                 table.add_column("Pinyin", justify="center", style="bright_blue")
-                table.add_column("English", justify="center", style="bright_blue")
+                table.add_column("Your Answer", justify="center", style="bright_blue")
 
                 table.add_row(f"{question_pick.chinese_character}", f"{question_pick.chinese_pinyin}", f"{question_pick.english}")
                 console.print(table)
 
                 bad_ans[key] = question_pick
-                update_word_stats(key, False)
+                update_word_stats(question_pick.chinese_character, False)
 
             question_pick.done = 1
             counter += 1
@@ -324,6 +338,8 @@ def random_x_quizz(inp, count=0, limitation=10001):
     # Display a summary of bad answers
     if bad_ans:
         display_bad_ans(bad_ans)
+        redo_bad_ans(bad_ans)
+
 
     console.print(Panel(f"[bold magenta]Quiz Complete![/bold magenta]\nYour final score: [bold yellow]{score_player_1}[/bold yellow]", expand=False))
     
@@ -399,6 +415,7 @@ def hsk_quizz(inp):
     # Display a summary of bad answers
     if bad_ans:
         display_bad_ans(bad_ans)
+        redo_bad_ans(bad_ans)
 
     # Calculate final score and display it
     console.print(Panel(f"[bold magenta]Quiz Complete![/bold magenta]\nYour final score: [bold yellow]{score_player_1}[/bold yellow]", expand=False))
@@ -437,7 +454,7 @@ def ce_random_quizz(inp, count=0, limitation=10001):
             if ans == question_pick.chinese_pinyin:
                 console.print("[bold green]Good Answer![/bold green]")
                 score_player_1 += question_pick.difficulty
-                update_word_stats(key, True)
+                update_word_stats(question_pick.chinese_character, True)
             else:
                 console.print("[bold red]Wrong Answer![/bold red]")
 
@@ -451,7 +468,7 @@ def ce_random_quizz(inp, count=0, limitation=10001):
                 console.print(table)
 
                 bad_ans[key] = question_pick
-                update_word_stats(key, False)
+                update_word_stats(question_pick.chinese_character, False)
 
             question_pick.done = 1
             counter += 1
@@ -472,6 +489,7 @@ def ce_random_quizz(inp, count=0, limitation=10001):
     # Display a summary of bad answers
     if bad_ans:
         display_bad_ans(bad_ans)
+        redo_bad_ans(bad_ans)
 
     console.print(Panel(f"[bold magenta]Quiz Complete![/bold magenta]\nYour final score: [bold yellow]{score_player_1}[/bold yellow]", expand=False))
     
@@ -537,6 +555,7 @@ def sentence_quizz(inp):
     # Display a summary of bad answers
     if bad_ans:
         display_bad_ans(bad_ans)
+        redo_bad_ans(bad_ans)
 
     # Display final score
     console.print(Panel(f"[bold magenta]Quiz Complete![/bold magenta]\nYour final score: [bold yellow]{score_player_1}[/bold yellow]", expand=False))

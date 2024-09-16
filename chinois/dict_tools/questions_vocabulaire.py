@@ -174,22 +174,64 @@ dq_vocabulary["没事儿"] = Vocabulary("mei2 shi4 r", "没事儿", "(dialect, u
 dq_vocabulary["吃完饭遛弯儿去吧也没事儿做"] = Vocabulary("chi1 wan2 fan4 liu4 wan1 r qu4 ba ye3 mei2 shi4 r zuo4", "吃完饭遛弯儿去吧也没事儿做", "(using Beijing erhua), Let's go for a walk after meal is done there is nothing else to do to do anyway", 3, category="Sentence", kind="general")
 
 
-dq_vocabulary["打算"] = Vocabulary("da3 suan4", "打算", "to plan, to intend", 3, category="Vocabulary", kind="verb")
+dq_vocabulary["打算"] = Vocabulary("da3 suan4", "打算", "to plan, to intend", 3, category="Vocabulary", kind="verb", topic="")
 
-dq_vocabulary["中秋切"] = Vocabulary("zhong1 qiu1 jie2", "中秋切", "Mid-autumn festival", 3, category="Vocabulary", kind="general")
+dq_vocabulary["中秋切"] = Vocabulary("zhong1 qiu1 jie2", "中秋切", "Mid-autumn festival", 3, category="Vocabulary", kind="general", topic="")
 
-dq_vocabulary["过"] = Vocabulary("guo4", "过", "to cross, to celebrate (a holiday), to pass (time).", 2, category="Vocabulary", kind="verb")
+dq_vocabulary["过"] = Vocabulary("guo4", "过", "to cross, to celebrate (a holiday), to pass (time).", 2, category="Vocabulary", kind="verb", topic="")
 
-dq_vocabulary["明天就是中秋节了打算怎么过"] = Vocabulary("ming2 tian1 jiu4 shi4 zhong1 qiu1 jie2 le da3 suan4 zen3 me guo4", "明天就是中秋节了打算怎么过", "Tomorrow (precisely) is Mid-Autumn Festival, how do you plan to celebrate ?", 4, category="Sentence", kind="general")
+dq_vocabulary["明天就是中秋节了打算怎么过"] = Vocabulary("ming2 tian1 jiu4 shi4 zhong1 qiu1 jie2 le da3 suan4 zen3 me guo4", "明天就是中秋节了打算怎么过", "Tomorrow (precisely) is Mid-Autumn Festival, how do you plan to celebrate ?", 4, category="Sentence", kind="general", topic="")
 
-dq_vocabulary["一家人"] = Vocabulary("yi1 jia1 ren2", "一家人", "the whole family", 2, category="Vocabulary", kind="general")
+dq_vocabulary["一家人"] = Vocabulary("yi1 jia1 ren2", "一家人", "the whole family", 2, category="Vocabulary", kind="general", topic="")
 
-dq_vocabulary["一起"] = Vocabulary("yi1 qi3", "一起", "in the same place, together, altogether", 2, category="Vocabulary", kind="grammar")
+dq_vocabulary["一起"] = Vocabulary("yi4 qi3", "一起", "in the same place, together, altogether", 2, category="Vocabulary", kind="grammar")
 
-dq_vocabulary["shang3"] = Vocabulary("赏", "shang3", "to admire the beauty (of nature or art)", 4, category="Vocabulary", kind="verb")
+dq_vocabulary["赏"] = Vocabulary("shang3", "赏", "to admire the beauty (of nature or art)", 4, category="Vocabulary", kind="verb")
 
 dq_vocabulary["顺便"] = Vocabulary("shun4 bian4", "顺便", "by the way, while we are at it", 4, category="Vocabulary", kind="grammar")
 
-dq_vocabulary["月饼"] = Vocabulary("yue4 bing3", "月饼", "mooncake (esp. for the Mid-Autumn Festival)", 2, category="Vocabulary", kind="general")
+dq_vocabulary["月饼"] = Vocabulary("yue4 bing3", "月饼", "mooncake (esp. for the Mid-Autumn Festival)", 2, category="Vocabulary", kind="general", topic="")
 
-dq_vocabulary["我们打算一家人一起吃饭赏月顺便吃月饼"] = Vocabulary("wo3 men da3 suan4 yi1 jia1 ren2 yi4 qi3 chi1 fan4 shang3 yue4 shun4 bian4 chi1 yue4 bing3", "我们打算一家人一起吃饭赏月顺便吃月饼", "We're planning to have a (whole together) family meal admire the moon eat moon cakes", 4, category="Sentence", kind="general")
+dq_vocabulary["我们打算一家人一起吃饭赏月顺便吃月饼"] = Vocabulary("wo3 men da3 suan4 yi1 jia1 ren2 yi4 qi3 chi1 fan4 shang3 yue4 shun4 bian4 chi1 yue4 bing3", "我们打算一家人一起吃饭赏月顺便吃月饼", "We're planning to have a (whole together) family meal admire the moon and(while we're at it) eat moon cakes", 4, category="Sentence", kind="general", topic="")
+
+dq_vocabulary["我听说"] = Vocabulary("wo3 ting1 shuo1", "我听说", "I heard ...", 2, category="Vocabulary", kind="verb")
+
+dq_vocabulary["南方"] = Vocabulary("nan2 fang1", "南方", "south (the south of China)", 2, category="Vocabulary", kind="general")
+
+dq_vocabulary["还会"] = Vocabulary("hai2 hui4", "还会", "also do / also will / still will / still can / smth continue to happen or remains a fact", 3, category="Vocabulary", kind="grammar")
+
+dq_vocabulary["对吧"] = Vocabulary("dui4 ba", "对吧", "right ? correct ?", 2, category="Vocabulary", kind="general")
+
+dq_vocabulary["真的吗"] = Vocabulary("zhen1 de ma", "真的吗", "Is that true ?", 3, category="Vocabulary", kind="grammar")
+
+dq_vocabulary["我听说你们这儿冬天还会下雪真的吗"] = Vocabulary("wo3 ting1 shuo1 ni3 men zhe4 r dong1 tian1 hai2 hui4 xia4 xue3 zhen1 de ma", "我听说你们这儿冬天还会下雪真的吗", "I heard that in (this) your place, during winter, it (still) snows (regurlarly), is that true ?", 4, category="Sentence", kind="general")
+
+dq_vocabulary["听着"] = Vocabulary("ting1 zhe", "听着", "Sounds like / Sounds ... / Listen ! / While listening to", 3, category="Vocabulary", kind="grammar", topic="")
+
+dq_vocabulary["不错"] = Vocabulary("bu4 cuo4", "不错", "not bad / correct / pretty good", 2, category="Vocabulary", kind="general", topic="daily")
+
+dq_vocabulary["口味"] = Vocabulary("kou3 wei4", "口味", "a person's preferences / preferences in tastes (food) / flavor", 5, category="Vocabulary", kind="general", topic="food")
+
+dq_vocabulary["味"] = Vocabulary("wei4", "味", "taste", 3, category="Vocabulary", kind="general", topic="food")
+
+dq_vocabulary["最"] = Vocabulary("zui4", "最", "most / the most / -est (superlative suffix)", 2, category="Vocabulary", kind="grammar", topic="")
+
+dq_vocabulary["最喜欢"] = Vocabulary("zui4 xi3 huan1", "最喜欢", "like the most", 3, category="Vocabulary", kind="verb", topic="daily")
+
+dq_vocabulary["听着不错"] = Vocabulary("ting1 zhe bu4 cuo4", "听着不错", "Sounds great ! / *Sounds not bad*", 2, category="Sentence", kind="general", topic="daily")
+
+dq_vocabulary["什么口味的月饼最喜欢"] = Vocabulary("shen2 me kou3 wei4 de yue4 bing3 ni3 zui4 xi3 huan1", "什么口味的月饼你最喜欢", "What flavor of moon cake do you like the most ?", 4, category="Sentence", kind="general", topic="food")
+
+dq_vocabulary["肯定"] = Vocabulary("ken3 ding4", "肯定", "to be certain; to be positive", 4, category="Vocabulary", kind="grammar", topic="")
+
+dq_vocabulary["肯定是"] = Vocabulary("ken3 ding4 shi4", "肯定是", "It definitely is ...", 2, category="Vocabulary", kind="general", topic="")
+
+dq_vocabulary["蛋黄"] = Vocabulary("dan4 huang2", "蛋黄", "egg yolk", 4, category="Vocabulary", kind="general", topic="food")
+
+dq_vocabulary["莲蓉"] = Vocabulary("lian2 rong2", "莲蓉", "lotus seed paste", 4, category="Vocabulary", kind="general", topic="food")
+
+dq_vocabulary["超级"] = Vocabulary("chao1 ji2", "超级", "super-", 6, category="Vocabulary", kind="grammar", topic="daily")
+
+dq_vocabulary["肯定是蛋黄莲蓉的超级好吃你呢"] = Vocabulary("ken3 ding4 shi4 dan4 huang2 lian2 rong2 de chao1 ji2 hao3 chi1 ni3 ne", "肯定是蛋黄莲蓉的超级好吃你呢", "It's definitely the egg yolk and lotus seed paste ones it's super delicious how about you ?", 4, category="Sentence", kind="general", topic="food")
+
+dq_vocabulary["蛋"] = Vocabulary("dan4", "蛋", "egg", 1, category="Vocabulary", kind="general", topic="food")

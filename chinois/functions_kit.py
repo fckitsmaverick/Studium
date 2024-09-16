@@ -5,10 +5,14 @@ from rich.columns import Columns
 from rich.table import Table
 from rich.box import SIMPLE, ROUNDED, SQUARE, HEAVY, DOUBLE, HORIZONTALS, SIMPLE_HEAVY, MINIMAL_DOUBLE_HEAD
 from rich.prompt import Prompt
+from rich.text import Text
+from rich.panel import Panel
+from rich.align import Align
 
 from database_tools.cedict_database import get_def_pinyin_simplified
 from dict_tools.questions_vocabulaire import dq_vocabulary
 from database_tools.hsk_database import get_hsk_level, get_hsk_dict_def
+from database_tools.database import update_word_stats
 
 
 def print_pokedex(pokedex):
@@ -57,12 +61,14 @@ def new_vocab_auto():
         dict_result = get_def_pinyin_simplified(pinyin_input, simplified_input)
         hsk_dict_result = get_hsk_dict_def(pinyin_input, simplified_input)
         dict_hsk = get_hsk_level(pinyin_input, simplified_input)
+
+        add_topic = Prompt.ask("[bold yellow]Do you want to add a topic ?[/bold yellow]", default="no", choices=["yes", "no"])
+
         duplicate = False
         #If cedict doesn't have the entries but hsk does use hsk
         if dict_result == False and hsk_dict_result != False:
              dict_result = hsk_dict_result
         
-
 
         if dict_result != False:
             for i in dq_vocabulary:
@@ -70,22 +76,23 @@ def new_vocab_auto():
                     console.print("[bold yellow]You already have this word in your personal vocab[/bold yellow]")
                     duplicate = True
 
-
-
         if dict_result != False and duplicate == False: 
             simplified = dict_result["simplified"]
             pinyin = dict_result["pinyin"]
             english = dict_result["english"]
 
+            if dict_hsk != False: hsk_level = dict_hsk["hsk_level"] 
+            elif dict_hsk == False: hsk_level = Prompt.ask("[bold yellow]Assign an hsk level (level of difficutly from 1 to 6) to your entry: [/bold yellow]", default=1, choices=["1", "2", "3", "4", "5", "6"])
+
             want_to_change = Prompt.ask(f"[bold yellow]Here is the English definition from the dictionnary [bold blue]{english}[/bold blue].\nDo you want to change it ?[/bold yellow]", default="no", choices=["yes", "no"])
             if want_to_change == "yes": 
                 english = Prompt.ask("[bold yellow]Enter the new definition: [/bold yellow]")
 
-            if dict_hsk != False: hsk_level = dict_hsk["hsk_level"] 
-            elif dict_hsk == False: hsk_level = Prompt.ask("[bold yellow]Assign an hsk level (level of difficutly from 1 to 6) to your entry: [/bold yellow]", default=1, choices=["1", "2", "3", "4", "5", "6"])
+            if add_topic == "yes":
+                topic_pick = Prompt.ask("[bold yellow]Enter the topic: [/bold yellow]")
 
             with open("dict_tools/questions_vocabulaire.py", "a") as f:
-                print(f'\ndq_vocabulary["{simplified}"] = Vocabulary("{pinyin}", "{simplified}", "{english}", {hsk_level}, category="{category}", kind="{kind}")', file=f)
+                print(f'\ndq_vocabulary["{simplified}"] = Vocabulary("{pinyin}", "{simplified}", "{english}", {hsk_level}, category="{category}", kind="{kind}", topic="{topic_pick if add_topic == "yes" else ""}")', file=f)
                 console.print("[bold green]New entry in your dictionnary[/bold green]")
                 f.close()
 
@@ -95,20 +102,23 @@ def new_vocab_auto():
             manual_input = Prompt.ask("[bold yellow]Do you want to manually input the definition ?[/bold yellow]", default="yes", choices=["yes", "no"])
 
             if manual_input == "yes":
+
+                english = Prompt.ask("[bold yellow]Enter the English definition: [/bold yellow]")
+                if add_topic == "yes":
+                    topic_pick = Prompt.ask("[bold yellow]Enter the topic: [/bold yellow]")
+
                 if dict_hsk != False:
                     hsk_level = dict_hsk["hsk_level"] 
                 elif dict_hsk == False:
                     hsk_level = Prompt.ask("[bold yellow]Assign an hsk level (level of difficutly from 1 to 6) to your entry: [/bold yellow]", default=1, choices=["1", "2", "3", "4", "5", "6"])
 
-                english = Prompt.ask("[bold yellow]Enter the English definition: [/bold yellow]")
+
+
 
                 with open("dict_tools/questions_vocabulaire.py", "a") as f:
-                    print(f'\ndq_vocabulary["{simplified_input}"] = Vocabulary("{pinyin_input}", "{simplified_input}", "{english}", {hsk_level}, category="{category}", kind="{kind}")', file=f)
+                    print(f'\ndq_vocabulary["{simplified_input}"] = Vocabulary("{pinyin_input}", "{simplified_input}", "{english}", {hsk_level}, category="{category}", kind="{kind}", topic="{topic_pick if add_topic == "yes" else ""}")', file=f)
                     console.print("[bold green]New entry in your dictionnary[/bold green]")
                     f.close()
-
-
-                
 
 
         keep_going = Prompt.ask("[bold red]Do you wish to add more vocabulary ?[/bold red]", default="yes", choices=["yes", "no"])
@@ -199,6 +209,83 @@ def display_bad_ans(curr_d):
             table.add_row(f"{curr_d[key].chinese_character}", f"{curr_d[key].chinese_pinyin}", f"{curr_d[key].english}")
         
         console.print(table)
+
+def compare_ans(user_ans, correct_ans):
+    console = Console()
+    compared_str = Text()
+    corrected_str = Text()
+
+    # Compare each character of both strings
+    for i, char in enumerate(user_ans):
+        if i < len(correct_ans):
+            if char == correct_ans[i]:
+                compared_str.append(char, style="bold green")  # Correct character
+                corrected_str.append(char, style="bold green")  # Correct character
+            else:
+                compared_str.append(char, style="bold underline red")    # Incorrect character
+                corrected_str.append(correct_ans[i], style="bold underline green")
+        else:
+            compared_str.append(char, style="bold underline red")        # Extra character in user_ans
+
+    # If correct_ans is longer than user_ans, highlight the extra characters in correct_ans
+    if len(correct_ans) > len(user_ans):
+        compared_str.append(f" (Missing: {correct_ans[len(user_ans):]})", style="bold underline yellow")
+        corrected_str.append(f" Missing: {correct_ans[len(user_ans):]}", style="bold underline yellow")
+
+    # Create panels for the user's answer and the correct answer
+    user_ans_panel = Panel(
+        Align.center(compared_str), 
+        title="[bold red]Your Answer[/bold red]", 
+        border_style="red", 
+        expand=False
+    )
+
+    correct_ans_panel = Panel(
+        Align.center(corrected_str), 
+        title="[bold green]Correct Answer[/bold green]", 
+        border_style="green", 
+        expand=False
+    )
+
+    # Print the panels side by side
+    console.print(user_ans_panel)
+    console.print(correct_ans_panel)
+
+    return compared_str, corrected_str
+
+def redo_bad_ans(bad_ans_d):
+    console = Console()
+    console.show_cursor()
+    redo = Prompt.ask("[bold magenta]Do you want redo the questions you got wrong?[/bold magenta]", choices=["yes", "no"], default="no")
+
+    if redo == "yes":
+        for key, value in bad_ans_d.items():
+            console.print(Panel(f"[bold blue]{value.english}[/bold blue]", title="Question", expand=False))
+            ans = Prompt.ask("[bold yellow]Enter your answer (pinyin or character): [/bold yellow]")
+
+            if ans == value.chinese_character or ans == value.chinese_pinyin:
+                console.print("[bold green]Correct![/bold green]")
+            else:
+                console.print("[bold red]Wrong Answer![/bold red]")
+                #Check if user typed pinyin or chinese character
+                #Then compare the answer and output the hightlighted error(s)
+                if len(ans) > 0:
+                    if ans[0].isascii(): correct_ans = compare_ans(ans, value.chinese_pinyin)
+                    else: correct_ans = compare_ans(ans, value.chinese_character)
+
+                # Display the correct answer in a table
+                table = Table(title=f"[bold]Correct Answer[/bold] - {value.chinese_character}")
+                table.add_column("Simplified", justify="center", style="bright_blue", no_wrap=True)
+                table.add_column("Pinyin", justify="center", style="bright_blue")
+                table.add_column("Your Answer", justify="center", style="bright_blue")
+
+                table.add_row(f"{value.chinese_character}", f"{value.chinese_pinyin}", f"{value.english}")
+                console.print(table)
+
+                update_word_stats(key, False)
+    else:
+        return
+
 
 if __name__ == "__main__":
     update_vocab_dictionnary(dq_vocabulary, sentence_included=True, kind_of_word=True, difficulty_set=False, kind="general", difficulty_limit="1")

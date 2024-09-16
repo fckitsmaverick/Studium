@@ -127,7 +127,7 @@ def get_hsk_level(pinyin_input, simplified_input, user_input=False):
         dict_result = {"hsk_level": result[0][0]}
         return dict_result
     else:
-        console.print("[bold red]No result found for this word, HSK default value is assigned (1)[/bold red]\n")
+        console.print("[bold red]No result found for this word, HSK default value is assigned (1)[/bold red]")
         dict_result = {"hsk_level": 1}
         return False
 

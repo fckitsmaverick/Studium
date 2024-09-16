@@ -1,76 +1,34 @@
-#!/usr/bin/env python
-"""
-Example of using the control-space key binding for auto completion.
-"""
+from rich.console import Console
+from rich.text import Text
 
-from prompt_toolkit import prompt
-from prompt_toolkit.completion import WordCompleter
-from prompt_toolkit.key_binding import KeyBindings
+def check_mistakes(str1, str2):
+    console = Console()
+    output = Text()
 
-animal_completer = WordCompleter(
-    [
-        "alligator",
-        "ant",
-        "ape",
-        "bat",
-        "bear",
-        "beaver",
-        "bee",
-        "bison",
-        "butterfly",
-        "cat",
-        "chicken",
-        "crocodile",
-        "dinosaur",
-        "dog",
-        "dolphin",
-        "dove",
-        "duck",
-        "eagle",
-        "elephant",
-        "fish",
-        "goat",
-        "gorilla",
-        "kangaroo",
-        "leopard",
-        "lion",
-        "mouse",
-        "rabbit",
-        "rat",
-        "snake",
-        "spider",
-        "turkey",
-        "turtle",
-    ],
-    ignore_case=True,
-)
+    # Compare each character of both strings
+    for i, char in enumerate(str1):
+        if i < len(str2):
+            if char == str2[i]:
+                output.append(char, style="bold green")  # Correct character
+            else:
+                output.append(char, style="bold red")    # Incorrect character
+        else:
+            output.append(char, style="bold red")        # Extra character in str1
 
+    # If str2 is longer than str1, highlight the extra characters in str2
+    if len(str2) > len(str1):
+        output.append(f" (Missing: {str2[len(str1):]})", style="bold yellow")
 
-kb = KeyBindings()
+    # Print the result
+    console.print(output)
+    return output
 
-
-@kb.add("c-space")
-def _(event):
-    """
-    Start auto completion. If the menu is showing already, select the next
-    completion.
-    """
-    b = event.app.current_buffer
-    if b.complete_state:
-        b.complete_next()
-    else:
-        b.start_completion(select_first=False)
 
 
 def main():
-    text = prompt(
-        "Give some animals: ",
-        completer=animal_completer,
-        complete_while_typing=False,
-        key_bindings=kb,
-    )
-    print(f"You said: {text}")
-
+    user_ans = "wo3 shi4 fa3 guo4 ren2"
+    correct_ans = "wo3 shi4 fa3 guo2 ren2"
+    check_mistakes(user_ans, correct_ans)
 
 if __name__ == "__main__":
     main()
