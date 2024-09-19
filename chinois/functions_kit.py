@@ -74,7 +74,9 @@ def new_vocab_auto():
             for i in dq_vocabulary:
                 if dq_vocabulary[i].chinese_character == dict_result["simplified"] and dq_vocabulary[i].chinese_pinyin == dict_result["pinyin"]:
                     console.print("[bold yellow]You already have this word in your personal vocab[/bold yellow]")
-                    duplicate = True
+                    keep_going = Prompt.ask("[bold yellow]Do you still wish to add it to your dictionnary ?[/bold yellow]", default="no", choices=["yes", "no"])
+                    if keep_going == "no": 
+                        duplicate = True
 
         if dict_result != False and duplicate == False: 
             simplified = dict_result["simplified"]
@@ -89,10 +91,11 @@ def new_vocab_auto():
                 english = Prompt.ask("[bold yellow]Enter the new definition: [/bold yellow]")
 
             if add_topic == "yes":
-                topic_pick = Prompt.ask("[bold yellow]Enter the topic: [/bold yellow]")
+                topic_pick = Prompt.ask("[bold yellow]Enter the topic (you can add more than one by using ', ' separator): [/bold yellow]")
+                topic_pick = topic_pick.split(", ")
 
             with open("dict_tools/questions_vocabulaire.py", "a") as f:
-                print(f'\ndq_vocabulary["{simplified}"] = Vocabulary("{pinyin}", "{simplified}", "{english}", {hsk_level}, category="{category}", kind="{kind}", topic="{topic_pick if add_topic == "yes" else ""}")', file=f)
+                print(f'\ndq_vocabulary["{simplified}"] = Vocabulary("{pinyin}", "{simplified}", "{english}", {hsk_level}, category="{category}", kind="{kind}", topic={topic_pick if add_topic == "yes" else []})', file=f)
                 console.print("[bold green]New entry in your dictionnary[/bold green]")
                 f.close()
 
@@ -105,7 +108,8 @@ def new_vocab_auto():
 
                 english = Prompt.ask("[bold yellow]Enter the English definition: [/bold yellow]")
                 if add_topic == "yes":
-                    topic_pick = Prompt.ask("[bold yellow]Enter the topic: [/bold yellow]")
+                    topic_pick = Prompt.ask("[bold yellow]Enter the topic (you can add more than one by using ', ' separator): [/bold yellow]")
+                    topic_pick = topic_pick.split(", ")
 
                 if dict_hsk != False:
                     hsk_level = dict_hsk["hsk_level"] 
@@ -116,7 +120,7 @@ def new_vocab_auto():
 
 
                 with open("dict_tools/questions_vocabulaire.py", "a") as f:
-                    print(f'\ndq_vocabulary["{simplified_input}"] = Vocabulary("{pinyin_input}", "{simplified_input}", "{english}", {hsk_level}, category="{category}", kind="{kind}", topic="{topic_pick if add_topic == "yes" else ""}")', file=f)
+                    print(f'\ndq_vocabulary["{simplified_input}"] = Vocabulary("{pinyin_input}", "{simplified_input}", "{english}", {hsk_level}, category="{category}", kind="{kind}", topic= {topic_pick if add_topic == "yes" else []})', file=f)
                     console.print("[bold green]New entry in your dictionnary[/bold green]")
                     f.close()
 
@@ -126,35 +130,6 @@ def new_vocab_auto():
         if keep_going.lower() == "no": return
             
 
-
-
-def study_personal():
-    console = Console()
-    console.show_cursor()
-    table = Table(title="[bold blue]Study Table", box=DOUBLE, show_lines=True, row_styles=["bright_blue", "yellow", "bright_green"])
-    sentence_study = Prompt.ask("[bold yellow]Do you want to study sentences ?[/bold yellow]", default="no", choices=["yes", "no"])
-    difficulty_set = Prompt.ask("[bold yellow]Do you want to set a difficulty limit ?[/bold yellow]", default="no", choices=["yes", "no"])
-    difficulty_limit = Prompt.ask("[bold yellow]Enter the difficulty limit (1 to 6): [/bold yellow]", default=1, choices=["1", "2", "3", "4", "5", "6"])
-
-    # Modify dq_vocabulary without reassigning
-    if sentence_study == "yes":
-        dq_vocabulary_copy = {key: value for key, value in dq_vocabulary.items() if value.category == "Sentence"}
-        dq_vocabulary.clear()
-        dq_vocabulary.update(dq_vocabulary_copy)
-
-    if difficulty_set.lower() == "yes":
-        dq_vocabulary_copy = {key: value for key, value in dq_vocabulary.items() if value.difficulty == int(difficulty_limit)}
-        dq_vocabulary.clear()
-        dq_vocabulary.update(dq_vocabulary_copy)
-
-    table.add_column("Simplified", justify="center", style="bright_blue", no_wrap=True)
-    table.add_column("Pinyin", justify="center", style="bright_blue")
-    table.add_column("English", justify="center", style="bright_blue")
-
-    for i in dq_vocabulary:
-        table.add_row(dq_vocabulary[i].chinese_character, dq_vocabulary[i].chinese_pinyin, dq_vocabulary[i].english, end_section=True) 
-    
-    console.print(table)
 
 def update_vocab_dictionnary(d_voc, sentence_included=False, kind_of_word=False, difficulty_set=False, kind="general", difficulty_limit="1"):
     d_voc_copy = d_voc
@@ -173,6 +148,38 @@ def assign_true_false(curr, bool_value):
     elif bool_value == "no":
         curr = False
     return curr
+
+
+def study_personal():
+    console = Console()
+    console.show_cursor()
+    table = Table(title="[bold blue]Study Table", box=DOUBLE, show_lines=True, row_styles=["bright_blue", "yellow", "bright_green"])
+    sentence_study = Prompt.ask("[bold yellow]Do you want to study sentences ?[/bold yellow]", default="no", choices=["yes", "no"])
+    difficulty_set = Prompt.ask("[bold yellow]Do you want to set a difficulty limit ?[/bold yellow]", default="no", choices=["yes", "no"])
+    difficulty_limit = Prompt.ask("[bold yellow]Enter the difficulty limit (1 to 6): [/bold yellow]", default=1, choices=["1", "2", "3", "4", "5", "6"])
+    sentence_study = assign_true_false(sentence_study, sentence_study)
+    difficulty_set = assign_true_false(difficulty_set, difficulty_set)
+
+    table.add_column("Simplified", justify="center", style="bright_blue", no_wrap=True)
+    table.add_column("Pinyin", justify="center", style="bright_blue")
+    table.add_column("English", justify="center", style="bright_blue")
+
+    if difficulty_set == True:
+        for i in dq_vocabulary:
+            if dq_vocabulary[i].difficulty == int(difficulty_limit):
+                if sentence_study == False:
+                    if dq_vocabulary[i].category != "Sentence":
+                        table.add_row(dq_vocabulary[i].chinese_character, dq_vocabulary[i].chinese_pinyin, dq_vocabulary[i].english)
+                elif sentence_study == True:
+                    table.add_row(dq_vocabulary[i].chinese_character, dq_vocabulary[i].chinese_pinyin, dq_vocabulary[i].english)
+        return
+
+    else:
+        for i in dq_vocabulary:
+            table.add_row(dq_vocabulary[i].chinese_character, dq_vocabulary[i].chinese_pinyin, dq_vocabulary[i].english, end_section=True) 
+        
+    console.print(table)
+
 
 
 def take_user_preferences():

@@ -136,7 +136,7 @@ dq_vocabulary["房间"] = Vocabulary("fang2 jian1", "房间", "room", 2, categor
 
 dq_vocabulary["还在"] = Vocabulary("hai2 zai4", "还在", "still (to exist)", 1, category="Vocabulary", kind="grammar")
 
-dq_vocabulary["她还在生气吗"] = Vocabulary("ta1 hai2 zai4 shui4 ma", "她还在生气吗", "Is she still sleeping ?", 2, category="Sentence", kind="")
+dq_vocabulary["她还在睡吗"] = Vocabulary("ta1 hai2 zai4 shui4 ma", "她还在睡吗", "Is she still sleeping ?", 2, category="Sentence", kind="")
 
 dq_vocabulary["生气"] = Vocabulary("sheng1 qi4", "生气", "to get angry; to be furious", 3, category="Vocabulary", kind="general")
 
@@ -176,7 +176,7 @@ dq_vocabulary["吃完饭遛弯儿去吧也没事儿做"] = Vocabulary("chi1 wan2
 
 dq_vocabulary["打算"] = Vocabulary("da3 suan4", "打算", "to plan, to intend", 3, category="Vocabulary", kind="verb", topic="")
 
-dq_vocabulary["中秋切"] = Vocabulary("zhong1 qiu1 jie2", "中秋切", "Mid-autumn festival", 3, category="Vocabulary", kind="general", topic="")
+dq_vocabulary["中秋节"] = Vocabulary("zhong1 qiu1 jie2", "中秋节", "Mid-autumn festival", 3, category="Vocabulary", kind="general", topic="")
 
 dq_vocabulary["过"] = Vocabulary("guo4", "过", "to cross, to celebrate (a holiday), to pass (time).", 2, category="Vocabulary", kind="verb", topic="")
 
@@ -235,3 +235,60 @@ dq_vocabulary["超级"] = Vocabulary("chao1 ji2", "超级", "super-", 6, categor
 dq_vocabulary["肯定是蛋黄莲蓉的超级好吃你呢"] = Vocabulary("ken3 ding4 shi4 dan4 huang2 lian2 rong2 de chao1 ji2 hao3 chi1 ni3 ne", "肯定是蛋黄莲蓉的超级好吃你呢", "It's definitely the egg yolk and lotus seed paste ones it's super delicious how about you ?", 4, category="Sentence", kind="general", topic="food")
 
 dq_vocabulary["蛋"] = Vocabulary("dan4", "蛋", "egg", 1, category="Vocabulary", kind="general", topic="food")
+
+dq_vocabulary["虽然"] = Vocabulary("sui1 ran2", "虽然", "although; even though (often used correlatively with 可是[ke3 shi4] or 但是[dan4 shi4] etc)", 3, category="Vocabulary", kind="grammar", topic="daily")
+
+dq_vocabulary["但"] = Vocabulary("dan4", "但", "but; yet; however; still", 1, category="Vocabulary", kind="grammar", topic="")
+
+dq_vocabulary["香"] = Vocabulary("xiang1", "香", "fragrant", 4, category="Vocabulary", kind="general", topic="food")
+
+dq_vocabulary["挺香"] = Vocabulary("ting3 xiang1", "挺香", "quite fragrant", 5, category="Vocabulary", kind="general", topic="food")
+
+dq_vocabulary["我喜欢五仁的虽然多人不喜欢但我觉得挺香的"] = Vocabulary("wo3 xi3 huan1 wu3 ren2 de sui1 ran2 duo1 ren2 bu4 xi3 huan1 dan4 wo3 jue2 de ting3 xiang1 de", "我喜欢五仁的虽然多人不喜欢但我觉得挺香的", "I like the five nut one (moon cake taste) although many people don't like it but i think it's quite fragrant", 4, category="Sentence", kind="general", topic=['food', 'holiday'])
+
+dq_vocabulary["确实"] = Vocabulary("que4 shi2", "确实", "indeed", 4, category="Vocabulary", kind="grammar", topic=['daily'])
+
+dq_vocabulary["争议"] = Vocabulary("zheng1 yi4", "争议", "controversy / disputed / controversial", 6, category="Vocabulary", kind="grammar", topic=['politics'])
+
+dq_vocabulary["有"] = Vocabulary("you3", "有", "to have / connector between adverb and noun to express the noun possess a characteristic", 1, category="Vocabulary", kind="verb", topic=[])
+
+dq_vocabulary["挺有争议"] = Vocabulary("ting3 you3 zheng1 yi4", "挺有争议", "Quite controversial", 4, category="Vocabulary", kind="general", topic= [])
+
+dq_vocabulary["一般"] = Vocabulary("yi1 ban1", "一般", "same / usually / normally", 3, category="Vocabulary", kind="general", topic=['daily'])
+
+dq_vocabulary["庆祝"] = Vocabulary("qing4 zhu4", "庆祝", "to celebrate", 5, category="Vocabulary", kind="verb", topic=['holyday'])
+
+dq_vocabulary["偶尔"] = Vocabulary("ou3 er3", "偶尔", "occasionally", 4, category="Vocabulary", kind="grammar", topic=['daily'])
+
+dq_vocabulary["放"] = Vocabulary("fang4", "放", "to put / to set off", 3, category="Vocabulary", kind="verb", topic=['holyday'])
+
+dq_vocabulary["烟花"] = Vocabulary("yan1 hua1", "烟花", "fireworks", 3, category="Vocabulary", kind="general", topic=['holyday'])
+
+dq_vocabulary["大家"] = Vocabulary("da4 jia1", "大家", "everyone in the house", 2, category="Vocabulary", kind="general", topic=['people'])
+
+dq_vocabulary["都会"] = Vocabulary("dou1 hui4", "都会", "everyone will / all will", 2, category="Vocabulary", kind="verb", topic= [])
+
+
+dq_vocabulary["晚上"] = Vocabulary("wan3 shang4", "晚上", "evening / night", 1, category="Vocabulary", kind="general", topic= ['daily', 'time'])
+
+dq_vocabulary["早上"] = Vocabulary("zao3 shang4", "早上", "early morning", 1, category="Vocabulary", kind="general", topic= ['daily', 'time'])
+
+dq_vocabulary["安排"] = Vocabulary("an1 pai2", "安排", "to arrange / plans / arrangements", 4, category="Vocabulary", kind="general", topic=['daily'])
+
+dq_vocabulary["今天晚上有什么安排吗"] = Vocabulary("jin1 tian1 wan3 shang4 you3 shen2 me an1 pai2 ma", "今天晚上有什么安排吗", "For tonight do you have anything planned ?", 2, category="Sentence", kind="general", topic= ['out', 'daily'])
+
+dq_vocabulary["没啥"] = Vocabulary("mei2 sha2", "没啥", "nothing / (there is) nothing", 3, category="Vocabulary", kind="general", topic= ['erhua', 'daily'])
+
+dq_vocabulary["特别"] = Vocabulary("te4 bie2", "特别", "unusual; special", 3, category="Vocabulary", kind="general", topic=[])
+
+dq_vocabulary["就"] = Vocabulary("jiu4", "就", "just (emphasis)", 2, category="Vocabulary", kind="grammar", topic=[])
+
+dq_vocabulary["一块"] = Vocabulary("yi1 kuai4", "一块", "together / one block / one piece / in the same place", 2, category="Vocabulary", kind="general", topic=['daily'])
+
+dq_vocabulary["一块儿"] = Vocabulary("yi1 kuai4 r", "一块儿", "(erhua) together", 2, category="Vocabulary", kind="general", topic= ['erhua'])
+
+dq_vocabulary["没啥特别的就打算去遛个弯人"] = Vocabulary("mei2 sha2 te4 bie2 de jiu4 da3 suan4 qu4 liu4 ge wan1 r", "没啥特别的就打算去遛个弯人", "Nothing special, just planning to go for (one) walk(erhua)", 3, category="Sentence", kind="general", topic= ['daily', 'erhua'])
+
+dq_vocabulary["你要一块儿去吗"] = Vocabulary("ni3 yao4 yi1 kuai4 r qu4 ma", "你要一块儿去吗", "Do you want to come along (together erhua) ?", 2, category="Sentence", kind="general", topic= ['daily', 'out', 'erhua'])
+
+dq_vocabulary["没啥特别的"] = Vocabulary("mei2 sha2 r te4 bie2 de", "没啥特别的", "Nothing special (erhua)", 2, category="Sentence", kind="general", topic= ['daily', 'erhua'])

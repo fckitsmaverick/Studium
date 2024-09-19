@@ -1,5 +1,5 @@
 class Vocabulary:
-    def __init__(self, chinese_pinyin, chinese_character, english, difficulty, category="Vocabulary", kind="general", topic=""):
+    def __init__(self, chinese_pinyin, chinese_character, english, difficulty, category="Vocabulary", kind="general", topic=[]):
         self.chinese_pinyin = chinese_pinyin
         self.chinese_character = chinese_character
         self.english = english

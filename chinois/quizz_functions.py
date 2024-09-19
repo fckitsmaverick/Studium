@@ -393,6 +393,9 @@ def hsk_quizz(inp):
             else:
                 console.print("[bold red]Wrong Answer![/bold red]")
                 bad_ans[key] = word
+                if len(ans) > 0:
+                    if ans[0].isascii(): correct_ans = compare_ans(ans, question_pick.chinese_pinyin)
+                    else: correct_ans = compare_ans(ans, question_pick.chinese_character)
 
                 # Display the correct answer in a table
                 table = Table(title=f"[bold]Correct Answer[/bold] - {word.chinese_character}")
@@ -457,6 +460,10 @@ def ce_random_quizz(inp, count=0, limitation=10001):
                 update_word_stats(question_pick.chinese_character, True)
             else:
                 console.print("[bold red]Wrong Answer![/bold red]")
+                bad_ans[key] = question_pick
+                if len(ans) > 0:
+                    if ans[0].isascii(): correct_ans = compare_ans(ans, question_pick.chinese_pinyin)
+                    else: correct_ans = compare_ans(ans, question_pick.chinese_character)
 
                 # Display the correct answer in a table
                 table = Table(title=f"[bold]Correct Answer[/bold] - {question_pick.chinese_character}")
@@ -503,6 +510,9 @@ def sentence_quizz(inp):
     console = Console()
     console.show_cursor()
 
+    user_limit = Prompt.ask("[bold yellow]Number of sentences you want to study (type x)[/bold yellow]", default="10")
+    user_limit = int(user_limit)
+
     score_player_1 = 0
     count = 0
     bad_ans = {}
@@ -530,9 +540,12 @@ def sentence_quizz(inp):
             if ans == question_pick.chinese_pinyin:
                 console.print("[bold bright_green]Good Answer![/bold bright_green]\n")
                 score_player_1 += question_pick.difficulty
-                update_word_stats(question_pick.chinese_character, True)
+                #update_word_stats(question_pick.chinese_character, True)
             else:
                 console.print("[bold bright_red]Bad Answer![/bold bright_red]\n")
+                if len(ans) > 0:
+                    if ans[0].isascii(): correct_ans = compare_ans(ans, question_pick.chinese_pinyin)
+                    else: correct_ans = compare_ans(ans, question_pick.chinese_character)
 
                 # Display the correct answer in a table
                 table = Table(title=f"[bold]Correct Answer[/bold] - {question_pick.chinese_character}")
@@ -544,13 +557,16 @@ def sentence_quizz(inp):
                 console.print(table)
 
                 bad_ans[i] = question_pick
-                update_word_stats(question_pick.chinese_character, False)
+                #update_word_stats(question_pick.chinese_character, False)
 
             question_pick.done = 1
             count += 1
             update_experience((question_pick.difficulty)*2)
             console.rule("[bold red]")
-            console.print(f"[bold yellow]Questions Completed: {count}/{len(sentence_dict)}, {round((count/len(sentence_dict))*100)}%[/bold yellow]")
+            console.print(f"[bold yellow]Questions Completed: {count}/{user_limit}, {round((count/user_limit)*100)}%[/bold yellow]")
+
+            if count >= user_limit:
+                break
 
     # Display a summary of bad answers
     if bad_ans:
@@ -560,6 +576,79 @@ def sentence_quizz(inp):
     # Display final score
     console.print(Panel(f"[bold magenta]Quiz Complete![/bold magenta]\nYour final score: [bold yellow]{score_player_1}[/bold yellow]", expand=False))
 
+
+def topic_quizz(inp):
+    # Start rich console
+    console = Console()
+    console.show_cursor()
+
+    topic_pick = Prompt.ask("[bold yellow]Which topic do you want to study ?[/bold yellow]")
+
+    user_limit = Prompt.ask("[bold yellow]Number of sentences you want to study (type x)[/bold yellow]", default="10")
+    user_limit = int(user_limit)
+
+    score_player_1 = 0
+    count = 0
+    bad_ans = {}
+
+    topic_dict = {}
+
+    for key, value in dq_vocabulary.items():
+        if value.topic == topic_pick:
+            topic_dict[key] = value
+
+    for i in topic_dict:
+        question_pick = random.choice(list(topic_dict.values()))
+
+        # Skip already answered questions
+        while question_pick.done == 1:
+            question_pick = random.choice(list(topic_dict.values()))
+
+        if question_pick.done == 0:
+            # Ask the question (displaying the English meaning)
+            console.print(Panel(f"[bold bright_blue]{question_pick.english}[/bold bright_blue]", title="Question", expand=False))
+            ans = Prompt.ask("[bold yellow]Enter your answer (pinyin): [/bold yellow]")
+
+            if ans.lower() == "exit": return
+
+            if ans == question_pick.chinese_pinyin:
+                console.print("[bold bright_green]Good Answer![/bold bright_green]\n")
+                score_player_1 += question_pick.difficulty
+                #update_word_stats(question_pick.chinese_character, True)
+            else:
+                console.print("[bold bright_red]Bad Answer![/bold bright_red]\n")
+                if len(ans) > 0:
+                    if ans[0].isascii(): correct_ans = compare_ans(ans, question_pick.chinese_pinyin)
+                    else: correct_ans = compare_ans(ans, question_pick.chinese_character)
+
+                # Display the correct answer in a table
+                table = Table(title=f"[bold]Correct Answer[/bold] - {question_pick.chinese_character}")
+                table.add_column("Simplified", justify="center", style="bright_blue", no_wrap=True)
+                table.add_column("Pinyin", justify="center", style="bright_blue")
+                table.add_column("English", justify="center", style="bright_blue")
+
+                table.add_row(f"{question_pick.chinese_character}", f"{question_pick.chinese_pinyin}", f"{question_pick.english}")
+                console.print(table)
+
+                bad_ans[i] = question_pick
+                #update_word_stats(question_pick.chinese_character, False)
+
+            question_pick.done = 1
+            count += 1
+            update_experience(question_pick.difficulty)
+            console.rule("[bold red]")
+            console.print(f"[bold yellow]Questions Completed: {count}/{len(user_limit)}, {round((count/len(user_limit))*100)}%[/bold yellow]")
+
+            if count >= user_limit:
+                break
+
+    # Display a summary of bad answers
+    if bad_ans:
+        display_bad_ans(bad_ans)
+        redo_bad_ans(bad_ans)
+
+    # Display final score
+    console.print(Panel(f"[bold magenta]Quiz Complete![/bold magenta]\nYour final score: [bold yellow]{score_player_1}[/bold yellow]", expand=False))
 
 
 
