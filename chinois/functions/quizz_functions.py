@@ -2,7 +2,7 @@ from dict_tools.questions_vocabulaire import dq_vocabulary
 from database_tools.database import update_score_progress, update_word_stats, get_word_stats, get_worst_word_ratios, update_experience
 from database_tools.cedict_database import get_def, get_def_pinyin_simplified
 from database_tools.hsk_database import get_hsk_by_level
-from functions_kit import update_vocab_dictionnary, assign_true_false, take_user_preferences, display_bad_ans, compare_ans, redo_bad_ans
+from functions.functions_kit import update_vocab_dictionnary, assign_true_false, take_user_preferences, display_bad_ans, compare_ans, redo_bad_ans
 
 from datetime import datetime
 from termcolor import cprint

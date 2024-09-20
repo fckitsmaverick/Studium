@@ -1,8 +1,9 @@
 from dict_tools.questions_vocabulaire import dq_vocabulary
 from database_tools.database import update_score_progress, get_experience
 from database_tools.pokemon_database import get_pokedex, check_pokemon_rank, add_to_pokedex
-from quizz_functions import ec_quizz, ecpinyin_quizz, last_x_quizz, worst_x_quizz, random_x_quizz, hsk_quizz, ce_random_quizz, sentence_quizz
-from functions_kit import print_pokedex, new_vocab_auto, study_personal
+from functions.quizz_functions import ec_quizz, ecpinyin_quizz, last_x_quizz, worst_x_quizz, random_x_quizz, hsk_quizz, ce_random_quizz, sentence_quizz
+from functions.functions_kit import print_pokedex, new_vocab_auto, study_personal
+from functions.english_quizz_functions import random_x_english
 
 
 from datetime import datetime

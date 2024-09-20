@@ -293,6 +293,26 @@ def redo_bad_ans(bad_ans_d):
     else:
         return
 
+def add_english_vocab():
+    console = Console()
+    console.show_cursor()
+
+    while True:
+        english_word = Prompt.ask("[bold yellow]Enter the English word: [/bold yellow]")
+        english_def = Prompt.ask("[bold yellow]Enter the English definition: [/bold yellow]")
+        french_equivalent = Prompt.ask("[bold yellow]Enter the French equivalent: [/bold yellow]")
+        difficulty = Prompt.ask("[bold yellow]Enter the difficulty level (1 to 6): [/bold yellow]", default="1", choices=["1", "2", "3", "4", "5", "6"])
+        category = Prompt.ask("[bold yellow]Enter the category: [/bold yellow]", default="Vocabulary")
+        topic = Prompt.ask("[bold yellow]Enter the topic: [/bold yellow]", default="")
+
+        with open("dict_tools/english_vocab.py", "a") as f:
+            print(f'\nd_english["{english_word}"] = EnglishVocabulary("{english_word}", "{english_def}", {difficulty}, "{category}", "{topic}", french_equivalent="{french_equivalent}")', file=f)
+            console.print("[bold green]New entry in your dictionnary[/bold green]")
+            f.close()
+
+        keep_going = Prompt.ask("[bold red]Do you wish to add more vocabulary ?[/bold red]", default="yes", choices=["yes", "no"])
+
+        if keep_going.lower() == "no": return
 
 if __name__ == "__main__":
     update_vocab_dictionnary(dq_vocabulary, sentence_included=True, kind_of_word=True, difficulty_set=False, kind="general", difficulty_limit="1")
