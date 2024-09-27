@@ -2,8 +2,7 @@ from dict_tools.questions_vocabulaire import dq_vocabulary
 from database_tools.database import update_score_progress, get_experience
 from database_tools.pokemon_database import get_pokedex, check_pokemon_rank, add_to_pokedex
 from functions.quizz_functions import ec_quizz, ecpinyin_quizz, last_x_quizz, worst_x_quizz, random_x_quizz, hsk_quizz, ce_random_quizz, sentence_quizz
-from functions.functions_kit import print_pokedex, new_vocab_auto, study_personal
-from functions.english_quizz_functions import random_x_english
+from functions.functions_kit import print_pokedex, new_vocab_auto, study_personal, update_word_personal_vocab, delete_word_personal_vocab
 
 
 from datetime import datetime
@@ -48,9 +47,8 @@ def display_menu():
     table.add_row("1", "Enter Quizz Mode")
     table.add_row("2", "Enter Pokemon Mode")
     table.add_row("3", "Enter Study Mode")
-    table.add_row("4", "Add New Vocabulary")
-    table.add_row("5", "View Pokedex")
-    table.add_row("6", "Exit")
+    table.add_row("4", "Enter Dictionnary Mode")
+    table.add_row("5", "Exit")
 
     console.print(table)
 
@@ -163,6 +161,33 @@ def pokemon_mode():
         elif pokemon_choice == "5":
             return  # Return to the main menu
 
+def display_dictionnary_submenu():
+    """Display the dictionnary mode submenu."""
+    console.print(Panel("[bold magenta]Dictionnary Mode[/bold magenta]", expand=False))
+
+    table = Table(title="Dictionnary Mode Options", show_edge=False, header_style="bold blue")
+    table.add_column("Option", justify="center", style="bold yellow")
+    table.add_column("Description", style="green")
+
+    table.add_row("1", "Add New Vocabulary")
+    table.add_row("2", "Back to Main Menu")
+
+    console.print(table)
+
+def dictionnary_mode():
+    while True:
+        display_dictionnary_submenu()
+        dictionnary_choice = get_submenu_choice(["1", "2"])
+
+        if dictionnary_choice == "1":
+            console.print("[bold green]Adding new vocabulary ![/bold green]")
+            new_vocab_auto()
+            return
+        elif dictionnary_choice == "2":
+            return  # Return to the main menu
+
+
+
 def main():
     while True:
         # Display the main menu
@@ -179,13 +204,9 @@ def main():
             console.print("Study Mode selected!")
             study_personal()
         elif choice == "4":
-            console.print("[bold green]Add New Vocabulary selected![/bold green]")
-            new_vocab_auto()
+            console.print("[bold green]Entering Dictionnary Mode ![/bold green]")
+            dictionnary_mode()
         elif choice == "5":
-            console.print("[bold green]View Pokedex selected![/bold green]")
-            my_pokedex = get_pokedex()
-            print_pokedex(my_pokedex)
-        elif choice == "6":
             console.print("[bold red]Exiting...[/bold red]")
             sys.exit(0)
         else:

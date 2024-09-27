@@ -3,6 +3,14 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+*.env
+to_do.txt
+game.py
+english_quizz.py
+functions/english_quizz_functions.py
+sprites/
+dict_tools/english_vocab.py
+classes/classes_english.py
 # C extensions
 *.so
 

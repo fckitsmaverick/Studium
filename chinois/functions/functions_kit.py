@@ -15,6 +15,7 @@ from database_tools.hsk_database import get_hsk_level, get_hsk_dict_def
 from database_tools.database import update_word_stats
 
 
+
 def print_pokedex(pokedex):
 
     console = Console()
@@ -128,8 +129,80 @@ def new_vocab_auto():
         keep_going = Prompt.ask("[bold red]Do you wish to add more vocabulary ?[/bold red]", default="yes", choices=["yes", "no"])
 
         if keep_going.lower() == "no": return
+
+def update_word_personal_vocab():
+    console = Console()
+    console.show_cursor()
+    while True:
+        word_key = Prompt.ask("[bold yellow]Enter the word you want to update (in Chinese Character): [/bold yellow]")
+        if word_key not in dq_vocabulary:
+            console.print("[bold red]This word is not in your personal vocab[/bold red]")
+            keep_going = Prompt.ask("[bold yellow]Do you wish to update another word ?[/bold yellow]", default="no", choices=["yes", "no"])
+            if keep_going == "no": 
+                return
+        else:
+            arg_to_update = Prompt.ask("[bold yellow]What do you want to update ?[/bold yellow]", choices=["pinyin", "simplified", "english", "category", "kind", "topic"], default="english")
+
+            if arg_to_update == "english":
+                console.print(f"[bold yellow]Current English definition: {dq_vocabulary[word_key].english}[/bold yellow]")
+                new_english = Prompt.ask("[bold yellow]Enter the new English definition: [/bold yellow]")
+                dq_vocabulary[word_key].english = new_english
+                console.print("[bold green]Successfully updated![/bold green]")
+
+            elif arg_to_update == "pinyin":
+                console.print(f"[bold yellow]Current Pinyin: {dq_vocabulary[word_key].chinese_pinyin}[/bold yellow]")
+                new_pinyin = Prompt.ask("[bold yellow]Enter the new Pinyin: [/bold yellow]")
+                dq_vocabulary[word_key].chinese_pinyin = new_pinyin
+                console.print("[bold green]Successfully updated![/bold green]")
+            
+            elif arg_to_update == "simplified":
+                console.print(f"[bold yellow]Current Simplified: {dq_vocabulary[word_key].chinese_character}[/bold yellow]")
+                new_simplified = Prompt.ask("[bold yellow]Enter the new Simplified: [/bold yellow]")
+                dq_vocabulary[word_key].chinese_character = new_simplified
+                console.print("[bold green]Successfully updated![/bold green]")
+            
+            elif arg_to_update == "category":
+                console.print(f"[bold yellow]Current Category: {dq_vocabulary[word_key].category}[/bold yellow]")
+                new_category = Prompt.ask("[bold yellow]Enter the new Category: [/bold yellow]")
+                dq_vocabulary[word_key].category = new_category
+                console.print("[bold green]Successfully updated![/bold green]")
+            
+            elif arg_to_update == "kind":
+                console.print(f"[bold yellow]Current Kind: {dq_vocabulary[word_key].kind}[/bold yellow]")
+                new_kind = Prompt.ask("[bold yellow]Enter the new Kind: [/bold yellow]")
+                dq_vocabulary[word_key].kind = new_kind
+                console.print("[bold green]Successfully updated![/bold green]")
+            
+            elif arg_to_update == "topic":
+                console.print(f"[bold yellow]Current Topic: {dq_vocabulary[word_key].topic}[/bold yellow]")
+                new_topic = Prompt.ask("[bold yellow]Enter the new Topic: [/bold yellow]")
+                dq_vocabulary[word_key].topic = new_topic
+                console.print("[bold green]Successfully updated![/bold green]")
+            
+            else:
+                console.print("[bold red]Invalid input[/bold red]")
+                return
+        keep_going = Prompt.ask("[bold yellow]Do you wish to update another word ?[/bold yellow]", default="no", choices=["yes", "no"])
+        if keep_going == "no":
+            return
             
 
+def delete_word_personal_vocab():
+    console = Console()
+    console.show_cursor()
+    while True:
+        word_key = Prompt.ask("[bold yellow]Enter the word you want to delete (in Chinese Character): [/bold yellow]")
+        if word_key not in dq_vocabulary:
+            console.print("[bold red]This word is not in your personal vocab[/bold red]")
+            keep_going = Prompt.ask("[bold yellow]Do you wish to delete another word ?[/bold yellow]", default="no", choices=["yes", "no"])
+            if keep_going == "no": 
+                return
+        else:
+            del dq_vocabulary[word_key]
+            console.print("[bold green]Successfully deleted![/bold green]")
+            keep_going = Prompt.ask("[bold yellow]Do you wish to delete another word ?[/bold yellow]", default="no", choices=["yes", "no"])
+            if keep_going == "no":
+                return
 
 def update_vocab_dictionnary(d_voc, sentence_included=False, kind_of_word=False, difficulty_set=False, kind="general", difficulty_limit="1"):
     d_voc_copy = d_voc
@@ -140,6 +213,10 @@ def update_vocab_dictionnary(d_voc, sentence_included=False, kind_of_word=False,
     if difficulty_set != False:
         d_voc_copy = {key: value for key, value in d_voc_copy.items() if value.difficulty == int(difficulty_limit)}
     return(d_voc_copy)
+
+def reset_vocab_dictionnary(d_voc):
+    for key, value in d_voc.items():
+        value.done = 0
 
 
 def assign_true_false(curr, bool_value):

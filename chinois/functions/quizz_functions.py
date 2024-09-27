@@ -2,7 +2,7 @@ from dict_tools.questions_vocabulaire import dq_vocabulary
 from database_tools.database import update_score_progress, update_word_stats, get_word_stats, get_worst_word_ratios, update_experience
 from database_tools.cedict_database import get_def, get_def_pinyin_simplified
 from database_tools.hsk_database import get_hsk_by_level
-from functions.functions_kit import update_vocab_dictionnary, assign_true_false, take_user_preferences, display_bad_ans, compare_ans, redo_bad_ans
+from functions.functions_kit import update_vocab_dictionnary, assign_true_false, take_user_preferences, display_bad_ans, compare_ans, redo_bad_ans, reset_vocab_dictionnary
 
 from datetime import datetime
 from termcolor import cprint
@@ -340,6 +340,7 @@ def random_x_quizz(inp, count=0, limitation=10001):
         display_bad_ans(bad_ans)
         redo_bad_ans(bad_ans)
 
+    reset_vocab_dictionnary(dq_vocabulary)
 
     console.print(Panel(f"[bold magenta]Quiz Complete![/bold magenta]\nYour final score: [bold yellow]{score_player_1}[/bold yellow]", expand=False))
     
@@ -394,8 +395,8 @@ def hsk_quizz(inp):
                 console.print("[bold red]Wrong Answer![/bold red]")
                 bad_ans[key] = word
                 if len(ans) > 0:
-                    if ans[0].isascii(): correct_ans = compare_ans(ans, question_pick.chinese_pinyin)
-                    else: correct_ans = compare_ans(ans, question_pick.chinese_character)
+                    if ans[0].isascii(): correct_ans = compare_ans(ans, word.chinese_pinyin)
+                    else: correct_ans = compare_ans(ans, word.chinese_character)
 
                 # Display the correct answer in a table
                 table = Table(title=f"[bold]Correct Answer[/bold] - {word.chinese_character}")
@@ -561,7 +562,7 @@ def sentence_quizz(inp):
 
             question_pick.done = 1
             count += 1
-            update_experience((question_pick.difficulty)*2)
+            update_experience((question_pick.difficulty)*len(question_pick.chinese_pinyin.split(" ")))
             console.rule("[bold red]")
             console.print(f"[bold yellow]Questions Completed: {count}/{user_limit}, {round((count/user_limit)*100)}%[/bold yellow]")
 

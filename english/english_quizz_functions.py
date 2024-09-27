@@ -61,7 +61,7 @@ def random_x_english(inp, count=0, limitation=10001):
                 console.print(table)
 
                 bad_ans[key] = question_pick
-                update_word_stats(question_pick.chinese_character, False)
+                #update_word_stats(question_pick.chinese_character, False)
 
             question_pick.done = 1
             counter += 1
@@ -80,10 +80,6 @@ def random_x_english(inp, count=0, limitation=10001):
     elapsed_time = time.time() - start_time
     minutes, seconds = divmod(int(elapsed_time), 60)
 
-    # Display a summary of bad answers
-    if bad_ans:
-        display_bad_ans(bad_ans)
-        redo_bad_ans(bad_ans)
 
     console.print(Panel(f"[bold magenta]Quiz Complete![/bold magenta]\nYour final score: [bold yellow]{score_player_1}[/bold yellow]", expand=False))
     
