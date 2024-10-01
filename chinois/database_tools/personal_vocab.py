@@ -4,7 +4,6 @@ import sys
 
 from contextlib import contextmanager
 
-from cedict_database import get_def_pinyin_simplified
 from hsk_database import get_hsk_level
 
 # Context manager to temporarily modify sys.path
@@ -22,7 +21,7 @@ chinois_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 
 # Use the context manager to safely import from the parent directory
 with add_to_sys_path(chinois_dir):
-    from questions_vocabulaire import dq_vocabulary
+    from dict_tools.questions_vocabulaire import dq_vocabulary
 
 db_directory = ('/Users/gabriel/Documents/VSCode/Python/Studium/chinois/database_tools')
 db_filename = ('personal_vocabulary.db')
@@ -36,9 +35,12 @@ def initiate_personal_db():
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS personal_vocab (
             hsk_level INTEGER DEFAULT 1,
-            simplified VARCHAR(255) NOT NULL,
-            pinyin VARCHAR(255) NOT NULL,
-            english VARCHAR(255) NOT NULL,
+            simplified TEXT NOT NULL,
+            pinyin TEXT NOT NULL,
+            english TEXT NOT NULL,
+            category TEXT NOT NULL,
+            kind TEXT NOT NULL,
+            topic TEXT NOT NULL,
             UNIQUE (simplified, pinyin, english)
         )
     ''')
@@ -83,13 +85,16 @@ def populate_personal_vocab():
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
 
-    for i in dq_vocabulary:
-        hsk_result = get_hsk_level(dq_vocabulary[i].chinese_pinyin, dq_vocabulary[i].chinese_character)
+    for item, value in dq_vocabulary.items():
+        hsk_result = get_hsk_level(value.chinese_pinyin, value.chinese_character)
+        print(hsk_result)
+        if hsk_result == False:
+            hsk_result_default = 1
         
         cursor.execute('''
-            INSERT OR IGNORE INTO personal_vocab (hsk_level, simplified, pinyin, english)
-            VALUES (?, ?, ?, ?)
-        ''', (hsk_result["hsk_level"], dq_vocabulary[i].chinese_character, dq_vocabulary[i].chinese_pinyin, dq_vocabulary[i].english))
+            INSERT OR IGNORE INTO personal_vocab (hsk_level, simplified, pinyin, english, category, kind, topic)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
+        ''', (hsk_result["hsk_level"] if hsk_result else hsk_result_default, value.chinese_character, value.chinese_pinyin, value.english, value.category, value.kind, value.topic))
     
     cursor.execute('SELECT * FROM personal_vocab')
 
@@ -102,7 +107,6 @@ def populate_personal_vocab():
 
 def main():
     initiate_personal_db()
-    add_personal_vocab()
     populate_personal_vocab()
 
 

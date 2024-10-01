@@ -2,7 +2,7 @@ from dict_tools.questions_vocabulaire import dq_vocabulary
 from database_tools.database import update_score_progress, get_experience
 from database_tools.pokemon_database import get_pokedex, check_pokemon_rank, add_to_pokedex
 from functions.quizz_functions import ec_quizz, ecpinyin_quizz, last_x_quizz, worst_x_quizz, random_x_quizz, hsk_quizz, ce_random_quizz, sentence_quizz
-from functions.functions_kit import print_pokedex, new_vocab_auto, study_personal, update_word_personal_vocab, delete_word_personal_vocab
+from functions.functions_kit import print_pokedex, new_vocab_auto, study_personal, update_word_personal_vocab, delete_specific_word_line
 
 
 from datetime import datetime
@@ -92,7 +92,7 @@ def display_pokemon_submenu():
 
 def get_user_choice():
     """Prompt the user for input."""
-    return Prompt.ask("[bold yellow]Please select an option[/bold yellow]", choices=["1", "2", "3", "4", "5", "6"])
+    return Prompt.ask("[bold yellow]Please select an option[/bold yellow]", choices=["1", "2", "3", "4", "5"])
 
 def get_submenu_choice(choices):
     """Prompt the user for input in the submenu."""
@@ -170,20 +170,30 @@ def display_dictionnary_submenu():
     table.add_column("Description", style="green")
 
     table.add_row("1", "Add New Vocabulary")
-    table.add_row("2", "Back to Main Menu")
+    table.add_row("2", "Deleting Vocabulary")
+    table.add_row("3", "Update Vocabulary")
+    table.add_row("4", "Back to Main Menu")
 
     console.print(table)
 
 def dictionnary_mode():
     while True:
         display_dictionnary_submenu()
-        dictionnary_choice = get_submenu_choice(["1", "2"])
+        dictionary_choice = get_submenu_choice(["1", "2", "3", "4"])
 
-        if dictionnary_choice == "1":
+        if dictionary_choice == "1":
             console.print("[bold green]Adding new vocabulary ![/bold green]")
             new_vocab_auto()
             return
-        elif dictionnary_choice == "2":
+        elif dictionary_choice == "2":
+            console.print("[bold green]Deleting a word in your personal vocabulary ![/bold green]")
+            delete_specific_word_line()
+            return
+        elif dictionary_choice == "3":
+            console.print("[bold green]Update a dictionnary entry[/bold green]")
+            update_word_personal_vocab()
+            return
+        elif dictionary_choice == "4":
             return  # Return to the main menu
 
 

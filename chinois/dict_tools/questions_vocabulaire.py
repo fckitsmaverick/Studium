@@ -414,3 +414,35 @@ dq_vocabulary["问题"] = Vocabulary("wen4 ti2", "问题", "question", 2, catego
 dq_vocabulary["如果你有问题问我"] = Vocabulary("ru2 guo3 ni3 you3 wen4 ti2 wen4 wo3", "如果你有问题问我", "If you have questions ask me", 2, category="Sentence", kind="general", topic= ['study'])
 
 dq_vocabulary["学"] = Vocabulary("xue2", "学", "to study / to learn", 1, category="Vocabulary", kind="general", topic=['study'])
+
+dq_vocabulary["学生"] = Vocabulary("xue2 sheng", "学生", "student / school child", 1, category="Vocabulary", kind="general", topic=['study'])
+
+dq_vocabulary["闭"] = Vocabulary("bi4", "闭", "to close / to shut up", 2, category="Vocabulary", kind="verb", topic=[])
+
+dq_vocabulary["嘴"] = Vocabulary("zui3", "嘴", "mouth / beak", 4, category="Vocabulary", kind="general", topic=[])
+
+dq_vocabulary["闭嘴"] = Vocabulary("bi4 zui3", "闭嘴", "Shut up!", 1, category="Sentence", kind="general", topic=['daily'])
+
+dq_vocabulary["已经"] = Vocabulary("yi3 jing1", "已经", "already", 2, category="Vocabulary", kind="grammar", topic=[])
+
+dq_vocabulary["我已经吃过了"] = Vocabulary("wo3 yi3 jing1 chi1 guo4 le", "我已经吃过了", "I have already eaten (already done)", 2, category="Sentence", kind="general", topic= [])
+
+dq_vocabulary["考古学"] = Vocabulary("kao3 gu3 xue2", "考古学", "archaeology", 5, category="Vocabulary", kind="general", topic=['study'])
+
+dq_vocabulary["灯"] = Vocabulary("deng1", "灯", "lamp / light", 3, category="Vocabulary", kind="general", topic=['daily'])
+
+dq_vocabulary["光"] = Vocabulary("guang1", "光", "light (brightness) / ray", 4, category="Vocabulary", kind="general", topic=[])
+
+dq_vocabulary["开"] = Vocabulary("kai1", "开", "to open / to turn on / to start", 1, category="Vocabulary", kind="verb", topic=['daily'])
+
+dq_vocabulary["开门"] = Vocabulary("kai1 men2", "开门", "to open a door (lit. and fig.)", 1, category="Vocabulary", kind="verb", topic=['daily'])
+
+dq_vocabulary["国庆节"] = Vocabulary("guo2 qing4 jie2", "国庆节", "Chinese (PRC) National Day", 2, category="Vocabulary", kind="general", topic= ['holyday'])
+
+dq_vocabulary["假"] = Vocabulary("jia4", "假", "vacation", 2, category="Vocabulary", kind="general", topic=['holyday'])
+
+dq_vocabulary["放假"] = Vocabulary("fang4 jia4", "放假", "to have a holiday or vacation", 3, category="Vocabulary", kind="verb", topic=['holyday'])
+
+dq_vocabulary["今天是国庆节我们放假了"] = Vocabulary("jin1 tian1 shi4 guo2 qing4 jie2 wo3 men fang4 jia4 le", "今天是国庆节我们放假了", "Today is PRC National Day we have a holiday (holiday has started)", 3, category="Sentence", kind="general", topic= ['holyday'])
+
+dq_vocabulary["凑合"] = Vocabulary("cou4 he", "凑合", "to bring together; to make do in a bad situation; to just get by; to improvise; passable; not too bad", 6, category="Vocabulary", kind="general", topic=['daily'])

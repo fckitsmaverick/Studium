@@ -1,3 +1,5 @@
+import re
+
 from rich_pixels import Pixels
 from rich.console import Console
 from PIL import Image
@@ -130,79 +132,95 @@ def new_vocab_auto():
 
         if keep_going.lower() == "no": return
 
+            
+
+
+def delete_specific_word_line():
+    console = Console()
+    console.show_cursor()
+    file_path = 'dict_tools/questions_vocabulaire.py'  # Replace with the actual file path
+    exact_key = Prompt.ask("[bold yellow]Enter the exact word you want to delete (in Chinese Character): [/bold yellow]") 
+    # Define a regex pattern to match the exact dictionary key line
+    pattern = rf'^dq_vocabulary\["{re.escape(exact_key)}"\]'  # Matches lines starting with dq_vocabulary["学"]
+
+    # Read all lines from the file
+    with open(file_path, 'r', encoding='utf-8') as file:
+        lines = file.readlines()
+
+    # Write back only the lines that do not match the specific pattern
+    with open(file_path, 'w', encoding='utf-8') as file:
+        for line in lines:
+            # If the line does not match the exact pattern, write it back
+            if not re.match(pattern, line.strip()):  # Match and strip leading/trailing spaces
+                file.write(line)
+    
+    console.print("[bold green]Word successfully deleted from your personal vocabulary ![/bold green]")
+
+
+
 def update_word_personal_vocab():
     console = Console()
     console.show_cursor()
-    while True:
-        word_key = Prompt.ask("[bold yellow]Enter the word you want to update (in Chinese Character): [/bold yellow]")
-        if word_key not in dq_vocabulary:
-            console.print("[bold red]This word is not in your personal vocab[/bold red]")
-            keep_going = Prompt.ask("[bold yellow]Do you wish to update another word ?[/bold yellow]", default="no", choices=["yes", "no"])
-            if keep_going == "no": 
-                return
-        else:
-            arg_to_update = Prompt.ask("[bold yellow]What do you want to update ?[/bold yellow]", choices=["pinyin", "simplified", "english", "category", "kind", "topic"], default="english")
 
-            if arg_to_update == "english":
-                console.print(f"[bold yellow]Current English definition: {dq_vocabulary[word_key].english}[/bold yellow]")
-                new_english = Prompt.ask("[bold yellow]Enter the new English definition: [/bold yellow]")
-                dq_vocabulary[word_key].english = new_english
-                console.print("[bold green]Successfully updated![/bold green]")
+    file_path = 'dict_tools/questions_vocabulaire.py'
+    exact_key = Prompt.ask("[bold yellow]Enter the exact word you want to modify (in Chinese Character): [/bold yellow]")
+    
+    if exact_key not in dq_vocabulary:
+        console.print("[bold red]Error: Cannot find the word in your personal vocabulary[/bold red]")
+        return
+    
+    try:
+        # Pattern to match the exact dictionary line
+        pattern = rf'^dq_vocabulary\["{re.escape(exact_key)}"\]'
+        with open(file_path, 'r', encoding='utf-8') as file:
+            lines = file.readlines()
 
-            elif arg_to_update == "pinyin":
-                console.print(f"[bold yellow]Current Pinyin: {dq_vocabulary[word_key].chinese_pinyin}[/bold yellow]")
-                new_pinyin = Prompt.ask("[bold yellow]Enter the new Pinyin: [/bold yellow]")
-                dq_vocabulary[word_key].chinese_pinyin = new_pinyin
-                console.print("[bold green]Successfully updated![/bold green]")
-            
-            elif arg_to_update == "simplified":
-                console.print(f"[bold yellow]Current Simplified: {dq_vocabulary[word_key].chinese_character}[/bold yellow]")
-                new_simplified = Prompt.ask("[bold yellow]Enter the new Simplified: [/bold yellow]")
-                dq_vocabulary[word_key].chinese_character = new_simplified
-                console.print("[bold green]Successfully updated![/bold green]")
-            
-            elif arg_to_update == "category":
-                console.print(f"[bold yellow]Current Category: {dq_vocabulary[word_key].category}[/bold yellow]")
-                new_category = Prompt.ask("[bold yellow]Enter the new Category: [/bold yellow]")
-                dq_vocabulary[word_key].category = new_category
-                console.print("[bold green]Successfully updated![/bold green]")
-            
-            elif arg_to_update == "kind":
-                console.print(f"[bold yellow]Current Kind: {dq_vocabulary[word_key].kind}[/bold yellow]")
-                new_kind = Prompt.ask("[bold yellow]Enter the new Kind: [/bold yellow]")
-                dq_vocabulary[word_key].kind = new_kind
-                console.print("[bold green]Successfully updated![/bold green]")
-            
-            elif arg_to_update == "topic":
-                console.print(f"[bold yellow]Current Topic: {dq_vocabulary[word_key].topic}[/bold yellow]")
-                new_topic = Prompt.ask("[bold yellow]Enter the new Topic: [/bold yellow]")
-                dq_vocabulary[word_key].topic = new_topic
-                console.print("[bold green]Successfully updated![/bold green]")
-            
+        modified_lines = []
+
+        update_choice = Prompt.ask(
+            "[bold yellow]Which argument would you like to update? Enter 1 for Chinese Character, 2 for Chinese Pinyin, 3 for English: [/bold yellow]",
+            choices=["1", "2", "3", "4"]
+        )
+
+        current_value_map = {
+            "1": dq_vocabulary[exact_key].chinese_character,
+            "2": dq_vocabulary[exact_key].chinese_pinyin,
+            "3": dq_vocabulary[exact_key].english
+        }
+        console.print(f"[bold yellow]Current value: {current_value_map[update_choice]}[/bold yellow]")
+
+        # Updated regex patterns with balanced parentheses
+        argument_map = {
+            "1": (r'(dq_vocabulary\[".*?"\] = Vocabulary\()"(.*?)",', r'\1"{new_value}",'),
+            "2": (r'(dq_vocabulary\[".*?"\] = Vocabulary\(".*?", )"(.*?)",', r'\1"{new_value}",'),
+            "3": (r'(dq_vocabulary\[".*?"\] = Vocabulary\(".*?", ".*?", )"(.*?)"(,)', r'\1"{new_value}"\3')
+        }
+
+        # Get the regex pattern and replacement format
+        regex_pattern, replacement_format = argument_map[update_choice]
+
+        # Prompt the user for the new value of the selected argument
+        new_value = Prompt.ask(f"[bold yellow]Enter the new value for the selected argument: [/bold yellow]")
+
+        # Iterate through lines to find and modify the target line
+        for line in lines:
+            if re.match(pattern, line.strip()):
+                # Replace the selected argument with the new value
+                modified_line = re.sub(regex_pattern, replacement_format.format(new_value=new_value), line)
+                if modified_line != line:  # Only print if the line has changed
+                    console.print(f"[bold green]Updating line: {line.strip()} to {modified_line.strip()}[/bold green]")
+                modified_lines.append(modified_line)
             else:
-                console.print("[bold red]Invalid input[/bold red]")
-                return
-        keep_going = Prompt.ask("[bold yellow]Do you wish to update another word ?[/bold yellow]", default="no", choices=["yes", "no"])
-        if keep_going == "no":
-            return
-            
+                modified_lines.append(line)
 
-def delete_word_personal_vocab():
-    console = Console()
-    console.show_cursor()
-    while True:
-        word_key = Prompt.ask("[bold yellow]Enter the word you want to delete (in Chinese Character): [/bold yellow]")
-        if word_key not in dq_vocabulary:
-            console.print("[bold red]This word is not in your personal vocab[/bold red]")
-            keep_going = Prompt.ask("[bold yellow]Do you wish to delete another word ?[/bold yellow]", default="no", choices=["yes", "no"])
-            if keep_going == "no": 
-                return
-        else:
-            del dq_vocabulary[word_key]
-            console.print("[bold green]Successfully deleted![/bold green]")
-            keep_going = Prompt.ask("[bold yellow]Do you wish to delete another word ?[/bold yellow]", default="no", choices=["yes", "no"])
-            if keep_going == "no":
-                return
+        # Write all lines back to the file
+        with open(file_path, 'w', encoding='utf-8') as file:
+            file.writelines(modified_lines)
+
+    except Exception as e:
+        console.print(f"[bold red]Error: Cannot update, try again. Details: {str(e)}[/bold red]")
+
+
 
 def update_vocab_dictionnary(d_voc, sentence_included=False, kind_of_word=False, difficulty_set=False, kind="general", difficulty_limit="1"):
     d_voc_copy = d_voc
@@ -390,6 +408,3 @@ def add_english_vocab():
         keep_going = Prompt.ask("[bold red]Do you wish to add more vocabulary ?[/bold red]", default="yes", choices=["yes", "no"])
 
         if keep_going.lower() == "no": return
-
-if __name__ == "__main__":
-    update_vocab_dictionnary(dq_vocabulary, sentence_included=True, kind_of_word=True, difficulty_set=False, kind="general", difficulty_limit="1")
