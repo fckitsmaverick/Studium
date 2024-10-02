@@ -1,4 +1,6 @@
 import re
+import os
+import sys
 
 from rich_pixels import Pixels
 from rich.console import Console
@@ -130,7 +132,11 @@ def new_vocab_auto():
 
         keep_going = Prompt.ask("[bold red]Do you wish to add more vocabulary ?[/bold red]", default="yes", choices=["yes", "no"])
 
-        if keep_going.lower() == "no": return
+        if keep_going.lower() == "no":
+            # Make it restart so that the words added to the dictionnary are taken into account
+            console.print("[bold red]Now restarting ... [/bold red]")
+            os.execl(sys.executable, sys.executable, *sys.argv)
+
 
             
 

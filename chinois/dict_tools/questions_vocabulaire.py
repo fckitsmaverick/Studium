@@ -446,3 +446,22 @@ dq_vocabulary["放假"] = Vocabulary("fang4 jia4", "放假", "to have a holiday 
 dq_vocabulary["今天是国庆节我们放假了"] = Vocabulary("jin1 tian1 shi4 guo2 qing4 jie2 wo3 men fang4 jia4 le", "今天是国庆节我们放假了", "Today is PRC National Day we have a holiday (holiday has started)", 3, category="Sentence", kind="general", topic= ['holyday'])
 
 dq_vocabulary["凑合"] = Vocabulary("cou4 he", "凑合", "to bring together; to make do in a bad situation; to just get by; to improvise; passable; not too bad", 6, category="Vocabulary", kind="general", topic=['daily'])
+
+
+dq_vocabulary["风"] = Vocabulary("feng1", "风", "wind", 2, category="Vocabulary", kind="general", topic=['daily', 'weather'])
+
+dq_vocabulary["汤"] = Vocabulary("tang1", "汤", "soup", 4, category="Vocabulary", kind="general", topic=['food'])
+
+dq_vocabulary["圆"] = Vocabulary("yuan2", "圆", "circle / round", 2, category="Vocabulary", kind="general", topic=[])
+
+dq_vocabulary["汤圆"] = Vocabulary("tang1 yuan2", "汤圆", "boiled or deep-fried balls of glutinous rice flour, usually eaten during Lantern Festival", 1, category="Vocabulary", kind="general", topic=['food'])
+
+dq_vocabulary["前几天"] = Vocabulary("qian2 ji3 tian1", "前几天", "a few days ago", 2, category="Vocabulary", kind="grammar", topic=['time'])
+
+dq_vocabulary["以前"] = Vocabulary("yi3 qian2", "以前", "before", 3, category="Vocabulary", kind="general", topic=['time'])
+
+dq_vocabulary["以后"] = Vocabulary("yi3 hou4", "以后", "after", 3, category="Vocabulary", kind="general", topic=['time'])
+
+dq_vocabulary["前"] = Vocabulary("qian2", "前", "front / forward / ago / before", 1, category="Vocabulary", kind="grammar", topic=[])
+
+dq_vocabulary["后"] = Vocabulary("hou4", "后", "back / behind / after / empress", 1, category="Vocabulary", kind="general", topic=[])
