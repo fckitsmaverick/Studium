@@ -161,6 +161,9 @@ def delete_specific_word_line():
                 file.write(line)
     
     console.print("[bold green]Word successfully deleted from your personal vocabulary ![/bold green]")
+    console.print("[bold red]Now restarting ... [/bold red]")
+    os.execl(sys.executable, sys.executable, *sys.argv)
+
 
 
 
@@ -185,7 +188,7 @@ def update_word_personal_vocab():
 
         update_choice = Prompt.ask(
             "[bold yellow]Which argument would you like to update? Enter 1 for Chinese Character, 2 for Chinese Pinyin, 3 for English: [/bold yellow]",
-            choices=["1", "2", "3", "4"]
+            choices=["1", "2", "3"]
         )
 
         current_value_map = {
@@ -195,10 +198,10 @@ def update_word_personal_vocab():
         }
         console.print(f"[bold yellow]Current value: {current_value_map[update_choice]}[/bold yellow]")
 
-        # Updated regex patterns with balanced parentheses
+        # Updated regex patterns with improved matching
         argument_map = {
-            "1": (r'(dq_vocabulary\[".*?"\] = Vocabulary\()"(.*?)",', r'\1"{new_value}",'),
-            "2": (r'(dq_vocabulary\[".*?"\] = Vocabulary\(".*?", )"(.*?)",', r'\1"{new_value}",'),
+            "1": (r'(dq_vocabulary\[".*?"\] = Vocabulary\()"(.*?)"(,)', r'\1"{new_value}"\3'),
+            "2": (r'(dq_vocabulary\[".*?"\] = Vocabulary\(".*?", )"(.*?)"(,)', r'\1"{new_value}"\3'),
             "3": (r'(dq_vocabulary\[".*?"\] = Vocabulary\(".*?", ".*?", )"(.*?)"(,)', r'\1"{new_value}"\3')
         }
 
@@ -222,10 +225,12 @@ def update_word_personal_vocab():
         # Write all lines back to the file
         with open(file_path, 'w', encoding='utf-8') as file:
             file.writelines(modified_lines)
+            console.print("[bold green]Word successfully updated in your personal vocabulary![/bold green]")
+            console.print("[bold red]Now restarting ... [/bold red]")
+            os.execl(sys.executable, sys.executable, *sys.argv)
 
     except Exception as e:
         console.print(f"[bold red]Error: Cannot update, try again. Details: {str(e)}[/bold red]")
-
 
 
 def update_vocab_dictionnary(d_voc, sentence_included=False, kind_of_word=False, difficulty_set=False, kind="general", difficulty_limit="1"):

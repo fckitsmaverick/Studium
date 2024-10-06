@@ -2,6 +2,7 @@ from dict_tools.questions_vocabulaire import dq_vocabulary
 from database_tools.database import update_score_progress, update_word_stats, get_word_stats, get_worst_word_ratios, update_experience
 from database_tools.cedict_database import get_def, get_def_pinyin_simplified
 from database_tools.hsk_database import get_hsk_by_level
+from database_tools.quest_database import update_quest_progress, reset_daily_quests
 from functions.functions_kit import update_vocab_dictionnary, assign_true_false, take_user_preferences, display_bad_ans, compare_ans, redo_bad_ans, reset_vocab_dictionnary
 
 from datetime import datetime
@@ -273,8 +274,10 @@ def random_x_quizz(inp, count=0, limitation=10001):
     counter = 0
     bad_ans = {}
 
+    # Get user preferences for the quiz
     user_limit, sentence_included, kind_of_word, difficulty_set, kind, difficulty_limit = take_user_preferences()
 
+    # Update the vocabulary dictionary based on preferences
     updated_dq = update_vocab_dictionnary(dq_vocabulary, sentence_included, kind_of_word, difficulty_set, kind, difficulty_limit)
     
     # Start timer
@@ -292,39 +295,53 @@ def random_x_quizz(inp, count=0, limitation=10001):
             console.print(Panel(f"[bold blue]{question_pick.english}[/bold blue]", title="Question", expand=False))
             ans = Prompt.ask("[bold yellow]Enter your answer (pinyin or character): [/bold yellow]")
 
-            if ans.lower() == "exit": return
+            # Allow user to exit quiz
+            if ans.lower() == "exit":
+                return
 
+            # Check if the answer is correct
             if ans == question_pick.chinese_pinyin or ans == question_pick.chinese_character:
                 console.print("[bold green]Good Answer![/bold green]")
                 score_player_1 += question_pick.difficulty
                 update_word_stats(question_pick.chinese_character, True)
+
+                # Update quest progress and add experience if quest is completed
+                #update_quest_progress('daily', quest_id=1, increment=1)  # Assuming 'daily' quest with quest_id=1
+
             else:
                 console.print("[bold red]Wrong Answer![/bold red]")
-                #Check if user typed pinyin or chinese character
-                #Then compare the answer and output the hightlighted error(s)
+
+                # Check if user typed pinyin or Chinese character and highlight errors
                 if len(ans) > 0:
-                    if ans[0].isascii(): correct_ans = compare_ans(ans, question_pick.chinese_pinyin)
-                    else: correct_ans = compare_ans(ans, question_pick.chinese_character)
+                    if ans[0].isascii():
+                        correct_ans = compare_ans(ans, question_pick.chinese_pinyin)
+                    else:
+                        correct_ans = compare_ans(ans, question_pick.chinese_character)
 
                 # Display the correct answer in a table
                 table = Table(title=f"[bold]Correct Answer[/bold] - {question_pick.chinese_character}")
                 table.add_column("Simplified", justify="center", style="bright_blue", no_wrap=True)
                 table.add_column("Pinyin", justify="center", style="bright_blue")
                 table.add_column("Your Answer", justify="center", style="bright_blue")
-
                 table.add_row(f"{question_pick.chinese_character}", f"{question_pick.chinese_pinyin}", f"{question_pick.english}")
                 console.print(table)
 
+                # Store bad answers and update word stats
                 bad_ans[key] = question_pick
                 update_word_stats(question_pick.chinese_character, False)
 
+            # Mark the question as answered
             question_pick.done = 1
             counter += 1
+
+            # Update player's experience based on question difficulty
             update_experience(question_pick.difficulty)
 
             # Display progress counter
-            if user_limit <= len(updated_dq): console.print(f"[bold yellow]Questions Completed: {counter}/{user_limit}[/bold yellow]")
-            else: console.print(f"[bold yellow]Questions Completed: {counter}/{len(updated_dq)}[/bold yellow]")
+            if user_limit <= len(updated_dq):
+                console.print(f"[bold yellow]Questions Completed: {counter}/{user_limit}[/bold yellow]")
+            else:
+                console.print(f"[bold yellow]Questions Completed: {counter}/{len(updated_dq)}[/bold yellow]")
             console.rule("[bold red]\n")
 
             # Check if the user has reached the limit
@@ -340,12 +357,15 @@ def random_x_quizz(inp, count=0, limitation=10001):
         display_bad_ans(bad_ans)
         redo_bad_ans(bad_ans)
 
+    # Reset the vocabulary dictionary
     reset_vocab_dictionnary(dq_vocabulary)
 
+    # Display final score and summary
     console.print(Panel(f"[bold magenta]Quiz Complete![/bold magenta]\nYour final score: [bold yellow]{score_player_1}[/bold yellow]", expand=False))
     
     # Display elapsed time
     console.print(f"[bold green]Time Elapsed: {minutes}m {seconds}s[/bold green]")
+
 
 
 

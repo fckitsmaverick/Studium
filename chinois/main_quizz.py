@@ -171,8 +171,7 @@ def display_dictionnary_submenu():
 
     table.add_row("1", "Add New Vocabulary")
     table.add_row("2", "Deleting Vocabulary")
-    table.add_row("3", "Update Vocabulary")
-    table.add_row("4", "Back to Main Menu")
+    table.add_row("3", "Back to Main Menu")
 
     console.print(table)
 
@@ -190,11 +189,7 @@ def dictionnary_mode():
             delete_specific_word_line()
             return
         elif dictionary_choice == "3":
-            console.print("[bold green]Update a dictionnary entry[/bold green]")
-            update_word_personal_vocab()
             return
-        elif dictionary_choice == "4":
-            return  # Return to the main menu
 
 
 

@@ -367,7 +367,7 @@ dq_vocabulary["医院"] = Vocabulary("yi1 yuan4", "医院", "hospital", 1, categ
 
 dq_vocabulary["一会儿"] = Vocabulary("yi2 hui4 r", "一会儿", "a little while / a bit / a short amount of time (erhua)", 3, category="Vocabulary", kind="grammar", topic= ['erhua', 'daily'])
 
-dq_vocabulary["过一会儿"] = Vocabulary("guo4 yi2 hui4 r", "过一会儿", "after a while / action will happen after a delay / after some time passes / in a bit", 3, category="Vocabulary", kind="grammar", topic= ['erhua', 'time', 'daily'])
+dq_vocabulary["过一会儿"] = Vocabulary("guo4 yi2 hui4 r", "过一会儿", "(erhua) after a while / action will happen after a delay / after some time passes / in a bit", 3, category="Vocabulary", kind="grammar", topic= ['erhua', 'time', 'daily'])
 
 dq_vocabulary["我过一会儿去你等我一会儿吧"] = Vocabulary("wo3 guo4 yi2 hui4 r qu4 ni3 deng3 wo3 yi2 hui4 r ba", "我过一会儿去你等我一会儿吧", "I'll go after a little while (delay, erhua), you wait for me a little while (erhua) particle", 3, category="Sentence", kind="general", topic= [])
 
@@ -391,7 +391,7 @@ dq_vocabulary["我马上就来"] = Vocabulary("wo3 ma3 shang4 jiu4 lai2", "我�
 
 dq_vocabulary["再"] = Vocabulary("zai4", "再", "again / once more / re- / then (after something and not until then)", 2, category="Vocabulary", kind="general", topic=[])
 
-dq_vocabulary["晚点儿再做"] = Vocabulary("wan3 dian3 r zai4 zuo4", "晚点儿再做", "Later (and only after that) (i)'ll do it", 3, category="Sentence", kind="general", topic= ['daily'])
+dq_vocabulary["晚点儿再做"] = Vocabulary("wan3 dian3 r zai4 zuo4", "晚点儿再做", "Later (erhua) (and only after that) (i)'ll do it", 3, category="Sentence", kind="general", topic= ['daily'])
 
 dq_vocabulary["忘"] = Vocabulary("wang4", "忘", "to forget", 2, category="Vocabulary", kind="verb", topic=[])
 
@@ -465,3 +465,37 @@ dq_vocabulary["以后"] = Vocabulary("yi3 hou4", "以后", "after", 3, category=
 dq_vocabulary["前"] = Vocabulary("qian2", "前", "front / forward / ago / before", 1, category="Vocabulary", kind="grammar", topic=[])
 
 dq_vocabulary["后"] = Vocabulary("hou4", "后", "back / behind / after / empress", 1, category="Vocabulary", kind="general", topic=[])
+
+dq_vocabulary["出来"] = Vocabulary("chu1 lai2", "出来", "after a verb, indicates coming out, completion of an action, or ability to discern or detect / to come out", 4, category="Vocabulary", kind="verb", topic=['daily'])
+
+dq_vocabulary["看出来"] = Vocabulary("kan4 chu1 lai2", "看出来", "'i see that' in the sense that you can notice what someone says", 4, category="Vocabulary", kind="verb", topic= [])
+
+dq_vocabulary["洗碗"] = Vocabulary("xi3 wan3", "洗碗", "to wash the dishes", 2, category="Vocabulary", kind="verb", topic=['daily'])
+
+dq_vocabulary["今天晚上我们去哪儿吃"] = Vocabulary("jin1 tian1 wan3 shang4 wo3 men qu4 na3 r chi1", "今天晚上我们去哪儿吃", "Tonight where do we go eat ?", 1, category="Sentence", kind="general", topic= [])
+
+dq_vocabulary["试"] = Vocabulary("shi4", "试", "to test / to try", 4, category="Vocabulary", kind="verb", topic=['daily'])
+
+dq_vocabulary["新"] = Vocabulary("xin1", "新", "new", 2, category="Vocabulary", kind="general", topic=['daily'])
+
+dq_vocabulary["衣服"] = Vocabulary("yi1 fu", "衣服", "clothes; CL:件[jian4],套[tao4]", 1, category="Vocabulary", kind="general", topic=['shopping'])
+
+dq_vocabulary["买点"] = Vocabulary("mai3 dian3", "买点", "buy some", 3, category="Vocabulary", kind="verb", topic= [])
+
+dq_vocabulary["我想买点新衣服"] = Vocabulary("wo3 xiang3 mai3 dian3 xin1 yi1 fu", "我想买点新衣服", "I want to buy some new clothes", 2, category="Sentence", kind="general", topic= ['shopping'])
+
+dq_vocabulary["刷完"] = Vocabulary("shua1 wan2", "刷完", "finish washing the dishes", 5, category="Vocabulary", kind="verb", topic= ['daily'])
+
+dq_vocabulary["吸地"] = Vocabulary("xi1 di4", "吸地", "to vacuum the floor", 4, category="Vocabulary", kind="verb", topic=['daily', 'action'])
+
+dq_vocabulary["公园"] = Vocabulary("gong1 yuan2", "公园", "park (for public recreation)", 3, category="Vocabulary", kind="general", topic=['place', 'leisure'])
+
+dq_vocabulary["散步"] = Vocabulary("san4 bu4", "散步", "to take a walk / to go for a walk (not erhua, not especially Beijing)", 4, category="Vocabulary", kind="verb", topic=['leisure'])
+
+dq_vocabulary["吃完饭我们顺便去公园散步吧"] = Vocabulary("chi1 wan2 fan4 wo3 men shun4 bian4 qu4 gong1 yuan2 san4 bu4 ba", "吃完饭我们顺便去公园散步吧", "(After) Finishing meal we while we're at it go to the park to take a walk (soften the tone particle)", 3, category="Sentence", kind="general", topic= ['leisure', 'food'])
+
+dq_vocabulary["主意"] = Vocabulary("zhu3 yi", "主意", "plan; idea; decision; CL:個|个[ge4]", 4, category="Vocabulary", kind="general", topic=[])
+
+dq_vocabulary["玩儿去"] = Vocabulary("wan2 r qu4", "玩儿去", "go out (Sisi's mom way)", 2, category="Vocabulary", kind="verb", topic= ['daily'])
+
+dq_vocabulary["再说一遍"] = Vocabulary("zai4 shuo1 yi1 bian4", "zai4 shuo1 yi2 bian4", "Again say one more time", 4, category="Sentence", kind="general", topic= ['daily'])
