@@ -5,11 +5,12 @@ dq_vocabulary = {
 }
 
 #dq_vocabulary[""] = Vocabulary("", "", "", 1)
+# categories are: daily, time, place, erhua, sport, gym, study, holyday, food, feeling, weather, xuci, work
 
 dq_vocabulary["回去"] = Vocabulary("hui2 qu4", "回去", "go back", 1, category="Vocabulary", kind="verb")
 dq_vocabulary[""] = Vocabulary("hui2 lai2", "回来", "come back", 1, category="Vocabulary", kind="verb")
 dq_vocabulary["行不行"] = Vocabulary("xing2 bu4 xing2", "行不行", "will that work ? / can you do it or not ?(ironic)", 2, category="Vocabulary", kind="general")
-dq_vocabulary["然后"] = Vocabulary("ran2 hou4", "然后", "and then, used in the middle of a sequence of events", 3, category="Vocabulary", kind="grammar")
+dq_vocabulary["然后"] = Vocabulary("ran2 hou4", "然后", "and then (used in the middle of a sequence of events) / aferwards / after that / then", 3, category="Vocabulary", kind="grammar")
 dq_vocabulary["那边"] = Vocabulary("na4 bian", "那边", "over there", 1, category="Vocabulary", kind="grammar")
 dq_vocabulary["二维码"] = Vocabulary("er4 wei2 ma3", "二维码", "QR code", 2, category="Vocabulary", kind="general")
 dq_vocabulary["唱"] = Vocabulary("chang4", "唱", "sing", 1, category="Vocabulary", kind="verb")
@@ -468,7 +469,7 @@ dq_vocabulary["后"] = Vocabulary("hou4", "后", "back / behind / after / empres
 
 dq_vocabulary["出来"] = Vocabulary("chu1 lai2", "出来", "after a verb, indicates coming out, completion of an action, or ability to discern or detect / to come out", 4, category="Vocabulary", kind="verb", topic=['daily'])
 
-dq_vocabulary["看出来"] = Vocabulary("kan4 chu1 lai2", "看出来", "'i see that' in the sense that you can notice what someone says", 4, category="Vocabulary", kind="verb", topic= [])
+dq_vocabulary["看出来"] = Vocabulary("kan4 chu1 lai2", "看出来", "'(i) see that' in the sense that you can notice what someone says", 4, category="Vocabulary", kind="verb", topic= [])
 
 dq_vocabulary["洗碗"] = Vocabulary("xi3 wan3", "洗碗", "to wash the dishes", 2, category="Vocabulary", kind="verb", topic=['daily'])
 
@@ -492,10 +493,242 @@ dq_vocabulary["公园"] = Vocabulary("gong1 yuan2", "公园", "park (for public 
 
 dq_vocabulary["散步"] = Vocabulary("san4 bu4", "散步", "to take a walk / to go for a walk (not erhua, not especially Beijing)", 4, category="Vocabulary", kind="verb", topic=['leisure'])
 
-dq_vocabulary["吃完饭我们顺便去公园散步吧"] = Vocabulary("chi1 wan2 fan4 wo3 men shun4 bian4 qu4 gong1 yuan2 san4 bu4 ba", "吃完饭我们顺便去公园散步吧", "(After) Finishing meal we while we're at it go to the park to take a walk (soften the tone particle)", 3, category="Sentence", kind="general", topic= ['leisure', 'food'])
+dq_vocabulary["吃完饭我们顺便去公园散步吧"] = Vocabulary("chi1 wan2 fan4 wo3 men shun4 bian4 qu4 gong1 yuan2 san4 bu4 ba", "吃完饭我们顺便去公园散步吧", "(After) Finishing meal we while we're at it go to the park to take a walk (not Beijing way) (soften the tone particle)", 3, category="Sentence", kind="general", topic= ['leisure', 'food'])
 
 dq_vocabulary["主意"] = Vocabulary("zhu3 yi", "主意", "plan; idea; decision; CL:個|个[ge4]", 4, category="Vocabulary", kind="general", topic=[])
 
 dq_vocabulary["玩儿去"] = Vocabulary("wan2 r qu4", "玩儿去", "go out (Sisi's mom way)", 2, category="Vocabulary", kind="verb", topic= ['daily'])
 
-dq_vocabulary["再说一遍"] = Vocabulary("zai4 shuo1 yi1 bian4", "zai4 shuo1 yi2 bian4", "Again say one more time", 4, category="Sentence", kind="general", topic= ['daily'])
+dq_vocabulary["再说一遍"] = Vocabulary("zai4 shuo1 yi2 bian4", "再说一遍", "Again say one more time", 4, category="Sentence", kind="general", topic= ['daily'])
+
+dq_vocabulary["精神"] = Vocabulary("jing1 shen", "精神", "vigorous / vigor / vitality / drive", 3, category="Vocabulary", kind="general", topic= ['daily'])
+
+dq_vocabulary["购物"] = Vocabulary("gou4 wu4", "购物", "shopping", 4, category="Vocabulary", kind="general", topic=['shopping', 'leisure'])
+
+dq_vocabulary["购买"] = Vocabulary("gou4 mai3", "购买", "(literary) to purchase / to buy", 4, category="Vocabulary", kind="verb", topic=['literary'])
+
+dq_vocabulary["一边"] = Vocabulary("yi4 bian1", "一边", "doing while / one side / either side / on the one hand", 1, category="Vocabulary", kind="grammar", topic= ['daily'])
+
+dq_vocabulary["聊"] = Vocabulary("liao2", "聊", "(coll.) to chat", 6, category="Vocabulary", kind="verb", topic=['leisure', 'daily'])
+
+dq_vocabulary["走"] = Vocabulary("zou3", "走", "to walk / to go / to leave", 2, category="Vocabulary", kind="verb", topic=[])
+
+dq_vocabulary["好主意边走聊"] = Vocabulary("hao3 zhu3 yi bian1 zou3 liao2", "好主意边走聊", "Great idea, (we can n.u) while (<-- casual) walking to chat.", 6, category="Sentence", kind="general", topic= ['leisure'])
+
+dq_vocabulary["慢慢来"] = Vocabulary("man4 man4 lai2", "慢慢来", "take your time", 3, category="Sentence", kind="general", topic=['daily'])
+
+dq_vocabulary["除了"] = Vocabulary("chu2 le", "除了", "besides / apart from (also ...) / in adition to", 3, category="Vocabulary", kind="grammar", topic= [])
+
+dq_vocabulary["欢迎"] = Vocabulary("huan1 ying2", "欢迎", "welcome !", 1, category="Vocabulary", kind="general", topic= ['daily'])
+
+dq_vocabulary["来到"] = Vocabulary("lai2 dao4", "来到", "(2 words) to arrive to/ to come", 3, category="Vocabulary", kind="verb", topic=[])
+
+dq_vocabulary["之前"] = Vocabulary("zhi1 qian2", "之前", "(formal) before", 3, category="Vocabulary", kind="grammar", topic=[])
+
+dq_vocabulary["之后"] = Vocabulary("zhi1 hou4", "之后", "(formal) after", 3, category="Vocabulary", kind="grammar", topic=[])
+
+dq_vocabulary["吐槽"] = Vocabulary("tu4 cao2", "吐槽", "(slang) to roast; to ridicule", 3, category="Vocabulary", kind="verb", topic=[])
+
+dq_vocabulary["讨厌"] = Vocabulary("tao3 yan4", "讨厌", "to dislike / annoying / to loathe", 4, category="Vocabulary", kind="verb", topic=[])
+
+dq_vocabulary["双标"] = Vocabulary("shuang1 biao1", "双标", "double standard (abbr. for 雙重標準|双重标准[shuang1 chong2 biao1 zhun3])", 5, category="Vocabulary", kind="general", topic=[])
+
+dq_vocabulary["我觉得最讨厌的是这个双标吧"] = Vocabulary("wo3 jue2 de zui4 tao3 yan4 de shi4 zhe4 ge shuang1 biao1 ba", "我觉得最讨厌的是这个双标吧", "I think the most annoying thing this (is n.u) double standard (ba)", 4, category="Sentence", kind="general", topic= ['daily'])
+
+dq_vocabulary["例子"] = Vocabulary("li4 zi", "例子", "case / example / (for) instance", 3, category="Vocabulary", kind="general", topic= [])
+
+dq_vocabulary["有点"] = Vocabulary("you3 dian3", "有点", "(2 words, common) a little", 2, category="Vocabulary", kind="grammar", topic=['daily'])
+
+dq_vocabulary["行为"] = Vocabulary("xing2 wei2", "行为", "conduct / behavior / action", 5, category="Vocabulary", kind="general", topic=[])
+
+dq_vocabulary["担心"] = Vocabulary("dan1 xin1", "担心", "anxious / worried", 3, category="Vocabulary", kind="general", topic=['emotions'])
+
+dq_vocabulary["干嘛"] = Vocabulary("gan4 ma", "干嘛", "（2 words, can't be used alone) what are you doing ? / doing / what for ?", 2, category="Vocabulary", kind="grammar", topic= ['daily'])
+
+dq_vocabulary["介意"] = Vocabulary("jie4 yi4", "介意", "to care about / to mind / to take offence", 6, category="Vocabulary", kind="verb", topic=[])
+
+dq_vocabulary["这个我不介意"] = Vocabulary("zhe4 ge wo3 bu2 jie4 yi4", "这个我不介意", "This I don't mind (care about ...)", 5, category="Sentence", kind="general", topic= [])
+
+dq_vocabulary["方向感"] = Vocabulary("fang1 xiang4 gan3", "方向感", "sense of direction", 5, category="Vocabulary", kind="general", topic=['place'])
+
+dq_vocabulary["路"] = Vocabulary("lu4", "路", "road (CL:條|条[tiao2])", 2, category="Vocabulary", kind="general", topic=[])
+
+dq_vocabulary["痴"] = Vocabulary("chi1", "痴", "imbecile", 4, category="Vocabulary", kind="general", topic=[])
+
+dq_vocabulary["路痴"] = Vocabulary("lu4 chi1", "路痴", "person with a poor sense of direction", 6, category="Vocabulary", kind="general", topic=['expression'])
+
+dq_vocabulary["你最想吐槽男生的什么行为"] = Vocabulary("ni3 zui4 xiang3 tu4 cao2 nan2 sheng1 de shen2 me xing2 wei2", "你最想吐槽男生的什么行为", "You want the most to complain about what men's behaviors ? (note English order is not the same as Chinese order)", 6, category="Sentence", kind="general", topic= ['question'])
+
+dq_vocabulary["人生"] = Vocabulary("ren2 sheng1", "人生", "life (one's time on earth)", 5, category="Vocabulary", kind="general", topic=[])
+
+dq_vocabulary["应该"] = Vocabulary("ying1 gai1", "应该", "(2 words) ought to / should / must", 3, category="Vocabulary", kind="verb", topic=[])
+
+dq_vocabulary["自由"] = Vocabulary("zi4 you2", "自由", "freedom; liberty (in the sense of following oneself aspirations)", 5, category="Vocabulary", kind="general", topic=[])
+
+dq_vocabulary["因为我觉得每个女人的人生都应该是自由"] = Vocabulary("yin1 wei4 wo3 jue2 de mei3 ge nv3 ren2 de ren2 sheng1 dou1 ying1 gai1 shi4 zi4 you2 de", "因为我觉得每个女人的人生都应该是自由", "Because i think every woman's life (all) ought to be (is) free.", 6, category="Sentence", kind="general", topic= [])
+
+dq_vocabulary["碰到"] = Vocabulary("peng4 dao4", "碰到", "to come across / to run into / to meet", 2, category="Vocabulary", kind="verb", topic=['daily'])
+
+dq_vocabulary["让"] = Vocabulary("rang4", "让", "to permit / to yield / to let somebody do something", 2, category="Vocabulary", kind="verb", topic=[])
+
+dq_vocabulary["什么的"] = Vocabulary("shen2 me de", "什么的", "etc ... / and so on ...", 5, category="Vocabulary", kind="grammar", topic= ['daily'])
+
+dq_vocabulary["下次"] = Vocabulary("xia4 ci4", "下次", "next time", 1, category="Vocabulary", kind="grammar", topic=['daily'])
+
+dq_vocabulary["改"] = Vocabulary("gai3", "改", "to change", 2, category="Vocabulary", kind="verb", topic=[])
+
+dq_vocabulary["错"] = Vocabulary("cuo4", "错", "mistake / wrong / bad", 2, category="Vocabulary", kind="general", topic=[])
+
+dq_vocabulary["这种"] = Vocabulary("zhe4 zhong3", "这种", "this kind of", 4, category="Vocabulary", kind="grammar", topic=[])
+
+dq_vocabulary["你有没有碰到过这种男生吗"] = Vocabulary("ni3 you3 mei2 you3 peng4 dao4 guo4 zhe4 zhong3 nan2 sheng1 ma", "你有没有碰到过这种男生吗", "Have you (or not) came across (in the past) (this n.u) kind of men ?", 6, category="Sentence", kind="general", topic= [])
+
+dq_vocabulary["我错了"] = Vocabulary("wo3 cuo4 le", "我错了", "I'm wrong", 1, category="Sentence", kind="general", topic= ['daily'])
+
+dq_vocabulary["需要"] = Vocabulary("xu1 yao4", "需要", "to need; to want; to demand; to require", 3, category="Vocabulary", kind="verb", topic=['daily'])
+
+dq_vocabulary["帮忙"] = Vocabulary("bang1 mang2", "帮忙", "help (can't be used alone as a verb but can be used to convey the help concept in a casual speech)", 3, category="Vocabulary", kind="verb", topic=['daily'])
+
+dq_vocabulary["帮助"] = Vocabulary("bang1 zhu4", "帮助", "assistance; aid; to (provide) help/assistance", 2, category="Vocabulary", kind="general", topic=[])
+
+dq_vocabulary["你需要帮忙吗"] = Vocabulary("ni3 xu1 yao4 bang1 mang2 ma", "你需要帮忙吗", "Do you need help ?", 2, category="Sentence", kind="general", topic= ['daily'])
+
+dq_vocabulary["约会"] = Vocabulary("yue1 hui4", "约会", "appointment / date", 3, category="Vocabulary", kind="general", topic= [])
+
+dq_vocabulary["地铁"] = Vocabulary("di4 tie3", "地铁", "subway / metro", 2, category="Vocabulary", kind="general", topic= ['transport'])
+
+dq_vocabulary["站"] = Vocabulary("zhan4", "站", "station", 3, category="Vocabulary", kind="general", topic=['place'])
+
+dq_vocabulary["地铁站"] = Vocabulary("di4 tie3 zhan4", "地铁站", "subway station", 2, category="Vocabulary", kind="general", topic=['place', 'transport'])
+
+dq_vocabulary["同"] = Vocabulary("tong2", "同", "like / same / similar / alike (can't be used alone)", 6, category="Vocabulary", kind="grammar", topic=['daily', 'xuci'])
+
+dq_vocabulary["同事"] = Vocabulary("tong2 shi4", "同事", "colleague; co-worker", 3, category="Vocabulary", kind="general", topic=['work'])
+
+dq_vocabulary["同时"] = Vocabulary("tong2 shi2", "同时", "at the same time; simultaneously", 5, category="Vocabulary", kind="grammar", topic=['daily', 'time'])
+
+dq_vocabulary["故意"] = Vocabulary("gu4 yi4", "故意", "deliberately; on purpose", 4, category="Vocabulary", kind="general", topic=[])
+
+dq_vocabulary["我不是故意的"] = Vocabulary("wo3 bu2 shi4 gu4 yi4 de", "我不是故意的", "I didn't do it on purpose / I didn't mean it", 1, category="Sentence", kind="general", topic= ['daily'])
+
+dq_vocabulary["花钱"] = Vocabulary("hua1 qian2", "花钱", "(2 words) to spend money", 2, category="Vocabulary", kind="general", topic=['daily', 'money'])
+
+dq_vocabulary["小气"] = Vocabulary("xiao3 qi4", "小气", "stingy", 6, category="Vocabulary", kind="general", topic=[])
+
+dq_vocabulary["花钱小气"] = Vocabulary("hua1 qian2 xiao3 qi4", "花钱小气", "(4 words, expression) being stingy", 6, category="Vocabulary", kind="general", topic= ['expression'])
+
+dq_vocabulary["还好"] = Vocabulary("hai2 hao3", "还好", "tolerable / not bad", 4, category="Vocabulary", kind="grammar", topic= ['daily'])
+
+dq_vocabulary["分手"] = Vocabulary("fen1 shou3", "分手", "to part company / to split up / to break up", 6, category="Vocabulary", kind="grammar", topic=[])
+
+dq_vocabulary["还钱"] = Vocabulary("huan2 qian2", "还钱", "to pay back / to return", 3, category="Vocabulary", kind="general", topic= ['daily'])
+
+dq_vocabulary["什么时候"] = Vocabulary("shen2 me shi2 hou", "什么时候", "when ? / at what time ?", 1, category="Vocabulary", kind="grammar", topic= ['daily'])
+
+dq_vocabulary["还给"] = Vocabulary("huan2 gei3", "还给", "to return something to somebody", 3, category="Vocabulary", kind="verb", topic=[])
+
+dq_vocabulary["然后分手的时候要那个朋友还给他"] = Vocabulary("ran2 hou4 fen1 shou3 de shi2 hou yao4 wo3 na4 ge peng2 you huan2 gei3 ta1", "然后分手的时候要那个朋友还给他", "And then (after) the time they broke up, (he n.u) wants that friend (no 的) of mine to return it to him.", 5, category="Sentence", kind="general", topic= [])
+
+dq_vocabulary["必要"] = Vocabulary("bi4 yao4", "必要", "(2 words) necessary", 5, category="Vocabulary", kind="grammar", topic=['daily'])
+
+dq_vocabulary["发给"] = Vocabulary("fa1 gei3", "发给", "to issue / to grant / to distribute / to give out", 3, category="Vocabulary", kind="verb", topic=[])
+
+dq_vocabulary["前途"] = Vocabulary("qian2 tu2", "前途", "prospects / future outlook / future (like in 'to have a future')", 5, category="Vocabulary", kind="general", topic=[])
+
+dq_vocabulary["付钱"] = Vocabulary("fu4 qian2", "付钱", "to pay money", 3, category="Vocabulary", kind="verb", topic=[])
+
+dq_vocabulary["我感觉就是男生付钱没什么的"] = Vocabulary("wo3 gan3 jue2 jiu4 shi4 nan2 sheng1 fu4 qian2 shi4 mei2 shen2 me de", "我感觉就是男生付钱没什么的", "My (no 的) thought is it just really is nothing for the guy to pay money. (the structure can be tricky)", 6, category="Sentence", kind="general", topic= [])
+
+dq_vocabulary["自己"] = Vocabulary("zi4 ji3", "自己", "oneself", 3, category="Vocabulary", kind="general", topic=[])
+
+dq_vocabulary["会给"] = Vocabulary("hui4 gei3", "会给", "(2 words) will give / is going to give", 4, category="Vocabulary", kind="verb", topic= [])
+
+dq_vocabulary["礼物"] = Vocabulary("li3 wu4", "礼物", "gift; present", 3, category="Vocabulary", kind="general", topic=[])
+
+dq_vocabulary["你男朋友会给你买礼物吗"] = Vocabulary("ni3 nan2 peng2 you hui4 gei3 ni3 mai3 li3 wu4 ma", "你男朋友会给你买礼物吗", "Will your (no 的) boyfriend buy you gift ? (use of 会给, and 买, express the intent to buy gifts)", 6, category="Sentence", kind="general", topic= ['money'])
+
+dq_vocabulary["有时候"] = Vocabulary("you3 shi2 hou", "有时候", "sometimes", 1, category="Vocabulary", kind="grammar", topic= ['daily', 'time'])
+
+dq_vocabulary["渣男"] = Vocabulary("zha1 nan2", "渣男", "(coll.) jerk; scumbag (esp. in romantic relationships)", 1, category="Vocabulary", kind="general", topic=['insult'])
+
+dq_vocabulary["懒惰"] = Vocabulary("lan3 duo4", "懒惰", "lazy / idle", 6, category="Vocabulary", kind="general", topic=['daily'])
+
+dq_vocabulary["假的"] = Vocabulary("jia3 de", "假的", "(it's) fake / bogus (use 的）", 1, category="Vocabulary", kind="general", topic= ['daily'])
+
+dq_vocabulary["生日"] = Vocabulary("sheng1 ri4", "生日", "birthday", 2, category="Vocabulary", kind="general", topic=[])
+
+dq_vocabulary["其他"] = Vocabulary("qi2 ta1", "其他", "other / (smthing or smbdy) else", 3, category="Vocabulary", kind="grammar", topic=[])
+
+dq_vocabulary["别的"] = Vocabulary("bie2 de", "别的", "(really casual) else / other", 1, category="Vocabulary", kind="grammar", topic= [])
+
+dq_vocabulary["还有其他的吗"] = Vocabulary("hai2 you3 qi2 ta1 de ma", "还有其他的吗", "Anything else ? (else is the more formal way)", 1, category="Sentence", kind="general", topic= ['daily', 'conversation'])
+
+dq_vocabulary["基本上"] = Vocabulary("ji1 ben3 shang", "基本上", "basically / on the whole", 3, category="Vocabulary", kind="grammar", topic= ['daily'])
+
+dq_vocabulary["基本上就是这些"] = Vocabulary("ji1 ben3 shang jiu4 shi4 zhe4 xie1", "基本上就是这些", "Basically these is (just) it", 2, category="Sentence", kind="general", topic= [])
+
+dq_vocabulary["平常"] = Vocabulary("ping2 chang2", "平常", "usually / ordinary / common", 5, category="Vocabulary", kind="grammar", topic=['expression'])
+
+dq_vocabulary["话题"] = Vocabulary("hua4 ti2", "话题", "subject (of a talk or conversation)", 5, category="Vocabulary", kind="general", topic=[])
+
+dq_vocabulary["这样子"] = Vocabulary("zhe4 yang4 zi", "这样子", "this way / like this / so / such", 5, category="Vocabulary", kind="grammar", topic= [])
+
+dq_vocabulary["怎么是指样子的"] = Vocabulary("zen3 me shi4 zhe4 yang4 zi de", "怎么是指样子的", "How come it is like this ?", 3, category="Sentence", kind="general", topic= [])
+
+dq_vocabulary["裸体"] = Vocabulary("luo3 ti3", "裸体", "naked", 1, category="Vocabulary", kind="general", topic=[])
+
+dq_vocabulary["澡"] = Vocabulary("zao3", "澡", "bath", 2, category="Vocabulary", kind="general", topic=[])
+
+dq_vocabulary["洗澡"] = Vocabulary("xi3 zao3", "洗澡", "to bathe / to take a shower", 3, category="Vocabulary", kind="verb", topic=[])
+
+dq_vocabulary["穿"] = Vocabulary("chuan1", "穿", "to wear", 2, category="Vocabulary", kind="verb", topic=[])
+
+dq_vocabulary["东西"] = Vocabulary("dong1 xi", "东西", "thing; stuff; person; CL:個|个[ge4],件[jian4]", 1, category="Vocabulary", kind="general", topic=['daily'])
+
+dq_vocabulary["差异"] = Vocabulary("cha1 yi4", "差异", "(2 words) difference / discrepancy", 6, category="Vocabulary", kind="general", topic=[])
+
+dq_vocabulary["南北"] = Vocabulary("nan2 bei3", "南北", "south and north", 5, category="Vocabulary", kind="general", topic=[])
+
+dq_vocabulary["这就是南北方的一个差异"] = Vocabulary("zhe4 jiu4 shi4 nan2 bei3 fang1 de yi1 ge cha1 yi4", "这就是南北方的一个差异", "This (no ge) just is one of south and north (place) differences", 5, category="Sentence", kind="general", topic= ['daily', 'conversation'])
+
+dq_vocabulary["豪爽"] = Vocabulary("hao2 shuang3", "豪爽", "outspoken and straightforward", 6, category="Vocabulary", kind="general", topic=[])
+
+dq_vocabulary["东北人"] = Vocabulary("dong1 bei3 ren2", "东北人", "(3 words) Northeasterner (person)", 6, category="Vocabulary", kind="general", topic= [])
+
+dq_vocabulary["他们就觉得东北人特别豪爽"] = Vocabulary("ta1 men jiu4 jue2 de dong1 bei3 ren2 te4 bie2 hao2 shuang3", "他们就觉得东北人特别豪爽", "They just think northeasterner are especially straightforward", 5, category="Sentence", kind="general", topic= ['conversation'])
+
+dq_vocabulary["什么样"] = Vocabulary("shen2 me yang4", "什么样", "what kind ? / what sort ?", 1, category="Vocabulary", kind="grammar", topic= ['daily'])
+
+dq_vocabulary["信息"] = Vocabulary("xin4 xi1", "信息", "(l.t letter news) information / news / message", 5, category="Vocabulary", kind="general", topic=[])
+
+dq_vocabulary["消息"] = Vocabulary("xiao1 xi", "消息", "message (as in wechat message) / news / information", 4, category="Vocabulary", kind="general", topic=['daily'])
+
+dq_vocabulary["回"] = Vocabulary("hui2", "回", "to turn around / to return / to answer / to go back", 1, category="Vocabulary", kind="verb", topic=[])
+
+dq_vocabulary["回消息"] = Vocabulary("hui2 xiao1 xi", "回消息", "reply to a message", 3, category="Vocabulary", kind="verb", topic= ['daily'])
+
+dq_vocabulary["总是"] = Vocabulary("zong3 shi4", "总是", "always", 3, category="Vocabulary", kind="grammar", topic=['daily'])
+
+dq_vocabulary["没电"] = Vocabulary("mei2 dian4", "没电", "discharged / dead", 2, category="Vocabulary", kind="verb", topic=[])
+
+dq_vocabulary["骗人"] = Vocabulary("pian4 ren2", "骗人", "to cheat sb / to lie / a liar", 6, category="Vocabulary", kind="verb", topic=[])
+
+dq_vocabulary["你为什么觉得他是骗人的"] = Vocabulary("ni3 wei4 shen2 me jue2 de ta1 shi4 pian4 ren2 de", "你为什么觉得他是骗人的", "Why do you think he is a liar ?", 6, category="Sentence", kind="general", topic= [])
+
+dq_vocabulary["信"] = Vocabulary("xin4", "信", "letter / mail / to trust / to believe / convincing / truthful / trust", 3, category="Vocabulary", kind="general", topic=[])
+
+dq_vocabulary["不太"] = Vocabulary("bu2 tai4", "不太", "not too / not very / not so", 2, category="Vocabulary", kind="grammar", topic= ['daily'])
+
+dq_vocabulary["我就觉得不太信吧"] = Vocabulary("wo3 jiu4 jue2 de bu2 tai4 xin4 ba", "我就觉得不太信吧", "I just think (it's) not very convincing (ba)", 3, category="Sentence", kind="general", topic= [])
+
+dq_vocabulary["窗口"] = Vocabulary("chuang1 hu4", "窗口", "window (as home window)", 6, category="Vocabulary", kind="general", topic=[])
+
+dq_vocabulary["文化"] = Vocabulary("wen2 hua4", "文化", "culture / civilization / cultural", 3, category="Vocabulary", kind="general", topic=[])
+
+dq_vocabulary["像"] = Vocabulary("xiang4", "像", "to ressemble / to be like / to look as / such as / image / portrait", 5, category="Vocabulary", kind="general", topic=['daily'])
+
+dq_vocabulary["到时候"] = Vocabulary("dao4 shi2 hou", "到时候", "when the moment comes / once it happens / at that time", 2, category="Vocabulary", kind="grammar", topic= ['daily'])
+
+dq_vocabulary["感受"] = Vocabulary("gan3 shou4", "感受", "to sense / perception / to feel (through the senses) / a feeling / it feels", 5, category="Vocabulary", kind="verb", topic=['feeling'])
+
+dq_vocabulary["到时候约会了之后就知道什么感受了"] = Vocabulary("dao4 shi2 hou yue1 hui4 le zhi1 hou4 jiu4 zhi1 dao4 shen2 me gan3 shou4 le", "到时候约会了之后就知道什么感受了", "Once (she n.u) has a date (le) after (formal) (just) will know what it feels (le)", 5, category="Sentence", kind="general", topic= ['conversation', 'feeling'])

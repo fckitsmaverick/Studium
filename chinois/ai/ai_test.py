@@ -18,16 +18,19 @@ client = OpenAI()
 
 console = Console()
 
-def generate_new_sentence():
+def how_to_say(english_sentence):
     chinese_sentence = '我到哪儿去买飞机票'
 
     completion = client.chat.completions.create(
         model="gpt-4o-mini",
         messages=[
-            {"role": "system", "content": "You are a Beijing native, you lived for 28 years in Beijing and got a good education."},
+            {"role": "system", "content": """You are a Beijing native, you lived for 28 years in Beijing and you had a good education.
+                You are dedicated to teach Chinese to Chinese students however you emphasize teaching the local, oral way of talking.
+                For example when a student ask you 'how to say this sentence in Chinese', you will give him the local, oral Beijing way to say it, not the litterary/school way.
+            """},
             {
                 "role": "user",
-                "content": f"I'll provide you a sentence in Chinese you will see that the input i give you is oral sentences mostly using Beijing style of speaking, i want your answer to be a variation of that sentence basically using the same grammar pattern AND THE SAME STYLE but using different vocabulary. Here is the sentence in Chinese: {chinese_sentence}. I want your answer to be only the sentence in Chinese and the translation in English separated by a coma like this 'Sentence 1, Sentence2'. Also when you give me the English translation i don't necessarily want it to be grammatically correct i want that if you give someone the English translation he can guess what word you used in the Chinese sentence, so the words order MUST FOLLOW THE ORDER OF THE CHINESE SENTENCE you can add parenthesis, give hints whatever you want."
+                "contenta z": f"How would you say:{english_sentence} in Chinese ? I want your output to be Sentence in Chinese Pinyin, Sentence in Chinese Characters, Sentence in English"
             }
         ]
     )

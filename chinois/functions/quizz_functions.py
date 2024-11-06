@@ -2,7 +2,6 @@ from dict_tools.questions_vocabulaire import dq_vocabulary
 from database_tools.database import update_score_progress, update_word_stats, get_word_stats, get_worst_word_ratios, update_experience
 from database_tools.cedict_database import get_def, get_def_pinyin_simplified
 from database_tools.hsk_database import get_hsk_by_level
-from database_tools.quest_database import update_quest_progress, reset_daily_quests
 from functions.functions_kit import update_vocab_dictionnary, assign_true_false, take_user_preferences, display_bad_ans, compare_ans, redo_bad_ans, reset_vocab_dictionnary
 
 from datetime import datetime
@@ -160,7 +159,7 @@ def last_x_quizz(inp, count=0, limitation=10001):
     # Loop over the last x entries and ask questions
     for key, value in updated_dq.items():
         # Iterate until the entry we want
-        if len(updated_dq) - count <= (user_limit - 1):
+        if len(updated_dq) - count <= (user_limit):
             question_pick = value
             
             # Ask the question (displaying the English meaning)
@@ -272,6 +271,7 @@ def random_x_quizz(inp, count=0, limitation=10001):
 
     score_player_1 = 0
     counter = 0
+    counter_right, counter_wrong = 0, 0
     bad_ans = {}
 
     # Get user preferences for the quiz

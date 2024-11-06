@@ -18,6 +18,8 @@ import time
 import pandas as pd
 import sys
 
+# Implement stop quizz go to wrong answers directely, implement choice on worst words quizz to choose between worst ratios and largest
+# number of wrong answers
 
 score_player_1 = 0
 limitation = 10001
