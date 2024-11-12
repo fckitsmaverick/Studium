@@ -16,7 +16,7 @@ from rich.align import Align
 from database_tools.cedict_database import get_def_pinyin_simplified
 from dict_tools.questions_vocabulaire import dq_vocabulary
 from database_tools.hsk_database import get_hsk_level, get_hsk_dict_def
-from database_tools.database import update_word_stats
+from database_tools.database import update_word_stats, get_word_stats, get_best_word_ratios, get_worst_word_ratios
 
 
 
@@ -57,7 +57,7 @@ def new_vocab_auto():
         while pinyin_input == "" and simplified_input == "":
             console.print("[bold red]Both fields are empty, please enter a pinyin and a simplified character[/bold red]")
 
-            finished = Prompt.ask("[bold yellow]Do you want to quit ?[/bold yellow]", default="no", choices=["yes", "no"])
+            finished = Prompt.ask("[bold yellow]Do you want to quit ?[/bold yellow]", default="yes", choices=["yes", "no"])
             if finished == "yes": return
 
             pinyin_input = Prompt.ask("[bold yellow]Pinyin: [/bold yellow]")
@@ -98,11 +98,17 @@ def new_vocab_auto():
             if add_topic == "yes":
                 topic_pick = Prompt.ask("[bold yellow]Enter the topic (you can add more than one by using ', ' separator): [/bold yellow]")
                 topic_pick = topic_pick.split(", ")
-
-            with open("dict_tools/questions_vocabulaire.py", "a") as f:
-                print(f'\ndq_vocabulary["{simplified}"] = Vocabulary("{pinyin}", "{simplified}", "{english}", {hsk_level}, category="{category}", kind="{kind}", topic={topic_pick if add_topic == "yes" else []})', file=f)
-                console.print("[bold green]New entry in your dictionnary[/bold green]")
-                f.close()
+            
+            
+            confirm = Prompt.ask(f"[bold yellow]Do you want to add this \n[bold magenta]Chinese Pinyin: {pinyin_input}\nChinese characters: {simplified_input}\nEnglish definition: {english}[/bold magenta]\nto you personal dictionnary?[/bold yellow]", default="yes", choices=["yes", "no"])
+            
+            if confirm == "yes":
+                with open("dict_tools/questions_vocabulaire.py", "a") as f:
+                    print(f'\ndq_vocabulary["{simplified}"] = Vocabulary("{pinyin}", "{simplified}", "{english}", {hsk_level}, category="{category}", kind="{kind}", topic={topic_pick if add_topic == "yes" else []})', file=f)
+                    console.print("[bold green]New entry in your dictionnary[/bold green]")
+                    f.close()
+            else:
+                break
 
 
         elif dict_result == False:
@@ -122,12 +128,15 @@ def new_vocab_auto():
                     hsk_level = Prompt.ask("[bold yellow]Assign an hsk level (level of difficutly from 1 to 6) to your entry: [/bold yellow]", default=1, choices=["1", "2", "3", "4", "5", "6"])
 
 
-
-
-                with open("dict_tools/questions_vocabulaire.py", "a") as f:
-                    print(f'\ndq_vocabulary["{simplified_input}"] = Vocabulary("{pinyin_input}", "{simplified_input}", "{english}", {hsk_level}, category="{category}", kind="{kind}", topic= {topic_pick if add_topic == "yes" else []})', file=f)
-                    console.print("[bold green]New entry in your dictionnary[/bold green]")
-                    f.close()
+                confirm = Prompt.ask(f"[bold yellow]Do you want to add this \n[bold magenta]Chinese Pinyin: {pinyin_input}\nChinese characters: {simplified_input}\nEnglish definition: {english}[/bold magenta]\nto you personal dictionnary?[/bold yellow]", default="yes", choices=["yes", "no"])
+            
+                if confirm == "yes":
+                    with open("dict_tools/questions_vocabulaire.py", "a") as f:
+                        print(f'\ndq_vocabulary["{simplified_input}"] = Vocabulary("{pinyin_input}", "{simplified_input}", "{english}", {hsk_level}, category="{category}", kind="{kind}", topic= {topic_pick if add_topic == "yes" else []})', file=f)
+                        console.print("[bold green]New entry in your dictionnary[/bold green]")
+                        f.close()
+                else:
+                    return
 
 
         keep_going = Prompt.ask("[bold red]Do you wish to add more vocabulary ?[/bold red]", default="yes", choices=["yes", "no"])
@@ -419,3 +428,14 @@ def add_english_vocab():
         keep_going = Prompt.ask("[bold red]Do you wish to add more vocabulary ?[/bold red]", default="yes", choices=["yes", "no"])
 
         if keep_going.lower() == "no": return
+
+def pick_questions(d, user_limit=10):
+    final_d = {}
+    best_words = get_best_word_ratios(round(user_limit*0,10))
+    worst_words = get_worst_word_ratios(round(user_limit*0,20))
+    final_d += best_words
+    final_d += worst_words
+    for key, value in d.items():
+        return
+
+    

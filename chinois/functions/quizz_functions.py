@@ -211,9 +211,6 @@ def last_x_quizz(inp, count=0, limitation=10001):
     console.print(Panel(f"[bold magenta]Quiz Complete![/bold magenta]\nYour final score: [bold yellow]{score_player_1}[/bold yellow]", expand=False))
 
 
-
-
-
 def worst_x_quizz(inp, count=0, limitation=10001):
     # Start rich console
     console = Console()
@@ -222,11 +219,14 @@ def worst_x_quizz(inp, count=0, limitation=10001):
     # Take user input for number of worst words to quiz on
     user_limit = Prompt.ask("[bold yellow]Worst x words (type x)[/bold yellow]", default="10")
     user_limit = int(user_limit)
+    way_of_counting = Prompt.ask("[bold yellow]Which data do you wish to use to rank your worst words ?[/bold yellow]", default="ratio", choices=["ratio", "brutewrong", "bruteright"])
     score_player_1 = 0
-    worst10 = get_worst_word_ratios(user_limit)
+    bad_ans = {}
+    counter, counter_right, counter_wrong = 0, 0, 0
+    worst10 = get_worst_word_ratios(user_limit, way_of_counting)
 
     # Loop through vocabulary to ask questions about the worst words
-    for word in worst10:
+    for word in reversed(worst10):
         for key, value in dq_vocabulary.items():
             if word["word"] == value.chinese_character:
                 # Ask the question (displaying the English meaning)
@@ -243,23 +243,37 @@ def worst_x_quizz(inp, count=0, limitation=10001):
                 else:
                     console.print("[bold bright_red]Incorrect![/bold bright_red]", style="bold red")
                     
-                    # Display correct answer in a table
-                    table = Table(title=f"[bold]Correct Answer[/bold] - {value.chinese_character}")
-                    table.add_column("Simplified", justify="center", style="bright_blue", no_wrap=True)
-                    table.add_column("Pinyin", justify="center", style="bright_blue")
-                    table.add_column("English", justify="center", style="bright_blue")
+                    bad_ans[key] = value
 
-                    table.add_row(f"{value.chinese_character}", f"{value.chinese_pinyin}", f"{value.english}")
-                    console.print(table)
+                    if len(ans) > 0:
+                        if ans[0].isascii():
+                            correct_ans = compare_ans(ans, value.chinese_pinyin)
+                        else:
+                            correct_ans = compare_ans(ans, value.chinese_character)
+                        
+                        # Display correct answer in a table
+                        table = Table(title=f"[bold]Correct Answer[/bold] - {value.chinese_character}")
+                        table.add_column("Simplified", justify="center", style="bright_blue", no_wrap=True)
+                        table.add_column("Pinyin", justify="center", style="bright_blue")
+                        table.add_column("English", justify="center", style="bright_blue")
+
+                        table.add_row(f"{value.chinese_character}", f"{value.chinese_pinyin}", f"{value.english}")
+                        console.print(table)
 
                     #update_word_stats(key, False)
-                
+
+                get_word_stats(value.chinese_character, value.chinese_pinyin, True) 
                 update_experience(value.difficulty)
                 # Print separator after each question
                 console.rule("[bold red]\n")
+    
+
+    # Display a summary of bad answers
+    if bad_ans:
+        display_bad_ans(bad_ans)
+        redo_bad_ans(bad_ans)
 
     # Calculate final score and display it
-    score_player_1 = round(score_player_1)
     console.print(Panel(f"[bold magenta]Quiz Complete![/bold magenta]\nYour final score: [bold yellow]{score_player_1}[/bold yellow]", expand=False))
 
 
@@ -304,12 +318,14 @@ def random_x_quizz(inp, count=0, limitation=10001):
                 console.print("[bold green]Good Answer![/bold green]")
                 score_player_1 += question_pick.difficulty
                 update_word_stats(question_pick.chinese_character, True)
+                counter_right += 1
 
                 # Update quest progress and add experience if quest is completed
                 #update_quest_progress('daily', quest_id=1, increment=1)  # Assuming 'daily' quest with quest_id=1
 
             else:
                 console.print("[bold red]Wrong Answer![/bold red]")
+                counter_wrong += 1
 
                 # Check if user typed pinyin or Chinese character and highlight errors
                 if len(ans) > 0:
@@ -329,6 +345,8 @@ def random_x_quizz(inp, count=0, limitation=10001):
                 # Store bad answers and update word stats
                 bad_ans[key] = question_pick
                 update_word_stats(question_pick.chinese_character, False)
+            
+            #get_word_stats(question_pick.chinese_character, question_pick.chinese_pinyin)
 
             # Mark the question as answered
             question_pick.done = 1
@@ -362,7 +380,7 @@ def random_x_quizz(inp, count=0, limitation=10001):
 
     # Display final score and summary
     console.print(Panel(f"[bold magenta]Quiz Complete![/bold magenta]\nYour final score: [bold yellow]{score_player_1}[/bold yellow]", expand=False))
-    
+    console.print(Panel(f"[bold magenta]Right Answer(s): {counter_right} \nWrong Answer(s): {counter_wrong} \nRatio: {(counter_right/counter)*100}[/bold magenta]", expand=False))
     # Display elapsed time
     console.print(f"[bold green]Time Elapsed: {minutes}m {seconds}s[/bold green]")
 

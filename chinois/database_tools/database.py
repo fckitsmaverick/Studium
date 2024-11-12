@@ -35,6 +35,7 @@ db_path = os.path.join(db_directory, db_filename)
 conn = sqlite3.connect(db_path)
 
 # Create a cursor object to interact with the database
+console = Console()
 cursor = conn.cursor()
 
 def intiate_database():
@@ -181,7 +182,7 @@ def update_word_stats(word, is_correct):
     conn.commit()
     conn.close()
 
-def get_word_stats(word, pinyin):
+def get_word_stats(word, pinyin, display=False):
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
 
@@ -191,11 +192,65 @@ def get_word_stats(word, pinyin):
     conn.close()
     if result:
         right_count, wrong_count, ratio = result
-        print(f"Word: '{pinyin}''{word}' - Right: {right_count}, Wrong: {wrong_count}, Ratio: {ratio:.2f}")
+        if display == True:
+            console.print(f"[gold3]Word: '{pinyin}''{word}' - Right: {right_count}, Wrong: {wrong_count}, Ratio: {ratio:.2f}[/gold3]")
     else:
-        print(f"Word: '{word}' not found in the database.")
+        if display == True:
+            console.print(f"[gold3]Word: '{word}' not found in the database.[/gold3]")
 
-def get_worst_word_ratios(limit=10):
+
+def get_worst_word_ratios(limit=10, data="ratio"):
+    # Connect to the SQLite database
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+
+    if data == "ratio":
+        # Retrieve the words with the worst ratios
+        cursor.execute('''
+            SELECT word, right_count, wrong_count, ratio
+            FROM SuccessRate
+            ORDER BY ratio ASC
+            LIMIT ?
+        ''', (limit,))
+
+        results = cursor.fetchall() 
+
+        conn.close()
+    
+    elif data == "brutewrong":
+        # Retrieve the words with the worst ratios
+        cursor.execute('''
+            SELECT word, right_count, wrong_count, ratio
+            FROM SuccessRate
+            ORDER BY wrong_count DESC
+            LIMIT ?
+        ''', (limit,))
+
+        results = cursor.fetchall() 
+
+        conn.close()
+    
+    elif data == "bruteright":
+        # Retrieve the words with the worst ratios
+        cursor.execute('''
+            SELECT word, right_count, wrong_count, ratio
+            FROM SuccessRate
+            ORDER BY right_count DESC
+            LIMIT ?
+        ''', (limit,))
+
+        results = cursor.fetchall() 
+
+        conn.close()
+
+
+    # Store the results in variables
+    worst_words = [{"word": word, "right_count": right_count, "wrong_count": wrong_count, "ratio": ratio}
+                   for word, right_count, wrong_count, ratio in results]
+    
+    return worst_words
+
+def get_best_word_ratios(limit=10):
     # Connect to the SQLite database
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
@@ -204,7 +259,7 @@ def get_worst_word_ratios(limit=10):
     cursor.execute('''
         SELECT word, right_count, wrong_count, ratio
         FROM SuccessRate
-        ORDER BY ratio ASC
+        ORDER BY ratio DESC
         LIMIT ?
     ''', (limit,))
 
@@ -213,10 +268,10 @@ def get_worst_word_ratios(limit=10):
     conn.close()
 
     # Store the results in variables
-    worst_words = [{"word": word, "right_count": right_count, "wrong_count": wrong_count, "ratio": ratio}
+    best_words = [{"word": word, "right_count": right_count, "wrong_count": wrong_count, "ratio": ratio}
                    for word, right_count, wrong_count, ratio in results]
-    
-    return worst_words
+
+    return best_words
 
 def get_experience():
     # Connect to SQLite database

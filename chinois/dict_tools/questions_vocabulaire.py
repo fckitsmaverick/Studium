@@ -137,7 +137,7 @@ dq_vocabulary["房间"] = Vocabulary("fang2 jian1", "房间", "room", 2, categor
 
 dq_vocabulary["还在"] = Vocabulary("hai2 zai4", "还在", "still (to exist)", 1, category="Vocabulary", kind="grammar")
 
-dq_vocabulary["她还在睡吗"] = Vocabulary("ta1 hai2 zai4 shui4 ma", "她还在睡吗", "Is she still sleeping ?", 2, category="Sentence", kind="")
+dq_vocabulary["她还在睡吗"] = Vocabulary("ta1 hai2 zai4 shui4 ma", "她还在睡吗", "Is she still sleeping (1 word) ?", 2, category="Sentence", kind="")
 
 dq_vocabulary["生气"] = Vocabulary("sheng1 qi4", "生气", "to get angry; to be furious", 3, category="Vocabulary", kind="general")
 
@@ -245,7 +245,7 @@ dq_vocabulary["香"] = Vocabulary("xiang1", "香", "fragrant", 4, category="Voca
 
 dq_vocabulary["挺香"] = Vocabulary("ting3 xiang1", "挺香", "quite fragrant", 5, category="Vocabulary", kind="general", topic="food")
 
-dq_vocabulary["我喜欢五仁的虽然多人不喜欢但我觉得挺香的"] = Vocabulary("wo3 xi3 huan1 wu3 ren2 de sui1 ran2 duo1 ren2 bu4 xi3 huan1 dan4 wo3 jue2 de ting3 xiang1 de", "我喜欢五仁的虽然多人不喜欢但我觉得挺香的", "I like the five nut one (flavor) although many people don't like it but i think it's quite fragrant", 4, category="Sentence", kind="general", topic=['food', 'holiday'])
+dq_vocabulary["我喜欢五仁的虽然多人不喜欢但我觉得挺香的"] = Vocabulary("wo3 xi3 huan1 wu3 ren2 de sui1 ran2 duo1 ren2 bu4 xi3 huan1 dan4 wo3 jue2 de ting3 xiang1 de", "我喜欢五仁的虽然多人不喜欢但我觉得挺香的", "I like the five nut one (flavor) although many people don't like it but i think it's quite fragrant (de)", 4, category="Sentence", kind="general", topic=['food', 'holiday'])
 
 dq_vocabulary["确实"] = Vocabulary("que4 shi2", "确实", "indeed", 4, category="Vocabulary", kind="grammar", topic=['daily'])
 
@@ -565,7 +565,7 @@ dq_vocabulary["应该"] = Vocabulary("ying1 gai1", "应该", "(2 words) ought to
 
 dq_vocabulary["自由"] = Vocabulary("zi4 you2", "自由", "freedom; liberty (in the sense of following oneself aspirations)", 5, category="Vocabulary", kind="general", topic=[])
 
-dq_vocabulary["因为我觉得每个女人的人生都应该是自由"] = Vocabulary("yin1 wei4 wo3 jue2 de mei3 ge nv3 ren2 de ren2 sheng1 dou1 ying1 gai1 shi4 zi4 you2 de", "因为我觉得每个女人的人生都应该是自由", "Because i think every woman's life (all) ought to be (is) free.", 6, category="Sentence", kind="general", topic= [])
+dq_vocabulary["因为我觉得每个女人的人生都应该是自由"] = Vocabulary("yin1 wei4 wo3 jue2 de mei3 ge nv3 ren2 de ren2 sheng1 dou1 ying1 gai1 shi4 zi4 you2 de", "因为我觉得每个女人的人生都应该是自由", "Because i think every woman's life (all) ought to be (is) free (de).", 6, category="Sentence", kind="general", topic= [])
 
 dq_vocabulary["碰到"] = Vocabulary("peng4 dao4", "碰到", "to come across / to run into / to meet", 2, category="Vocabulary", kind="verb", topic=['daily'])
 
@@ -732,3 +732,33 @@ dq_vocabulary["到时候"] = Vocabulary("dao4 shi2 hou", "到时候", "when the 
 dq_vocabulary["感受"] = Vocabulary("gan3 shou4", "感受", "to sense / perception / to feel (through the senses) / a feeling / it feels", 5, category="Vocabulary", kind="verb", topic=['feeling'])
 
 dq_vocabulary["到时候约会了之后就知道什么感受了"] = Vocabulary("dao4 shi2 hou yue1 hui4 le zhi1 hou4 jiu4 zhi1 dao4 shen2 me gan3 shou4 le", "到时候约会了之后就知道什么感受了", "Once (she n.u) has a date (le) after (formal) (just) will know what it feels (le)", 5, category="Sentence", kind="general", topic= ['conversation', 'feeling'])
+
+dq_vocabulary["陪"] = Vocabulary("pei2", "陪", "to accompany", 4, category="Vocabulary", kind="verb", topic=['daily'])
+
+dq_vocabulary["多久"] = Vocabulary("duo1 jiu3", "多久", "(of time) how long?", 2, category="Vocabulary", kind="grammar", topic=[])
+
+dq_vocabulary["出租"] = Vocabulary("chu1 zu1", "出租", "(2 words) to rent", 2, category="Vocabulary", kind="general", topic=[])
+
+dq_vocabulary["出租车"] = Vocabulary("chu1 zu1 che1", "出租车", "taxi", 1, category="Vocabulary", kind="general", topic=[])
+
+dq_vocabulary["你开出租车开了多久了"] = Vocabulary("ni3 kai1 chu1 zu1 che1 kai1 le duo1 jiu3 le", "你开出租车开了多久了", "You started to drive a taxi (le) how long (le) ?", 3, category="Sentence", kind="general", topic= [])
+
+dq_vocabulary["长"] = Vocabulary("chang2", "长", "long / length", 2, category="Vocabulary", kind="grammar", topic=[])
+
+dq_vocabulary["时间"] = Vocabulary("shi2 jian1", "时间", "(concept of) time / (duration of) time (2 words)", 2, category="Vocabulary", kind="general", topic=[])
+
+dq_vocabulary["我开车的时间挺长的"] = Vocabulary("wo3 kai1 che1 de shi2 jian1 ting3 chang2 de", "我开车的时间挺长的", "I (n.u have been) driving for quite a long time (de)", 2, category="Sentence", kind="general", topic= [])
+
+dq_vocabulary["差不多"] = Vocabulary("cha4 bu duo1", "差不多", "(3 words, one neutral tone) almost / nearly / more or less", 4, category="Vocabulary", kind="grammar", topic=['daily', 'time'])
+
+dq_vocabulary["左"] = Vocabulary("zuo3", "左", "left", 1, category="Vocabulary", kind="general", topic=[])
+
+dq_vocabulary["右"] = Vocabulary("you4", "右", "(bound form) right; right-hand side", 1, category="Vocabulary", kind="general", topic=[])
+
+dq_vocabulary["左右"] = Vocabulary("zuo3 you4", "左右", "left and right / approximately", 6, category="Vocabulary", kind="grammar", topic=['daily'])
+
+dq_vocabulary["差不多有五年左右"] = Vocabulary("cha4 bu duo1 you3 wu3 nian2 zuo3 you4", "差不多有五年左右", "Nearly (有）5 years approximately (2 words l.and.r)", 3, category="Sentence", kind="general", topic= [])
+
+dq_vocabulary["货车"] = Vocabulary("huo4 che1", "货车", "truck (l.t goods vehicle)", 6, category="Vocabulary", kind="general", topic=[])
+
+dq_vocabulary["我开过货车"] = Vocabulary("wo3 kai1 guo huo4 che1", "我开过货车", "I drove (in the past) truck. (beware of the accent on the marker)", 5, category="Sentence", kind="general", topic= [])

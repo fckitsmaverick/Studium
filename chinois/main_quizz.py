@@ -141,7 +141,7 @@ def pokemon_mode():
     """Handle Pokemon Mode submenu actions."""
     while True:
         display_pokemon_submenu()
-        pokemon_choice = get_submenu_choice(["1", "2", "3", "4"])
+        pokemon_choice = get_submenu_choice(["1", "2", "3", "4", "5"])
 
         if pokemon_choice == "1":
             console.print("[bold green]Catching a Pokémon![/bold green]")
