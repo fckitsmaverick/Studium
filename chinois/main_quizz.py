@@ -63,7 +63,7 @@ def display_quizz_submenu():
     table.add_column("Option", justify="center", style="bold yellow")
     table.add_column("Description", style="green")
 
-    table.add_row("1", "English to Chinese Pinyin Quizz")
+    table.add_row("1", "Chinese to English Quizz")
     table.add_row("2", "Random X Words Quizz (taken from your personal dictionnary)")
     table.add_row("3", "Last X Words Quizz (taken from your personal dictionnary)")
     table.add_row("4", "Worst X Words Quizz (your words with the worst ratio!)")
@@ -108,7 +108,7 @@ def quizz_mode():
 
         if quizz_choice == "1":
             console.print("[bold green]Starting a new English to Chinese Pinyin Quizz ![/bold green]")
-            ecpinyin_quizz("1")
+            ce_random_quizz("1")
             return
         elif quizz_choice == "2":
             console.print("[bold green]Starting a new Random Test ![/bold green]")
@@ -185,7 +185,6 @@ def dictionnary_mode():
         if dictionary_choice == "1":
             console.print("[bold green]Adding new vocabulary ![/bold green]")
             new_vocab_auto()
-            return
         elif dictionary_choice == "2":
             console.print("[bold green]Deleting a word in your personal vocabulary ![/bold green]")
             delete_specific_word_line()

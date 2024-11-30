@@ -1,6 +1,7 @@
 import re
 import os
 import sys
+import random
 
 from rich_pixels import Pixels
 from rich.console import Console
@@ -429,13 +430,31 @@ def add_english_vocab():
 
         if keep_going.lower() == "no": return
 
-def pick_questions(d, user_limit=10):
-    final_d = {}
-    best_words = get_best_word_ratios(round(user_limit*0,10))
-    worst_words = get_worst_word_ratios(round(user_limit*0,20))
-    final_d += best_words
-    final_d += worst_words
-    for key, value in d.items():
-        return
+def pick_questions(updated_d, user_limit=10):
+    console = Console()
+    if user_limit > (len(updated_d)):
+        console.print("[bold red]Fail, your limit is longer than the size of your dictionnary [/bold red]")
+        return None
 
+    final_d = {}
+    for i in range(0, user_limit):
+
+        pick = random.choice(list(updated_d.values()))
+        while pick.done == 1:
+            pick = random.choice(list(updated_d.values()))
+
+        if pick.done == 0:
+            pick.done = 1
+            final_d[i] = pick
+    return final_d
+
+    
+def handle_tone_sandhi(answer):
+
+    string_list = answer.split()
+
+    for word in string_list:
+        print(word)
+        if word == "":
+            return
     

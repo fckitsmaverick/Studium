@@ -2,7 +2,7 @@ from dict_tools.questions_vocabulaire import dq_vocabulary
 from database_tools.database import update_score_progress, update_word_stats, get_word_stats, get_worst_word_ratios, update_experience
 from database_tools.cedict_database import get_def, get_def_pinyin_simplified
 from database_tools.hsk_database import get_hsk_by_level
-from functions.functions_kit import update_vocab_dictionnary, assign_true_false, take_user_preferences, display_bad_ans, compare_ans, redo_bad_ans, reset_vocab_dictionnary
+from functions.functions_kit import update_vocab_dictionnary, assign_true_false, take_user_preferences, display_bad_ans, compare_ans, redo_bad_ans, reset_vocab_dictionnary, pick_questions
 
 from datetime import datetime
 from termcolor import cprint
@@ -293,78 +293,72 @@ def random_x_quizz(inp, count=0, limitation=10001):
 
     # Update the vocabulary dictionary based on preferences
     updated_dq = update_vocab_dictionnary(dq_vocabulary, sentence_included, kind_of_word, difficulty_set, kind, difficulty_limit)
+
+    questions = pick_questions(updated_dq, user_limit)
+    if questions == None:
+        console.print("[bold red]Error, try to input a smaller limit.[/bold red]")
+        return
     
     # Start timer
     start_time = time.time()
 
-    for key, value in updated_dq.items():
-        question_pick = random.choice(list(updated_dq.values()))
+    for key, value in questions.items():
 
-        # Skip already answered questions
-        while question_pick.done == 1:
-            question_pick = random.choice(list(updated_dq.values()))
+        # Ask the question (displaying the English meaning)
+        console.print(Panel(f"[bold blue]{value.english}[/bold blue]", title="Question", expand=False))
+        ans = Prompt.ask("[bold yellow]Enter your answer (pinyin or character): [/bold yellow]")
 
-        if question_pick.done == 0:
-            # Ask the question (displaying the English meaning)
-            console.print(Panel(f"[bold blue]{question_pick.english}[/bold blue]", title="Question", expand=False))
-            ans = Prompt.ask("[bold yellow]Enter your answer (pinyin or character): [/bold yellow]")
+        # Allow user to exit quiz
+        if ans.lower() == "exit":
+            return
 
-            # Allow user to exit quiz
-            if ans.lower() == "exit":
-                return
+        # Check if the answer is correct
+        if ans == value.chinese_pinyin or ans == value.chinese_character:
+            console.print("[bold green]Good Answer![/bold green]")
+            score_player_1 += value.difficulty
+            update_word_stats(value.chinese_character, True)
+            counter_right += 1
 
-            # Check if the answer is correct
-            if ans == question_pick.chinese_pinyin or ans == question_pick.chinese_character:
-                console.print("[bold green]Good Answer![/bold green]")
-                score_player_1 += question_pick.difficulty
-                update_word_stats(question_pick.chinese_character, True)
-                counter_right += 1
+            # Update quest progress and add experience if quest is completed
+            #update_quest_progress('daily', quest_id=1, increment=1)  # Assuming 'daily' quest with quest_id=1
 
-                # Update quest progress and add experience if quest is completed
-                #update_quest_progress('daily', quest_id=1, increment=1)  # Assuming 'daily' quest with quest_id=1
+        else:
+            console.print("[bold red]Wrong Answer![/bold red]")
+            counter_wrong += 1
 
-            else:
-                console.print("[bold red]Wrong Answer![/bold red]")
-                counter_wrong += 1
+            # Check if user typed pinyin or Chinese character and highlight errors
+            if len(ans) > 0:
+                if ans[0].isascii():
+                    correct_ans = compare_ans(ans, value.chinese_pinyin)
+                else:
+                    correct_ans = compare_ans(ans, value.chinese_character)
 
-                # Check if user typed pinyin or Chinese character and highlight errors
-                if len(ans) > 0:
-                    if ans[0].isascii():
-                        correct_ans = compare_ans(ans, question_pick.chinese_pinyin)
-                    else:
-                        correct_ans = compare_ans(ans, question_pick.chinese_character)
+            # Display the correct answer in a table
+            table = Table(title=f"[bold]Correct Answer[/bold] - {value.chinese_character}")
+            table.add_column("Simplified", justify="center", style="bright_blue", no_wrap=True)
+            table.add_column("Pinyin", justify="center", style="bright_blue")
+            table.add_column("Your Answer", justify="center", style="bright_blue")
+            table.add_row(f"{value.chinese_character}", f"{value.chinese_pinyin}", f"{value.english}")
+            console.print(table)
 
-                # Display the correct answer in a table
-                table = Table(title=f"[bold]Correct Answer[/bold] - {question_pick.chinese_character}")
-                table.add_column("Simplified", justify="center", style="bright_blue", no_wrap=True)
-                table.add_column("Pinyin", justify="center", style="bright_blue")
-                table.add_column("Your Answer", justify="center", style="bright_blue")
-                table.add_row(f"{question_pick.chinese_character}", f"{question_pick.chinese_pinyin}", f"{question_pick.english}")
-                console.print(table)
+            # Store bad answers and update word stats
+            bad_ans[key] = value
+            update_word_stats(value.chinese_character, False)
+        
+        #get_word_stats(question_pick.chinese_character, question_pick.chinese_pinyin)
 
-                # Store bad answers and update word stats
-                bad_ans[key] = question_pick
-                update_word_stats(question_pick.chinese_character, False)
-            
-            #get_word_stats(question_pick.chinese_character, question_pick.chinese_pinyin)
+        # Mark the question as answered
+        counter += 1
 
-            # Mark the question as answered
-            question_pick.done = 1
-            counter += 1
+        # Update player's experience based on question difficulty
+        update_experience(value.difficulty)
 
-            # Update player's experience based on question difficulty
-            update_experience(question_pick.difficulty)
-
-            # Display progress counter
-            if user_limit <= len(updated_dq):
-                console.print(f"[bold yellow]Questions Completed: {counter}/{user_limit}[/bold yellow]")
-            else:
-                console.print(f"[bold yellow]Questions Completed: {counter}/{len(updated_dq)}[/bold yellow]")
-            console.rule("[bold red]\n")
-
-            # Check if the user has reached the limit
-            if counter >= user_limit:
-                break
+        # Display progress counter
+        if user_limit <= len(updated_dq):
+            console.print(f"[bold yellow]Questions Completed: {counter}/{user_limit}[/bold yellow]")
+        else:
+            console.print(f"[bold yellow]Questions Completed: {counter}/{len(updated_dq)}[/bold yellow]")
+        console.rule("[bold red]\n")
 
     # Calculate elapsed time
     elapsed_time = time.time() - start_time
@@ -380,7 +374,7 @@ def random_x_quizz(inp, count=0, limitation=10001):
 
     # Display final score and summary
     console.print(Panel(f"[bold magenta]Quiz Complete![/bold magenta]\nYour final score: [bold yellow]{score_player_1}[/bold yellow]", expand=False))
-    console.print(Panel(f"[bold magenta]Right Answer(s): {counter_right} \nWrong Answer(s): {counter_wrong} \nRatio: {(counter_right/counter)*100}[/bold magenta]", expand=False))
+    console.print(Panel(f"[bold magenta]Right Answer(s): {counter_right} \nWrong Answer(s): {counter_wrong} \nRatio: {round((counter_right/counter)*100, 2)}[/bold magenta]", expand=False))
     # Display elapsed time
     console.print(f"[bold green]Time Elapsed: {minutes}m {seconds}s[/bold green]")
 
@@ -488,7 +482,7 @@ def ce_random_quizz(inp, count=0, limitation=10001):
 
         if question_pick.done == 0:
             # Ask the question (displaying the English meaning)
-            console.print(Panel(f"[bold blue]{question_pick.chinese_character}[/bold blue]", title="Question", expand=False))
+            console.print(Panel(f"[bold blue]{question_pick.chinese_character} / {question_pick.chinese_pinyin}[/bold blue]", title="Question", expand=False))
             ans = Prompt.ask("[bold yellow]Enter your answer (pinyin or character): [/bold yellow]")
 
             if ans.lower() == "exit": return
