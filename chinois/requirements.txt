@@ -1,0 +1,12 @@
+numpy==1.24.2
+openai==1.55.3
+pandas==2.2.3
+Pillow==11.0.0
+playsound==1.2.2
+pydantic==1.10.7
+python-dotenv==1.0.1
+rich==13.9.4
+rich_pixels==3.0.1
+sounddevice==0.5.1
+termcolor==2.5.0
+keyboard==0.13.5

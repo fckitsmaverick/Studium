@@ -3,6 +3,7 @@ from database_tools.database import update_score_progress, get_experience
 from database_tools.pokemon_database import get_pokedex, check_pokemon_rank, add_to_pokedex
 from functions.quizz_functions import ec_quizz, ecpinyin_quizz, last_x_quizz, worst_x_quizz, random_x_quizz, hsk_quizz, ce_random_quizz, sentence_quizz
 from functions.functions_kit import print_pokedex, new_vocab_auto, study_personal, update_word_personal_vocab, delete_specific_word_line
+from ai.ai_main import chinese_conversation, chinese_conversation_listening_quizz, chinese_conversation_quizz, how_to_say, explain_a_sentence
 
 
 from datetime import datetime
@@ -50,7 +51,8 @@ def display_menu():
     table.add_row("2", "Enter Pokemon Mode")
     table.add_row("3", "Enter Study Mode")
     table.add_row("4", "Enter Dictionnary Mode")
-    table.add_row("5", "Exit")
+    table.add_row("5", "Enter ChatGPT Mode")
+    table.add_row("6", "Exit")
 
     console.print(table)
 
@@ -94,7 +96,7 @@ def display_pokemon_submenu():
 
 def get_user_choice():
     """Prompt the user for input."""
-    return Prompt.ask("[bold yellow]Please select an option[/bold yellow]", choices=["1", "2", "3", "4", "5"])
+    return Prompt.ask("[bold yellow]Please select an option[/bold yellow]", choices=["1", "2", "3", "4", "5", "6"])
 
 def get_submenu_choice(choices):
     """Prompt the user for input in the submenu."""
@@ -192,6 +194,54 @@ def dictionnary_mode():
         elif dictionary_choice == "3":
             return
 
+def display_ai_submenu():
+
+    console.print(Panel("[bold magenta]ChatGPT Mode[/bold magenta]", expand=False))
+ 
+    table = Table(title="ChatGPT Mode Options", show_edge=False, header_style="bold blue")
+    table.add_column("Option", justify="center", style="bold yellow")
+    table.add_column("Description", style="green")
+
+    table.add_row("1", "Chinese conversation generation and quizz")
+    table.add_row("2", "Chinese conversation listening quizz")
+    table.add_row("3", "Explain a Chinese sentence")
+    table.add_row("4", "How to say in Chinese")
+    table.add_row("5", "Exit")
+
+    console.print(table)
+
+def ai_mode():
+
+    while True:
+        display_ai_submenu()
+        ai_choice = get_submenu_choice(["1", "2", "3", "4", "5"])
+    
+        if ai_choice == "1":
+            try:
+                console.print("[bold green]Enter conversation generation mode[/bold green]") 
+                chinese_conversation_quizz()
+            except Exception as e:
+                console.print(f"[bold red]An error occured, try again.\n{e}")
+        if ai_choice == "2":
+            try:
+                console.print("[bold green]Enter listening quizz")
+                chinese_conversation_listening_quizz()
+            except:
+                console.print("[bold red]An error occured, try again.")
+        if ai_choice == "3":
+            try:
+                console.print("[bold green]I'm here to help you understand Chinese !")
+                explain_a_sentence()
+            except:
+                console.print("[bold red]An error occured, try again.")
+        if ai_choice == "4":
+            try:
+                console.print("[bold green]I'm here to help you translate English into Chinese !")
+                how_to_say()
+            except:
+                console.print("[bold red]An error occured, try again.")
+        if ai_choice == "5":
+            return
 
 
 def main():
@@ -213,6 +263,9 @@ def main():
             console.print("[bold green]Entering Dictionnary Mode ![/bold green]")
             dictionnary_mode()
         elif choice == "5":
+            console.print("[bold green]ChatGPT[/bold green]")
+            ai_mode()
+        elif choice == "6":
             console.print("[bold red]Exiting...[/bold red]")
             sys.exit(0)
         else:
