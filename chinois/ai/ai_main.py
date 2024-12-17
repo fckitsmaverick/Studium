@@ -11,6 +11,8 @@ from playsound import playsound
 
 from ai.ai_functions import take_input
 from ai.ai_audio_functions import record_audio_manual
+from ai.ai_elevenlabs import tts_chinese 
+from dict_tools.questions_vocabulaire import dq_vocabulary
 
 # Load environment variables from the .env file
 load_dotenv()
@@ -97,7 +99,7 @@ def chinese_conversation():
         """},
         {
             "role": "user",
-            "content": f"Generate a conversation in Chinese (using an oral/casual tone, and using erhua like if you were from Beijing) on the theme '{topic}'. And Translate it to chinese pinyin (your chinese pinyin must match the chinese characters)"
+            "content": f"Generate a conversation in Chinese (using an oral/casual tone, and using erhua like if you were from Beijing) on the theme '{topic}'. And Translate it to chinese pinyin (your chinese pinyin must match the chinese characters)."
         }
     ],
     response_format = ChineseConversation
@@ -147,6 +149,20 @@ def make_chinese_vocab(conversation):
     ) 
     print(completion.choices[0].message.parsed)
 
+def chinese_personal_audio():
+    for key, value in dq_vocabulary.items():
+        console.print(Panel(f"[bold blue]{value.english}[bold blue]"))
+        record_audio_manual("manual_recording.wav")
+        ans = audio_to_text_check()
+        print(ans, value.chinese_character)
+        if ans.lower() == "exit":
+            return
+        if ans == value.chinese_character:
+            console.print("[bold green]Good Answer ![/bold green]")
+        else:
+            console.print("[bold red]Wrong Answer ![/bold red]")
+    
+
 
 def chinese_conversation_quizz():
     conversation = chinese_conversation()
@@ -156,12 +172,12 @@ def chinese_conversation_quizz():
         if audio == "yes":
             record_audio_manual("manual_recording.wav")
             ans = audio_to_text_check()
-            if ans == "exit": return
+            if ans.lower() == "exit": return
             if correction == "yes": sentence_correction(ans, i)
         else:
             ans = Prompt.ask("How would you translate this sentence in Chinese ?")
             console.print(f"[bold green]Here is the original 10/10 answer: {i.pinyin}\n{i.characters}[/bold green]")
-            if ans == "exit": return
+            if ans.lower() == "exit": return
             if correction == "yes": sentence_correction(ans, i)
         #sentence_correction(ans, i)
     return
@@ -174,7 +190,8 @@ def chinese_conversation_listening_quizz():
                                     string.punctuation))
         while True:
             ready = Prompt.ask("[bold magenta]Press enter when you are ready")
-            audio_generation(i.characters)
+            tts_chinese(i.characters)
+            playsound("speech.mp3")
             ans = Prompt.ask("[bold magenta]Type what you heard (to listen one more time type 'again', to exit type 'exit'): ", default="again")
 
             if ans == "again":
@@ -191,6 +208,7 @@ def chinese_conversation_listening_quizz():
                 break
             else:
                 continue
+
     console.print("[bold magenta]Quizz Finished !")
         
 
@@ -215,6 +233,5 @@ def audio_to_text_check():
     return transcription.text
 
     
-        
 if __name__ == "__main__":
-    how_to_say()
+    print("What are you trying to do ?")

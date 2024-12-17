@@ -3,7 +3,7 @@ from database_tools.database import update_score_progress, get_experience
 from database_tools.pokemon_database import get_pokedex, check_pokemon_rank, add_to_pokedex
 from functions.quizz_functions import ec_quizz, ecpinyin_quizz, last_x_quizz, worst_x_quizz, random_x_quizz, hsk_quizz, ce_random_quizz, sentence_quizz
 from functions.functions_kit import print_pokedex, new_vocab_auto, study_personal, update_word_personal_vocab, delete_specific_word_line
-from ai.ai_main import chinese_conversation, chinese_conversation_listening_quizz, chinese_conversation_quizz, how_to_say, explain_a_sentence
+from ai.ai_main import chinese_conversation, chinese_conversation_listening_quizz, chinese_conversation_quizz, how_to_say, explain_a_sentence, chinese_personal_audio
 
 
 from datetime import datetime
@@ -206,7 +206,8 @@ def display_ai_submenu():
     table.add_row("2", "Chinese conversation listening quizz")
     table.add_row("3", "Explain a Chinese sentence")
     table.add_row("4", "How to say in Chinese")
-    table.add_row("5", "Exit")
+    table.add_row("5", "Chinese Personal Vocab Quizz")
+    table.add_row("6", "Exit")
 
     console.print(table)
 
@@ -214,7 +215,7 @@ def ai_mode():
 
     while True:
         display_ai_submenu()
-        ai_choice = get_submenu_choice(["1", "2", "3", "4", "5"])
+        ai_choice = get_submenu_choice(["1", "2", "3", "4", "5", "6"])
     
         if ai_choice == "1":
             try:
@@ -241,6 +242,12 @@ def ai_mode():
             except:
                 console.print("[bold red]An error occured, try again.")
         if ai_choice == "5":
+            try:
+                console.print("[bold green]Starting a random quizz !")
+                chinese_personal_audio()
+            except:
+                console.print("[bold red]An error occured, try again.")
+        if ai_choice == "6":
             return
 
 

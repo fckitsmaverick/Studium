@@ -329,6 +329,32 @@ def update_experience(score):
 
     conn.close()
 
+def return_all_SR():
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+    cursor.execute('''SELECT * FROM SuccessRate''')
+
+    result = cursor.fetchall()
+    conn.close()
+    return result
+
+def clean_db(entry_id):
+    # Step 1: Connect to the database
+    connection = sqlite3.connect(db_path)  # Replace 'example.db' with your database file name
+    cursor = connection.cursor()
+
+    # Step 2: Define the condition for deletion
+
+    # Step 3: Execute the DELETE query
+    cursor.execute("DELETE FROM SuccessRate WHERE word = ?", (entry_id,))  # Replace 'your_table_name' with your actual table name
+
+    # Step 4: Commit the changes
+    connection.commit()
+
+    # Step 5: Close the connection
+    connection.close()
+
+    print(f"Entry with ID {entry_id} has been deleted.")
 
 
 if __name__ == "__main__":

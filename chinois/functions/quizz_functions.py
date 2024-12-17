@@ -1,5 +1,5 @@
 from dict_tools.questions_vocabulaire import dq_vocabulary
-from database_tools.database import update_score_progress, update_word_stats, get_word_stats, get_worst_word_ratios, update_experience
+from database_tools.database import update_score_progress, update_word_stats, get_word_stats, get_worst_word_ratios, update_experience, return_all_SR, clean_db
 from database_tools.cedict_database import get_def, get_def_pinyin_simplified
 from database_tools.hsk_database import get_hsk_by_level
 from functions.functions_kit import update_vocab_dictionnary, assign_true_false, take_user_preferences, display_bad_ans, compare_ans, redo_bad_ans, reset_vocab_dictionnary, pick_questions
@@ -215,6 +215,13 @@ def worst_x_quizz(inp, count=0, limitation=10001):
     # Start rich console
     console = Console()
     console.show_cursor()
+
+    clean = Prompt.ask("[bold yellow]Do you wish to clean the database before starting the quizz ?[/bold yellow]", choices=["yes", "no"], default="no")
+    if clean == "yes":
+        db = return_all_SR()
+        for word in db:
+            if word[0] not in dq_vocabulary.keys():
+                clean_db(word[0])
 
     # Take user input for number of worst words to quiz on
     user_limit = Prompt.ask("[bold yellow]Worst x words (type x)[/bold yellow]", default="10")
@@ -490,7 +497,6 @@ def ce_random_quizz(inp, count=0, limitation=10001):
             if ans == question_pick.chinese_pinyin:
                 console.print("[bold green]Good Answer![/bold green]")
                 score_player_1 += question_pick.difficulty
-                update_word_stats(question_pick.chinese_character, True)
             else:
                 console.print("[bold red]Wrong Answer![/bold red]")
                 bad_ans[key] = question_pick
@@ -508,11 +514,10 @@ def ce_random_quizz(inp, count=0, limitation=10001):
                 console.print(table)
 
                 bad_ans[key] = question_pick
-                update_word_stats(question_pick.chinese_character, False)
 
             question_pick.done = 1
             counter += 1
-            update_experience(question_pick.difficulty)
+            #update_experience(question_pick.difficulty)
             console.rule("[bold red]\n")
 
             # Display progress counter
