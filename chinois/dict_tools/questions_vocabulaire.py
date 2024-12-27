@@ -245,7 +245,7 @@ dq_vocabulary["香"] = Vocabulary("xiang1", "香", "fragrant", 4, category="Voca
 
 dq_vocabulary["挺香"] = Vocabulary("ting3 xiang1", "挺香", "quite fragrant", 5, category="Vocabulary", kind="general", topic="food")
 
-dq_vocabulary["我喜欢五仁的虽然多人不喜欢但我觉得挺香的"] = Vocabulary("wo3 xi3 huan1 wu3 ren2 de sui1 ran2 duo1 ren2 bu4 xi3 huan1 dan4 wo3 jue2 de ting3 xiang1 de", "我喜欢五仁的虽然多人不喜欢但我觉得挺香的", "I like the five nut one (flavor) although many people don't like it but i think it's quite fragrant (de)", 4, category="Sentence", kind="general", topic=['food', 'holiday'])
+dq_vocabulary["我喜欢五仁的虽然多人不喜欢但我觉得挺香的"] = Vocabulary("wo3 xi3 huan1 wu3 ren2 de sui1 ran2 duo1 ren2 bu4 xi3 huan1 dan4 wo3 jue2 de ting3 xiang1 de", "我喜欢五仁的虽然多人不喜欢但我觉得挺香的", "I like the five nut one (n.u flavor) although many people don't like it but (1 word) i think it's quite fragrant (de)", 4, category="Sentence", kind="general", topic=['food', 'holiday'])
 
 dq_vocabulary["确实"] = Vocabulary("que4 shi2", "确实", "indeed", 4, category="Vocabulary", kind="grammar", topic=['daily'])
 
@@ -320,7 +320,7 @@ dq_vocabulary["你最近还去健身房吗"] = Vocabulary("ni3 zui4 jin4 hai2 qu
 
 dq_vocabulary["烙饼"] = Vocabulary("lao4 bing3", "烙饼", "pancake", 2, category="Vocabulary", kind="general", topic=['food'])
 
-dq_vocabulary["跑"] = Vocabulary("pao3", "跑", "to run", 3, category="Vocabulary", kind="verb", topic=['gym', 'sport'])
+dq_vocabulary["跑"] = Vocabulary("pao3", "跑", "(1 word) to run", 3, category="Vocabulary", kind="verb", topic=['gym', 'sport'])
 
 dq_vocabulary["公里"] = Vocabulary("gong1 li3", "公里", "kilometer", 4, category="Vocabulary", kind="general", topic=[])
 
@@ -509,7 +509,7 @@ dq_vocabulary["购买"] = Vocabulary("gou4 mai3", "购买", "(literary) to purch
 
 dq_vocabulary["一边"] = Vocabulary("yi4 bian1", "一边", "doing while / one side / either side / on the one hand", 1, category="Vocabulary", kind="grammar", topic= ['daily'])
 
-dq_vocabulary["聊"] = Vocabulary("liao2", "聊", "(coll.) to chat", 6, category="Vocabulary", kind="verb", topic=['leisure', 'daily'])
+dq_vocabulary["聊"] = Vocabulary("liao2", "聊", "(1 word) (coll.) to chat", 6, category="Vocabulary", kind="verb", topic=['leisure', 'daily'])
 
 dq_vocabulary["走"] = Vocabulary("zou3", "走", "to walk / to go / to leave", 2, category="Vocabulary", kind="verb", topic=[])
 
@@ -557,7 +557,7 @@ dq_vocabulary["痴"] = Vocabulary("chi1", "痴", "imbecile", 4, category="Vocabu
 
 dq_vocabulary["路痴"] = Vocabulary("lu4 chi1", "路痴", "person with a poor sense of direction", 6, category="Vocabulary", kind="general", topic=['expression'])
 
-dq_vocabulary["你最想吐槽男生的什么行为"] = Vocabulary("ni3 zui4 xiang3 tu4 cao2 nan2 sheng1 de shen2 me xing2 wei2", "你最想吐槽男生的什么行为", "You want the most to complain about what men's behaviors ? (note English order is not the same as Chinese order)", 6, category="Sentence", kind="general", topic= ['question'])
+dq_vocabulary["你最想吐槽男生的什么行为"] = Vocabulary("ni3 zui4 xiang3 tu4 cao2 nan2 sheng1 de shen2 me xing2 wei2", "你最想吐槽男生的什么行为", "You want (想) the most to complain about what men's behaviors ? (note English order is not the same as Chinese order)", 6, category="Sentence", kind="general", topic= ['question'])
 
 dq_vocabulary["人生"] = Vocabulary("ren2 sheng1", "人生", "life (one's time on earth)", 5, category="Vocabulary", kind="general", topic=[])
 
@@ -607,7 +607,7 @@ dq_vocabulary["同事"] = Vocabulary("tong2 shi4", "同事", "colleague; co-work
 
 dq_vocabulary["同时"] = Vocabulary("tong2 shi2", "同时", "at the same time; simultaneously", 5, category="Vocabulary", kind="grammar", topic=['daily', 'time'])
 
-dq_vocabulary["故意"] = Vocabulary("gu4 yi4", "故意", "deliberately; on purpose", 4, category="Vocabulary", kind="general", topic=[])
+dq_vocabulary["故意"] = Vocabulary("gu4 yi4", "故意", "(2 words) deliberately; on purpose", 4, category="Vocabulary", kind="general", topic=[])
 
 dq_vocabulary["我不是故意的"] = Vocabulary("wo3 bu2 shi4 gu4 yi4 de", "我不是故意的", "I didn't do it on purpose / I didn't mean it", 1, category="Sentence", kind="general", topic= ['daily'])
 
@@ -667,11 +667,11 @@ dq_vocabulary["基本上"] = Vocabulary("ji1 ben3 shang", "基本上", "basicall
 
 dq_vocabulary["基本上就是这些"] = Vocabulary("ji1 ben3 shang jiu4 shi4 zhe4 xie1", "基本上就是这些", "Basically these is (just) it", 2, category="Sentence", kind="general", topic= [])
 
-dq_vocabulary["平常"] = Vocabulary("ping2 chang2", "平常", "usually / ordinary / common", 5, category="Vocabulary", kind="grammar", topic=['expression'])
+dq_vocabulary["平常"] = Vocabulary("ping2 chang2", "平常", "(2 words no 一) usually / ordinary / common", 5, category="Vocabulary", kind="grammar", topic=['expression'])
 
 dq_vocabulary["话题"] = Vocabulary("hua4 ti2", "话题", "subject (of a talk or conversation)", 5, category="Vocabulary", kind="general", topic=[])
 
-dq_vocabulary["这样子"] = Vocabulary("zhe4 yang4 zi", "这样子", "this way / like this / so / such", 5, category="Vocabulary", kind="grammar", topic= [])
+dq_vocabulary["这样子"] = Vocabulary("zhe4 yang4 zi", "这样子", "(3 words) this way / like this / so / such", 5, category="Vocabulary", kind="grammar", topic= [])
 
 dq_vocabulary["怎么是指样子的"] = Vocabulary("zen3 me shi4 zhe4 yang4 zi de", "怎么是指样子的", "How come it is like this ?", 3, category="Sentence", kind="general", topic= [])
 
@@ -923,7 +923,7 @@ dq_vocabulary["合同"] = Vocabulary("he2 tong", "合同", "(business) contract;
 
 dq_vocabulary["签"] = Vocabulary("qian1", "签", "to sign one's name / visa", 6, category="Vocabulary", kind="verb", topic=[])
 
-dq_vocabulary["这个合同一般是多久的"] = Vocabulary("zhe4 ge he2 tong yi4 ban1 shi4 qian1 duo1 jiu3 de", "这个合同一般是多久的", "This business contract usually is signed for (n.u a duration) of how long (的）？", 5, category="Sentence", kind="general", topic= ['work'])
+dq_vocabulary["这个合同一般是多久的"] = Vocabulary("zhe4 ge he2 tong yi4 ban1 shi4 qian1 duo1 jiu3 de", "这个合同一般是签多久的", "This business contract usually is signed for (n.u a duration) of how long (的）？", 5, category="Sentence", kind="general", topic= ['work'])
 
 dq_vocabulary["方面"] = Vocabulary("fang1 mian4", "方面", "aspect / area / side / respect", 4, category="Vocabulary", kind="general", topic=[])
 
@@ -931,7 +931,7 @@ dq_vocabulary["还是你们有这方面的自由呢"] = Vocabulary("hai2 shi ni3
 
 dq_vocabulary["抽"] = Vocabulary("chou1", "抽", "to draw out / to pull out from in between", 5, category="Vocabulary", kind="verb", topic=['time'])
 
-dq_vocabulary["抽点"] = Vocabulary("chou1 dian3", "抽点", "to take some time (to do smth) / to find some time", 5, category="Vocabulary", kind="verb", topic= ['time'])
+dq_vocabulary["抽时间"] = Vocabulary("chou1 shi2 jian1", "抽时间", "to take some time (to do smth) / to find some time", 5, category="Vocabulary", kind="verb", topic= ['time'])
 
 dq_vocabulary["运"] = Vocabulary("yun4", "运", "(1 word) to move / to exercise / sports", 2, category="Vocabulary", kind="general", topic=[])
 
@@ -997,7 +997,7 @@ dq_vocabulary["变化"] = Vocabulary("bian4 hua4", "变化", "(2 words) change /
 
 dq_vocabulary["厚"] = Vocabulary("hou4", "厚", "thick / deep or profound", 4, category="Vocabulary", kind="general", topic=[])
 
-dq_vocabulary["最近这天气变化的可真快大家都说需要注意身体"] = Vocabulary("zui4 jin4 zhe4 tian1 qi4 bian4 hua4 de ke3 zhen1 kuai4 da4 jia1 dou1 shuo1 xu1 yao4 zhu4 yi4 shen1 ti3", "最近这天气变化的可真快大家都说需要注意身体", "Recently THIS (no 的, no 个) weather changes really super fast everyone (大家）all say (n.u we) need to pay attention to our body's health", 5, category="Sentence", kind="general", topic= ['daily', 'health'])
+dq_vocabulary["最近这天气变化的可真快大家都说需要注意身体"] = Vocabulary("zui4 jin4 zhe4 tian1 qi4 bian4 hua4 de ke3 zhen1 kuai4 da4 jia1 dou1 shuo1 xu1 yao4 zhu4 yi4 shen1 ti3", "最近这天气变化的可真快大家都说需要注意身体", "Recently THIS (no 的, no 个) weather changes (的） really super fast everyone (大家）all say (n.u we) need to pay attention to our body's health", 5, category="Sentence", kind="general", topic= ['daily', 'health'])
 
 dq_vocabulary["坚持"] = Vocabulary("jian1 chi2", "坚持", "(2 words) to persevere with; to persist in; to insist on", 4, category="Vocabulary", kind="verb", topic=[])
 
@@ -1052,3 +1052,43 @@ dq_vocabulary["新鲜"] = Vocabulary("xin1 xian1", "新鲜", "fresh (experience,
 dq_vocabulary["饮食"] = Vocabulary("yin3 shi2", "饮食", "food and drink / diet", 6, category="Vocabulary", kind="general", topic=['health', 'food'])
 
 dq_vocabulary["蔬菜"] = Vocabulary("shu1 cai4", "蔬菜", "vegetables", 5, category="Vocabulary", kind="general", topic=['food'])
+
+dq_vocabulary["努力"] = Vocabulary("nu3 li4", "努力", "to make an effort; to try hard; to strive", 3, category="Vocabulary", kind="verb", topic=[])
+
+dq_vocabulary["真是"] = Vocabulary("zhen1 shi4", "真是", "(2 words l.t really is) truly / indeed / used to express disapproval or annaoyance about something", 5, category="Vocabulary", kind="grammar", topic= ['daily', 'expression'])
+
+dq_vocabulary["考虑"] = Vocabulary("kao3 lv4", "考虑", "(2 words）to think over; to consider; consideration", 4, category="Vocabulary", kind="verb", topic=[])
+
+dq_vocabulary["等到"] = Vocabulary("deng3 dao4", "等到", "(2 words l.t to wait to arrive) to wait until / by the time when ...", 2, category="Vocabulary", kind="verb", topic=['time'])
+
+dq_vocabulary["出问题"] = Vocabulary("chu1 wen4 ti2", "出问题", "(3 words) to have smth to go wrong / to have a problem arise", 4, category="Vocabulary", kind="verb", topic=['expression'])
+
+dq_vocabulary["后悔"] = Vocabulary("hou4 hui3", "后悔", "(2 words) to regret / to feel remorse", 4, category="Vocabulary", kind="verb", topic=[])
+
+dq_vocabulary["健康最重要别等到出问题才后悔"] = Vocabulary("jian4 kang1 zui4 zhong4 yao4 bie2 deng3 dao4 chu1 wen4 ti2 cai2 hou4 hui3", "健康最重要别等到出问题才后悔", "Health (健康) (n.u is) the most important don't wait until smth go wrong only then (才) to regret", 5, category="Sentence", kind="general", topic= ['health'])
+
+dq_vocabulary["开交"] = Vocabulary("kai1 jiao1", "开交", "(2 words) (used with negative) to conclude; (impossible) to end; (can't) finish", 6, category="Vocabulary", kind="general", topic=[])
+
+dq_vocabulary["不可开交"] = Vocabulary("bu4 ke3 kai1 jiao1", "不可开交", "(4 words) to be awfully (busy etc)", 6, category="Vocabulary", kind="verb", topic=[])
+
+dq_vocabulary["加班"] = Vocabulary("jia1 ban1", "加班", "to work overtime", 4, category="Vocabulary", kind="verb", topic=['work'])
+
+dq_vocabulary["换"] = Vocabulary("huan4", "换", "(1 word) to exchange / to change (clothes, etc)", 3, category="Vocabulary", kind="verb", topic=['daily'])
+
+dq_vocabulary["舍"] = Vocabulary("she3", "舍", "(1 word) to give up; to abandon", 3, category="Vocabulary", kind="general", topic=[])
+
+dq_vocabulary["舍得"] = Vocabulary("she3 de", "舍得", "(2 words) to be willing to part with something", 5, category="Vocabulary", kind="verb", topic= [])
+
+dq_vocabulary["有时候想换个工作可又觉得不舍得"] = Vocabulary("you3 shi2 hou xiang3 huan4 ge gong1 zuo4 ke3 you4 jue2 de bu4 she3 de", "有时候想换个工作可又觉得不舍得", "Sometimes (n.u I) want (想）to change work but still (可又) (n.u I) think (n.u I) don't wanna let go", 5, category="Sentence", kind="general", topic= ['work'])
+
+dq_vocabulary["稳定"] = Vocabulary("wen3 ding4", "稳定", "(2 words) steady / stable / to stabilize", 5, category="Vocabulary", kind="general", topic=[])
+
+dq_vocabulary["光顾着"] = Vocabulary("guang1 gu4 zhe", "光顾着", "(3 words) to focus solely on / to have patronized", 5, category="Vocabulary", kind="verb", topic= [])
+
+dq_vocabulary["瑜伽"] = Vocabulary("yu2 jia1", "瑜伽", "yoga (loanword)", 1, category="Vocabulary", kind="general", topic=['sport'])
+
+dq_vocabulary["放松"] = Vocabulary("fang4 song1", "放松", "(2 words) to relax; to slacken; to loosen.", 5, category="Vocabulary", kind="verb", topic=[])
+
+dq_vocabulary["找个时间"] = Vocabulary("zhao3 ge shi2 jian1", "找个时间", "(4 words not 抽时间）find a time (looking for a convenient time in your schedule)", 6, category="Vocabulary", kind="grammar", topic= ['time', 'expression', 'daily'])
+
+dq_vocabulary["更"] = Vocabulary("geng4", "更", "(1 word not 点）more / even more / still", 5, category="Vocabulary", kind="grammar", topic=[])

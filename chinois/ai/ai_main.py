@@ -23,6 +23,10 @@ openai_api_key = os.getenv("OPENAI_API_KEY")
 # Set the API key for OpenAI
 openai.api_key = openai_api_key
 
+db_directory = '/Users/gabriel/Documents/VSCode/Python/Studium/chinois/ai/'
+db_filename = 'speech.mp3'
+db_path = os.path.join(db_directory, db_filename)
+
 from openai import OpenAI
 client = OpenAI()
 
@@ -191,11 +195,10 @@ def chinese_conversation_listening_quizz():
         while True:
             ready = Prompt.ask("[bold magenta]Press enter when you are ready")
             tts_chinese(i.characters)
-            playsound("speech.mp3")
             ans = Prompt.ask("[bold magenta]Type what you heard (to listen one more time type 'again', to exit type 'exit'): ", default="again")
 
             if ans == "again":
-                playsound("speech.mp3")
+                playsound(db_path)
                 continue
             if ans == "exit": return
 
@@ -219,8 +222,8 @@ def audio_generation(speech):
         voice="alloy",
         input=f"""{speech}""",
     ) as response:
-        response.stream_to_file("speech.mp3")
-    playsound("speech.mp3")
+        response.stream_to_file(db_path)
+    playsound(db_path)
 
 
 def audio_to_text_check():

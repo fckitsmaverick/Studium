@@ -2,7 +2,7 @@ from dict_tools.questions_vocabulaire import dq_vocabulary
 from database_tools.database import update_score_progress, update_word_stats, get_word_stats, get_worst_word_ratios, update_experience, return_all_SR, clean_db
 from database_tools.cedict_database import get_def, get_def_pinyin_simplified
 from database_tools.hsk_database import get_hsk_by_level
-from functions.functions_kit import update_vocab_dictionnary, assign_true_false, take_user_preferences, display_bad_ans, compare_ans, redo_bad_ans, reset_vocab_dictionnary, pick_questions
+from functions.functions_kit import update_vocab_dictionnary, assign_true_false, take_user_preferences, display_bad_ans, compare_ans, redo_bad_ans, reset_vocab_dictionnary, pick_questions, tts_audio
 
 from datetime import datetime
 from termcolor import cprint
@@ -12,6 +12,7 @@ from rich.table import Table
 from rich.prompt import Prompt
 from rich.panel import Panel
 from rich.progress import track
+from playsound import playsound
 
 import random
 import time
@@ -85,7 +86,7 @@ def ecpinyin_quizz(inp):
     count = 0
     bad_ans = {}
 
-    user_limit, sentence_included, kind_of_word, difficulty_set, kind, difficulty_limit = take_user_preferences()
+    user_limit, sentence_included, kind_of_word, difficulty_set, kind, difficulty_limit, audio, tts_model = take_user_preferences()
     updated_dq = update_vocab_dictionnary(dq_vocabulary, sentence_included, kind_of_word, difficulty_set, kind, difficulty_limit)
 
     for i in updated_dq:
@@ -147,7 +148,7 @@ def last_x_quizz(inp, count=0, limitation=10001):
     console = Console()
     console.show_cursor()
 
-    user_limit, sentence_included, kind_of_word, difficulty_set, kind, difficulty_limit = take_user_preferences()
+    user_limit, sentence_included, kind_of_word, difficulty_set, kind, difficulty_limit, audio, tts_model = take_user_preferences()
     updated_dq = update_vocab_dictionnary(dq_vocabulary, sentence_included, kind_of_word, difficulty_set, kind, difficulty_limit)
     update_ratio = Prompt.ask("[bold yellow]Do you want to update the success ratio?[/bold yellow]", choices=["yes", "no"], default="no")
 
@@ -190,7 +191,13 @@ def last_x_quizz(inp, count=0, limitation=10001):
                 console.print(table)
 
                 bad_ans[key] = question_pick
-            
+
+            if audio == "yes":
+                try:
+                    tts_audio(tts_model, question_pick)
+                except:
+                    console.print("[bold red]An error occured.[/bold red]")
+
             update_experience(question_pick.difficulty)
             console.rule("[bold]\n")
             # Update the ratio if the user opted to
@@ -296,7 +303,7 @@ def random_x_quizz(inp, count=0, limitation=10001):
     bad_ans = {}
 
     # Get user preferences for the quiz
-    user_limit, sentence_included, kind_of_word, difficulty_set, kind, difficulty_limit = take_user_preferences()
+    user_limit, sentence_included, kind_of_word, difficulty_set, kind, difficulty_limit, audio, tts_model = take_user_preferences()
 
     # Update the vocabulary dictionary based on preferences
     updated_dq = update_vocab_dictionnary(dq_vocabulary, sentence_included, kind_of_word, difficulty_set, kind, difficulty_limit)
@@ -339,6 +346,7 @@ def random_x_quizz(inp, count=0, limitation=10001):
                     correct_ans = compare_ans(ans, value.chinese_pinyin)
                 else:
                     correct_ans = compare_ans(ans, value.chinese_character)
+        
 
             # Display the correct answer in a table
             table = Table(title=f"[bold]Correct Answer[/bold] - {value.chinese_character}")
@@ -353,6 +361,12 @@ def random_x_quizz(inp, count=0, limitation=10001):
             update_word_stats(value.chinese_character, False)
         
         #get_word_stats(question_pick.chinese_character, question_pick.chinese_pinyin)
+        if audio == "yes":
+            try:
+                tts_audio(tts_model, value)
+            except:
+                console.print("[bold red]An error occured.[/bold red]")
+
 
         # Mark the question as answered
         counter += 1

@@ -13,11 +13,14 @@ from rich.prompt import Prompt
 from rich.text import Text
 from rich.panel import Panel
 from rich.align import Align
+from playsound import playsound
 
 from database_tools.cedict_database import get_def_pinyin_simplified
 from dict_tools.questions_vocabulaire import dq_vocabulary
 from database_tools.hsk_database import get_hsk_level, get_hsk_dict_def
 from database_tools.database import update_word_stats, get_word_stats, get_best_word_ratios, get_worst_word_ratios
+from ai.ai_elevenlabs import tts_chinese
+from ai.ai_main import audio_generation
 
 
 
@@ -253,6 +256,7 @@ def update_vocab_dictionnary(d_voc, sentence_included=False, kind_of_word=False,
         d_voc_copy = {key: value for key, value in d_voc_copy.items() if value.difficulty == int(difficulty_limit)}
     return(d_voc_copy)
 
+
 def reset_vocab_dictionnary(d_voc):
     for key, value in d_voc.items():
         value.done = 0
@@ -300,7 +304,8 @@ def study_personal():
 
 def take_user_preferences():
     difficulty_limit = "1"
-    kind="general"
+    kind= "general"
+    tts_model= "elevenlabs"
 
     user_limit = Prompt.ask("[bold yellow]Number of words you want to study:[/bold yellow]", default="10")
 
@@ -316,8 +321,12 @@ def take_user_preferences():
     difficulty_set = assign_true_false(difficulty_set, difficulty_set)
     if difficulty_set == True:
          difficulty_limit = Prompt.ask("[bold yellow]Enter the difficulty limit (1 to 6): [/bold yellow]", choices=["1", "2", "3", "4", "5"], default="1")
+    
+    audio = Prompt.ask("[bold yellow]Do you wish to activate audio play ? (you need to have linked your elevenlabs account)[/bold yellow]", choices=["yes", "no"], default="no")
+    if audio == "yes":
+        tts_model = Prompt.ask("[bold yellow]Which TTS model do you wish to use ?", choices=["elevenlabs", "openai"], default="elevenlabs")
 
-    return int(user_limit), sentence_included, kind_of_word, difficulty_set, kind, difficulty_limit
+    return int(user_limit), sentence_included, kind_of_word, difficulty_set, kind, difficulty_limit, audio, tts_model
 
 def display_bad_ans(curr_d):
         console = Console()
@@ -409,26 +418,6 @@ def redo_bad_ans(bad_ans_d):
     else:
         return
 
-def add_english_vocab():
-    console = Console()
-    console.show_cursor()
-
-    while True:
-        english_word = Prompt.ask("[bold yellow]Enter the English word: [/bold yellow]")
-        english_def = Prompt.ask("[bold yellow]Enter the English definition: [/bold yellow]")
-        french_equivalent = Prompt.ask("[bold yellow]Enter the French equivalent: [/bold yellow]")
-        difficulty = Prompt.ask("[bold yellow]Enter the difficulty level (1 to 6): [/bold yellow]", default="1", choices=["1", "2", "3", "4", "5", "6"])
-        category = Prompt.ask("[bold yellow]Enter the category: [/bold yellow]", default="Vocabulary")
-        topic = Prompt.ask("[bold yellow]Enter the topic: [/bold yellow]", default="")
-
-        with open("dict_tools/english_vocab.py", "a") as f:
-            print(f'\nd_english["{english_word}"] = EnglishVocabulary("{english_word}", "{english_def}", {difficulty}, "{category}", "{topic}", french_equivalent="{french_equivalent}")', file=f)
-            console.print("[bold green]New entry in your dictionnary[/bold green]")
-            f.close()
-
-        keep_going = Prompt.ask("[bold red]Do you wish to add more vocabulary ?[/bold red]", default="yes", choices=["yes", "no"])
-
-        if keep_going.lower() == "no": return
 
 def pick_questions(updated_d, user_limit=10):
     console = Console()
@@ -450,6 +439,7 @@ def pick_questions(updated_d, user_limit=10):
 
     
 def handle_tone_sandhi(answer):
+    # Aim to not count mistakes of tone sandhi
 
     string_list = answer.split()
 
@@ -457,4 +447,40 @@ def handle_tone_sandhi(answer):
         print(word)
         if word == "":
             return
+
+def tts_audio(tts_model, question_pick):
+    console = Console()
+    console.show_cursor()
+    if tts_model == "elevenlabs":
+        tts_chinese(question_pick.chinese_character)
+    if tts_model == "openai":
+        audio_generation(question_pick.chinese_character) 
+    if question_pick.category == "Sentence":
+        while True:
+            replay = Prompt.ask("Replay ?", choices=["yes", "no"], default="no")
+            if replay == "yes": playsound("/Users/gabriel/Documents/VSCode/Python/Studium/chinois/ai/speech.mp3")
+            else: break
     
+
+"""
+def add_english_vocab():
+    console = Console()
+    console.show_cursor()
+
+    while True:
+        english_word = Prompt.ask("[bold yellow]Enter the English word: [/bold yellow]")
+        english_def = Prompt.ask("[bold yellow]Enter the English definition: [/bold yellow]")
+        french_equivalent = Prompt.ask("[bold yellow]Enter the French equivalent: [/bold yellow]")
+        difficulty = Prompt.ask("[bold yellow]Enter the difficulty level (1 to 6): [/bold yellow]", default="1", choices=["1", "2", "3", "4", "5", "6"])
+        category = Prompt.ask("[bold yellow]Enter the category: [/bold yellow]", default="Vocabulary")
+        topic = Prompt.ask("[bold yellow]Enter the topic: [/bold yellow]", default="")
+
+        with open("dict_tools/english_vocab.py", "a") as f:
+            print(f'\nd_english["{english_word}"] = EnglishVocabulary("{english_word}", "{english_def}", {difficulty}, "{category}", "{topic}", french_equivalent="{french_equivalent}")', file=f)
+            console.print("[bold green]New entry in your dictionnary[/bold green]")
+            f.close()
+
+        keep_going = Prompt.ask("[bold red]Do you wish to add more vocabulary ?[/bold red]", default="yes", choices=["yes", "no"])
+
+        if keep_going.lower() == "no": return
+"""
