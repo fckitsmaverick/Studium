@@ -190,19 +190,26 @@ def chinese_conversation_listening_quizz():
     conversation = chinese_conversation()
 
     for i in conversation:
-        correct_ans = i.characters.translate(str.maketrans('', '',
-                                    string.punctuation))
+        characters_to_read = i.characters
+        multiple_pass = False 
+
+        to_remove_char = " 。？！：；-， ?!:;-,"
+        for char in to_remove_char:
+                i.characters = i.characters.replace(char, "")
+                
         while True:
             ready = Prompt.ask("[bold magenta]Press enter when you are ready")
-            tts_chinese(i.characters)
+            if multiple_pass == False:
+                tts_chinese(characters_to_read)
+                multiple_pass == True
             ans = Prompt.ask("[bold magenta]Type what you heard (to listen one more time type 'again', to exit type 'exit'): ", default="again")
-
+            
             if ans == "again":
                 playsound(db_path)
                 continue
             if ans == "exit": return
 
-            if ans == correct_ans or ans == i.pinyin:
+            if ans == i.characters or ans == i.pinyin:
                 console.print("[bold green]Good Answer !")
                 break
             elif ans != i.characters and ans != i.pinyin:

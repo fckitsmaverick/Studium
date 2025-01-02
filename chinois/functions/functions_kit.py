@@ -51,6 +51,8 @@ def print_pokedex(pokedex):
 def new_vocab_auto():
     console = Console()
     console.show_cursor()
+    counter = 0
+    starting_key = (next(reversed(dq_vocabulary.keys())))+1
 
     while True:
         pinyin_input = Prompt.ask("[bold yellow]Pinyin: [/bold yellow]")
@@ -108,11 +110,12 @@ def new_vocab_auto():
             
             if confirm == "yes":
                 with open("dict_tools/questions_vocabulaire.py", "a") as f:
-                    print(f'\ndq_vocabulary["{simplified}"] = Vocabulary("{pinyin}", "{simplified}", "{english}", {hsk_level}, category="{category}", kind="{kind}", topic={topic_pick if add_topic == "yes" else []})', file=f)
+                    print(f'\ndq_vocabulary[{starting_key+counter}] = Vocabulary("{pinyin}", "{simplified}", "{english}", {hsk_level}, category="{category}", kind="{kind}", topic={topic_pick if add_topic == "yes" else []})', file=f)
                     console.print("[bold green]New entry in your dictionnary[/bold green]")
                     f.close()
+                    counter += 1
             else:
-                break
+                continue
 
 
         elif dict_result == False:
@@ -136,17 +139,19 @@ def new_vocab_auto():
             
                 if confirm == "yes":
                     with open("dict_tools/questions_vocabulaire.py", "a") as f:
-                        print(f'\ndq_vocabulary["{simplified_input}"] = Vocabulary("{pinyin_input}", "{simplified_input}", "{english}", {hsk_level}, category="{category}", kind="{kind}", topic= {topic_pick if add_topic == "yes" else []})', file=f)
+                        print(f'\ndq_vocabulary[{starting_key+counter}] = Vocabulary("{pinyin_input}", "{simplified_input}", "{english}", {hsk_level}, category="{category}", kind="{kind}", topic= {topic_pick if add_topic == "yes" else []})', file=f)
                         console.print("[bold green]New entry in your dictionnary[/bold green]")
                         f.close()
+                        counter += 1
                 else:
-                    return
+                    continue
 
 
         keep_going = Prompt.ask("[bold red]Do you wish to add more vocabulary ?[/bold red]", default="yes", choices=["yes", "no"])
 
         if keep_going.lower() == "no":
             # Make it restart so that the words added to the dictionnary are taken into account
+            console.print(f"[bold yellow]You added {counter} words !")
             console.print("[bold red]Now restarting ... [/bold red]")
             os.execl(sys.executable, sys.executable, *sys.argv)
 
