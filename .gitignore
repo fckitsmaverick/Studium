@@ -4,6 +4,8 @@ __pycache__/
 *$py.class
 
 *.env
+*.mp3
+*.wav
 to_do.txt
 game.py
 english_quizz.py
